@@ -1,8 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import Formulario from './Formulario.jsx';
-import PerfilPrivado from './PerfilPrivado.jsx';
-import PerfilPublico from './PerfilPublico.jsx';
+import Formulario from './Formulario.js';
+import PerfilPrivado from './PerfilPrivado.js';
+import PerfilPublico from './PerfilPublico.js';
 import { createBrowserRouter,} from "react-router-dom";
 
 const routes = [
