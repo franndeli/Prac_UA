@@ -3,24 +3,7 @@ import './App.css';
 import Formulario from './Formulario.jsx';
 import PerfilPrivado from './PerfilPrivado.jsx';
 import PerfilPublico from './PerfilPublico.jsx';
-import { createBrowserRouter,} from "react-router-dom";
-
-const routes = [
-  {
-    path: "/",
-    element: <Formulario />,
-  },
-  {
-    path: "/",
-    element: <PerfilPrivado />,
-  },
-  {
-    path: "/",
-    element: <PerfilPublico />,
-  },
-]
-
-const router = createBrowserRouter(routes);
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
@@ -36,12 +19,15 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
         </a>
+          <Routes>
+            <Route path="/formulario" element={<Formulario />} />
+            <Route path="/perfil-privado" element={<PerfilPrivado />} />
+            <Route path="/perfil-publico" element={<PerfilPublico />} />
+          </Routes>
       </header>
     </div>
   );
 }
-
 
 export default App;
