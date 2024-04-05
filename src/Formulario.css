@@ -1,0 +1,85 @@
+/* Estilos para el fieldset */
+fieldset {
+  width: 600px;
+  border: 2px solid blue; /* Cambia el ancho del borde */
+  margin: 20px 0; /* Añade más espacio alrededor del fieldset */
+  padding: 20px; /* Añade más espacio dentro del fieldset */
+  border-radius: 10px; /* Añade bordes redondeados al fieldset */
+}
+
+legend {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Estilos para los campos */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px;
+  width: 60%;
+}
+
+ .inp {
+  text-align: left; /* Establece la dirección del texto a izquierda-derecha */
+ }
+
+/* Estilos para los botones */
+.custom-button {
+  background-color: #f9f9f9;
+  color: #000000;
+  border: 2px solid blue; /* Añade un borde azul a los botones */
+  border-radius: 20px; /* Añade bordes redondeados a los botones */
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 10px; /* Ajusta el espacio entre los botones */
+}
+
+.custom-button.blue {
+  background-color: #0074d9;
+  color: #ffffff; /* Cambia el color del texto para que sea legible */
+  border: 2px solid #0000ff; /* Añade un borde azul a los botones */
+  border-radius: 20px; /* Añade bordes redondeados a los botones */
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 10px; /* Ajusta el espacio entre los botones */
+}
+
+.custom-button-red {
+  background-color: #f86150;
+  color: #ffffff; /* Cambia el color del texto para que sea legible */
+  border: 2px solid rgb(244, 63, 13); /* Añade un borde azul a los botones */
+  border-radius: 20px; /* Añade bordes redondeados a los botones */
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 10px; /* Ajusta el espacio entre los botones */
+}
+
+/* Cambiar imagen */
+.button-cambiar-imagen {
+  background-color: transparent;
+  color: #0074d9;
+}
+
+/* Estilos específicos para el formulario "sistema" */
+#Idioma {
+  /* Estilos para el select múltiple */
+}
+
+/* Otros estilos específicos según necesites */
+
+/* Ajusta los colores, tamaños y márgenes según tus preferencias */

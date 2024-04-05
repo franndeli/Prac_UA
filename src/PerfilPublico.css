@@ -1,0 +1,60 @@
+h1{
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Apila los elementos verticalmente */
+  }
+
+.InfoUsuario {
+    display: flex;
+    border: 1px solid #0000ff;
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 70%;
+    margin: auto;
+  }
+  
+  .InfoUsuarioImage {
+    flex: 0 0 auto; /* No crece ni se encoge */
+  }
+  
+  .InfoUsuarioText {
+    flex: 1; /* Que ocupe el espacio restante */
+    padding-left: 20px; /* Espaciado entre la imagen y el texto */
+  }
+
+h2{
+    text-align: left;
+    margin-left: 75px;
+}
+
+
+
+.Publicaciones {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Publicaciones > div {
+    display: flex;
+    align-items: center;
+  }
+  
+  .select-container {
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px; /* Ajusta según tu preferencia */
+    margin-left: 75px;
+}
+  
+  .select-container select {
+    border-radius: 20px; /* Forma redonda */
+    padding: 0.25rem;
+    border: 1px solid #0000ff;
+    background-color: #0074d9;
+    margin-bottom: 10px; /* Espacio entre los selects */
+  }
+  
+ 

@@ -1,0 +1,76 @@
+h1{
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Apila los elementos verticalmente */
+  }
+
+.InfoUsuario {
+    display: flex;
+    border: 1px solid #0000ff;
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 70%;
+    margin: auto;
+  }
+  
+  .InfoUsuarioImage {
+    flex: 0 0 auto; /* No crece ni se encoge */
+  }
+  
+  .InfoUsuarioText {
+    flex: 1; /* Que ocupe el espacio restante */
+    padding-left: 20px; /* Espaciado entre la imagen y el texto */
+  }
+
+  .button-custom{
+    align-self: flex-end;
+    margin-right: 215px
+  }
+
+  .custom-button-blue {
+    background-color: #0074d9;
+    color: #ffffff; /* Cambia el color del texto para que sea legible */
+    border: 2px solid #0000ff; /* Añade un borde azul a los botones */
+    border-radius: 20px; /* Añade bordes redondeados a los botones */
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    margin-top: 10px; /* Ajusta el espacio entre los botones */
+    margin-left: 50px;
+}
+
+h2{
+    text-align: left;
+    margin-left: 75px;
+}
+
+
+
+.Publicaciones {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Publicaciones > div {
+    display: flex;
+    align-items: center;
+  }
+  
+  .select-container {
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px; /* Ajusta según tu preferencia */
+    margin-left: 75px;
+}
+  
+  .select-container select {
+    border-radius: 20px; /* Forma redonda */
+    padding: 0.25rem;
+    border: 1px solid #0000ff;
+    background-color: #0074d9;
+    margin-bottom: 10px; /* Espacio entre los selects */
+  }
+  
+ 
