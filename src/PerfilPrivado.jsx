@@ -1,9 +1,23 @@
+import React from 'react';
 import './PerfilPrivado.css';
+import { useNavigate } from 'react-router-dom';
 import Card from './Card.jsx';
+import Nav from './Nav.jsx'
 
 export default function PerfilPrivado() {
+
+  const navigate = useNavigate(); // Usa useNavigate para la navegación
+
+  const handleEditarPerfilClick = () => {
+    // Redirigir a la página de edición de perfil
+    navigate('/Formulario');
+  };
+
     return (
       <div>
+        <div>
+          <Nav></Nav>
+        </div>
         <h1>Mi perfil</h1>
         <div className='container'>
           <div className='InfoUsuario'>
@@ -17,7 +31,7 @@ export default function PerfilPrivado() {
             </div>
           </div>
           <div className='button-custom'>
-                <button className='custom-button-blue'>
+                <button className='custom-button-blue' onClick={handleEditarPerfilClick}>
                     Editar Perfil
                 </button>
             </div>

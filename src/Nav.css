@@ -1,0 +1,34 @@
+.navbar {
+    background-color: #f0f0f0; /* Color de fondo de la barra de navegación */
+    border: 3px solid #0074d9; /* Borde azul en la parte inferior */
+    border-top-right-radius: 50px; /* Borde redondeado en la esquina superior derecha */
+    border-bottom-right-radius: 50px; /* Borde redondeado en la esquina inferior derecha */
+    width: 85%; /* Ancho de la barra de navegación */
+    margin: 0 auto; /* Centrar horizontalmente la barra de navegación */
+}
+
+.nav-list {
+    list-style-type: none; /* Quita los puntos de lista */
+    display: flex; /* Mostrar elementos en línea */
+    justify-content: space-between; /* Distribuye los elementos uniformemente */
+    align-items: center; /* Centra verticalmente los elementos */
+}
+
+.nav-list li {
+    margin-right: 10px; /* Espacio entre elementos de la lista */
+}
+
+.nav-list li a {
+    text-decoration: none; /* Quita subrayado de enlaces */
+    color: #333; /* Color de texto */
+    font-weight: bold; /* Texto en negrita */
+  }
+
+.logo-item {
+    margin-right: auto;
+  }
+  
+  .logo-item img {
+    width: 40px; /* Ancho de las imágenes de logotipo */
+    height: auto; /* Altura automática para mantener la proporción */
+  }

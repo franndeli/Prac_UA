@@ -58,19 +58,23 @@ h2{
     align-items: center;
   }
   
-  .select-container {
+  .Publicaciones .select-container {
     display: flex;
     flex-direction: row;
     margin-right: 20px; /* Ajusta según tu preferencia */
     margin-left: 75px;
 }
   
-  .select-container select {
+ .Publicaciones .select-container select {
     border-radius: 20px; /* Forma redonda */
     padding: 0.25rem;
     border: 1px solid #0000ff;
-    background-color: #0074d9;
+    background-color: #ffffff;
     margin-bottom: 10px; /* Espacio entre los selects */
+  }
+
+  .Publicaciones .select-container select option{
+    background-color: #ffffff;
   }
   
  

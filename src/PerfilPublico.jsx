@@ -1,9 +1,11 @@
 import './PerfilPublico.css';
 import Card from './Card.jsx';
+import Nav from './Nav.jsx'
 
 export default function PerfilPrivado() {
     return (
       <div>
+       <div><Nav></Nav></div> 
         <h1>Perfil de Pablo</h1>
         <div className='container'>
           <div className='InfoUsuario'>
