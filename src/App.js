@@ -1,26 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
 import Formulario from './Formulario.jsx';
 import PerfilPrivado from './PerfilPrivado.jsx';
 import PerfilPublico from './PerfilPublico.jsx';
+import Inicio from './Inicio.jsx';
 import { Routes, Route } from "react-router-dom";
+import IniciarSesion from './IniciarSesion.jsx';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hola React
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-        </a>
           <Routes>
+            <Route path="/inicio" element={<Inicio/>} />
+            <Route path="/iniciarsesion" element={<IniciarSesion />} />
             <Route path="/formulario" element={<Formulario />} />
             <Route path="/perfil-privado" element={<PerfilPrivado />} />
             <Route path="/perfil-publico" element={<PerfilPublico />} />

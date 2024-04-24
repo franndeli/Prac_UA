@@ -1,34 +1,74 @@
 .navbar {
-    background-color: #f0f0f0; /* Color de fondo de la barra de navegación */
-    border: 3px solid #0074d9; /* Borde azul en la parte inferior */
-    border-top-right-radius: 50px; /* Borde redondeado en la esquina superior derecha */
-    border-bottom-right-radius: 50px; /* Borde redondeado en la esquina inferior derecha */
-    width: 85%; /* Ancho de la barra de navegación */
-    margin: 0 auto; /* Centrar horizontalmente la barra de navegación */
+  display: flex;
+  align-items: center;
+  background-color: #00000000;
+  border: 4px solid #0097EC;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  width: 85%;
+  height: 65px;
+  margin: 40px auto 0;
+}
+
+.navbar > img{
+  width: 50px;
+  height: auto;
+  margin-left: 15px;
+}
+
+.nav-container {
+  display: flex;
+  margin-left: 60px;
+  justify-content: center;
+  flex-grow: 1;
 }
 
 .nav-list {
-    list-style-type: none; /* Quita los puntos de lista */
-    display: flex; /* Mostrar elementos en línea */
-    justify-content: space-between; /* Distribuye los elementos uniformemente */
-    align-items: center; /* Centra verticalmente los elementos */
+  list-style-type: none;
+  display: flex;
+  gap: 100px;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  width: auto;
 }
 
 .nav-list li {
-    margin-right: 10px; /* Espacio entre elementos de la lista */
+  margin-right: 10px; /* Espacio entre elementos de la lista */
 }
 
 .nav-list li a {
-    text-decoration: none; /* Quita subrayado de enlaces */
-    color: #333; /* Color de texto */
-    font-weight: bold; /* Texto en negrita */
-  }
+  text-decoration: none;
+  color: #000000;
+  cursor: pointer;
+  margin: 0;
+  font-weight: 500;
+  /*font-weight: bold;*/ 
+}
 
 .logo-item {
-    margin-right: auto;
-  }
+  display: flex;
+  margin-right: auto;
+  width: 80px;
+  height: auto;
+}
   
-  .logo-item img {
-    width: 40px; /* Ancho de las imágenes de logotipo */
-    height: auto; /* Altura automática para mantener la proporción */
-  }
+.icons-menu {
+  background-color: #0097EC;
+  border-top-right-radius: 26px;
+  border-bottom-right-radius: 26px;
+  border-bottom: 2px solid #0097EC ;
+  padding-left: 25px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.icons-menu-list{
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+}

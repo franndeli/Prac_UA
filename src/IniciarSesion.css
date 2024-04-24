@@ -1,0 +1,20 @@
+/* .iniciar-sesion {
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("./images/iniciar_sesion.svg");
+} */
+
+.titulo-web{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.titulo-web img{
+    height: 60px;
+}
+
+h1{
+    font-size: 80px;
+}
