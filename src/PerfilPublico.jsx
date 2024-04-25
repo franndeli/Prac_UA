@@ -2,7 +2,7 @@ import './PerfilPublico.css';
 import Card from './Card.jsx';
 import Nav from './Nav.jsx'
 
-export default function PerfilPrivado() {
+export default function PerfilPublico() {
     return (
       <div>
        <div><Nav></Nav></div> 
@@ -21,7 +21,7 @@ export default function PerfilPrivado() {
         </div>
   
         <div className='Publicaciones'>
-            <h2>Publicaciones</h2>
+            <h2 className='Publi'>Publicaciones</h2>
                 <div className='select-container'>
                     <label>Tipo</label>
                         <select name="Tipo" id="Tipo">

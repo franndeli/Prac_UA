@@ -38,7 +38,7 @@ export default function PerfilPrivado() {
         </div>
   
         <div className='Publicaciones'>
-            <h2>Publicaciones</h2>
+            <h2 className='Publi'>Publicaciones</h2>
                 <div className='select-container'>
                     <label>Tipo</label>
                         <select name="Tipo" id="Tipo">

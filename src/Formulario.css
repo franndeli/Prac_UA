@@ -1,7 +1,12 @@
 /* Estilos para el fieldset */
+
+.ModalCambiaDatos{
+  text-align: center;
+}
+
 fieldset {
   width: 600px;
-  border: 2px solid blue; /* Cambia el ancho del borde */
+  border: 1px solid #0000ff; /* Cambia el ancho del borde */
   margin: 20px 0; /* Añade más espacio alrededor del fieldset */
   padding: 20px; /* Añade más espacio dentro del fieldset */
   border-radius: 10px; /* Añade bordes redondeados al fieldset */
@@ -12,31 +17,40 @@ legend {
   font-weight: bold;
 }
 
-/* Estilos para los campos */
-form {
+.form-group {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
 }
 
-label {
+.form-group-user {
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.label-group {
+  display: flex;
+  align-items: center;
+}
+
+
+.label-group label {
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-right: 10px;
 }
 
 input[type="text"],
 input[type="password"],
 input[type="email"],
-textarea {
+textarea, .Select {
+  flex: 1;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-top: 5px;
-  width: 60%;
 }
-
- .inp {
-  text-align: left; /* Establece la dirección del texto a izquierda-derecha */
- }
 
 /* Estilos para los botones */
 .custom-button {
@@ -74,12 +88,3 @@ textarea {
   background-color: transparent;
   color: #0074d9;
 }
-
-/* Estilos específicos para el formulario "sistema" */
-#Idioma {
-  /* Estilos para el select múltiple */
-}
-
-/* Otros estilos específicos según necesites */
-
-/* Ajusta los colores, tamaños y márgenes según tus preferencias */
