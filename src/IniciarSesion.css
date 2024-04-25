@@ -1,18 +1,54 @@
-/* .iniciar-sesion {
-    background-attachment: fixed;
+.iniciar-sesion {
+    /* background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("./images/iniciar_sesion.svg");
-} */
+    background-image: url("./images/iniciar_sesion.svg"); */
+}
 
 .titulo-web{
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .titulo-web img{
-    height: 60px;
+    height: 100px;
+    margin-right: 50px;
+}
+
+.input-icon-container {
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.input-icon-container .input-icon {
+    position: absolute;
+    margin-left: 10px;
+    color: gray;
+}
+
+.input-icon-container input {
+    padding-left: 40px;
+}
+
+input[type=text] {
+    margin-top: 0px;
+    height: 30px;
+    font-size: 20px;
+    font-family: 'Montserrat';
+}
+
+.formulario-iniciar-sesion {
+    border: 10px solid rgb(0, 0, 0);
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
 }
 
 h1{
