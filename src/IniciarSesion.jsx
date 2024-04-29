@@ -17,7 +17,6 @@ export default function IniciarSesion() {
     // Función para manejar el envío del formulario
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Aquí manejarías el envío del formulario, tal vez enviando una solicitud HTTP
     };
 
     return (
@@ -55,13 +54,22 @@ export default function IniciarSesion() {
                             />
                         </div>
                     </label>
-                    <div className="recuerdame">
-                        <input type="checkbox" id="recuerdame" name="recuerdame" />
-                        <label htmlFor="recuerdame">Recuérdame</label>
-                    </div>
-                    <a href="/olvido-contraseña" className="olvido-contraseña">¿Has olvidado tu contraseña?</a>
-                    <button type="submit">ACEPTAR</button>
+                    <span className="recuerdame_contrasena">
+                        <div className="recuerdame">
+                            <input type="checkbox" id="recuerdame" name="recuerdame" />
+                            <label className="label_recuerdame" htmlFor="recuerdame">Recuérdame</label>
+                        </div>
+                        <a href="/olvido-contraseña" className="olvido-contraseña">¿Has olvidado tu contraseña?</a>
+                    </span>
+                    <button className="boton_aceptar" type="submit">ACEPTAR</button>
                 </form>
+                <hr className="separador"/>
+                <div className="iniciarsesion_google">
+                    <p className="google">Inicia sesión con Google</p>
+                    <FontAwesomeIcon icon={fas.faRightToBracket} />
+                </div>
+                <hr className="separador"/>
+                <p className="registrate">¿No tienes cuenta? <a href="/registro">Regístrate</a> </p>
             </div>
         </div>
     );
