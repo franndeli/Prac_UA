@@ -49,32 +49,32 @@ h2{
 
 
 .Publicaciones {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .Publicaciones > div {
-    display: flex;
-    align-items: center;
-  }
-  
-  .Publicaciones .select-container {
-    display: flex;
-    flex-direction: row;
-    margin-right: 20px; /* Ajusta según tu preferencia */
-    margin-left: 75px;
+  display: flex;
+  flex-direction: column;
 }
-  
- .Publicaciones .select-container select {
-    border-radius: 20px; /* Forma redonda */
-    padding: 0.25rem;
-    border: 1px solid #0000ff;
-    background-color: #ffffff;
-    margin-bottom: 10px; /* Espacio entre los selects */
-  }
 
-  .Publicaciones .select-container select option{
-    background-color: #ffffff;
-  }
+.Publicaciones > div {
+  display: flex;
+  align-items: center;
+}
+
+.Publicaciones .select-container {
+  display: flex;
+  flex-direction: row;
+  margin-right: 20px; /* Ajusta según tu preferencia */
+  margin-left: 75px;
+}
+
+.Publicaciones .select-container select {
+  border-radius: 20px; /* Forma redonda */
+  padding: 0.25rem;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+  margin-bottom: 10px; /* Espacio entre los selects */
+}
+
+.Publicaciones .select-container select option{
+  background-color: #ffffff;
+}
   
  
