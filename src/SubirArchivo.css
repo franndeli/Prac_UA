@@ -1,0 +1,159 @@
+/* Primero, asegúrate de resetear los estilos y de que el formulario está centrado y bien espaciado */
+.SubirArchivo-container {
+    display: flex;
+    justify-content: space-between; /* Esto separará los elementos al principio y al final */
+    align-items: center; /* Esto alinea los elementos al inicio de su contenedor en el eje cruzado */
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+  
+  /* A continuación, estiliza el fieldset para que tenga un aspecto moderno y limpio */
+  fieldset {
+    border: 2px solid #0097EC;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+    width: 80%; /* O el ancho que prefieras */
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  /* Estilos para los contenedores de los grupos de formularios */
+.cont1, .cont2 {
+  flex: 1; /* Asigna la misma flexibilidad a ambos contenedores */
+  margin: 0 10px; /* Añade un pequeño margen entre ellos */
+   /* O podrías usar simplemente flex */
+    
+    min-width: calc(50% - 20px); /* Ajusta el espacio disponible */
+    max-width: calc(50% - 20px); /* Ajusta el espacio disponible */
+    box-sizing: border-box;
+}
+
+/* Asegúrate de que cont2 no crezca más de lo necesario si solo quieres que contenga la imagen y el botón */
+.cont2 {
+  flex-grow: 0;
+  flex-basis: auto; /* Establece una base automática para el ancho/altura según el contenido */
+}
+.cont3 {
+  width: 100%; /* Asegura que ocupe todo el ancho */
+    display: flex; /* Utiliza flex para poder centrar el botón fácilmente */
+    justify-content: center; /* Centra el botón horizontalmente */
+    align-items: center; /* Centra el botón verticalmente */
+    box-sizing: border-box; /* Asegúrate de que el padding y el border no afecten el ancho */
+    padding: 10px 0; /* Añade algo de padding si es necesario */
+}
+.button-container {
+  display: flex;
+  justify-content: center; /* Centra el botón horizontalmente */
+  padding-top: 20px; /* Añade un poco de espacio en la parte superior */
+}
+  
+  /* El legend será el título de tu formulario */
+  legend {
+    color: #0000ff;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    width: auto;
+    padding: 0 10px;
+    border: none;
+  }
+  
+  /* Los estilos de tus inputs y selects pueden venir de Formulario.css, pero si necesitas ajustes, los haces aquí */
+  input[type="text"],
+  textarea,
+  .Select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  
+  
+  
+  
+  /* Añade estilos para el botón de subir imagen */
+  .button-cambiar-imagen {
+    /* Tus estilos del botón cambiar imagen */
+    background-color: #f0f0f0; /* Ejemplo */
+  }
+  /* Añade esto en SubirArchivo.css */
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+.image-upload-container {
+    margin-bottom: 20px; /* Asegura espacio debajo del botón de carga */
+}
+
+.upload-icon-container {
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
+    
+}
+.upload-icon-container img{
+  max-width: 40px; 
+  
+}
+
+.image-upload-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    background-color: #3498db;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 20px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.image-upload-label:hover {
+    background-color: #2980b9;
+}
+
+.form-group {
+  /* ... tus estilos previos ... */
+  flex: 1; /* Esto permitirá que cada form-group crezca y tome igual cantidad de espacio */
+  min-width: 250px; /* Establece un ancho mínimo para cada form-group para que se vea bien en pantallas pequeñas */
+  margin-right: 20px; /* Esto da espacio entre los form-group */
+}
+
+/* Esto es específicamente para el contenedor imagen-subida */
+.imagen-subida {
+  /* ... tus estilos previos ... */
+  flex: 0 0 200px; /* Esto asegura que imagen-subida no crezca y tenga un ancho fijo */
+  justify-self: end; /* Esto alinea el imagen-subida al final de la línea */
+  margin-right: 0; /* Asegúrate de que no tenga margen a la derecha para alinearse correctamente */
+}
+
+.custom-button.blue {
+    /* ... tus estilos previos ... */
+    background-color: #007bff; /* Ajusta este color para que coincida con tu diseño */
+    color: #fff;
+    padding: 10px 20px; /* Ajusta el padding para que coincida con el tamaño del botón en la imagen */
+    border: none;
+    border-radius: 5px; /* Radio de borde para que coincida con tu diseño */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.custom-button.blue:hover {
+    background-color: #0056b3; /* Un color un poco más oscuro para el efecto hover */
+}
+
+  /* Si es necesario, añade media queries para que tu diseño sea responsivo */
+  @media (max-width: 768px) {
+    fieldset {
+      width: 90%;
+    }
+  }
+  

@@ -1,7 +1,8 @@
-/* .iniciar-sesion {
-    /* background-attachment: fixed;
+/* .registro {
+    background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;
+    min-height: 100vh;
     background-image: url("./images/iniciar_sesion.svg");
 } */
 
@@ -17,21 +18,22 @@
     margin-right: 50px;
 }
 
-.input-icon-container {
+.input-icon-container_registro {
     display: flex;
     align-items: center;
     /* width: 100%; */
     /* justify-content: center; */
+    margin-bottom: 7px;
 }
 
-.input-icon-container .input-icon {
+.input-icon-container_registro .input-icon {
     position: absolute;
     margin-left: 15px;
     margin-bottom: 15px;
     color: gray;
 }
 
-.input-icon-container input {
+.input-icon-container_registro input, .input-icon-container_registro select  {
     padding-left: 45px;
 }
 
@@ -42,9 +44,21 @@ form{
     width: 70%;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email] {
     margin-top: 0px;
     height: 30px;
+    font-size: 18px;
+    font-family: 'Montserrat';
+    border-radius: 20px;
+    width: 100%;
+    background-color: rgba(217, 217, 217, 0.51);
+    border: 1px solid black;
+    margin-bottom: 15px ;
+}
+
+#titulacion_cursada{
+    margin-top: 0px;
+    height: 45px;
     font-size: 18px;
     font-family: 'Montserrat';
     border-radius: 20px;
@@ -58,7 +72,11 @@ input[type=text], input[type=password] {
     text-align: center;
 } */
 
-.formulario-iniciar-sesion {
+.inputs_registro{
+    display: flex;
+    gap: 30px;
+}
+.formulario-registro {
     border: 10px solid rgb(0, 0, 0);
     border-bottom: 20px solid black;
     border-top-left-radius: 40px;
@@ -69,7 +87,7 @@ input[type=text], input[type=password] {
     align-items: center;
     margin: auto;
     background-color: white;
-    width: 500px;
+    width: 800px;
 }
 
 .recuerdame{
