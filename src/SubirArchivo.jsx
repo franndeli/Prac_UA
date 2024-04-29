@@ -18,21 +18,21 @@ const SubirArchivo = () => {
             <div><Nav></Nav></div> 
             <div className="SubirArchivo-container">
             <legend>SUBIR ARCHIVO</legend>
-                <fieldset>
+                <fieldset className="fielsetSubirArchivo">
                     
                     <div className="cont1">
                     <div className="form-group">
                         <label htmlFor="titulo">Título:</label>
-                        <input type="text" id="titulo" name="titulo" />
+                        <input className='inputSubirArchivo' type="text" id="titulo" name="titulo" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="etiquetas">Etiquetas:</label>
-                        <input type="text" id="etiquetas" name="etiquetas" />
+                        <input className='inputSubirArchivo' type="text" id="etiquetas" name="etiquetas" />
                     </div>
                     
                     <div className="form-group">
                         <label htmlFor="tipo-archivo">Tipo de Contenido:</label>
-                        <select id="tipo-archivo" name="tipo-archivo">
+                        <select className='inputSubirArchivo' id="tipo-archivo" name="tipo-archivo">
                             <option >TFG</option>
                             <option >TFM</option>
                             <option>Práctica</option>
@@ -40,7 +40,7 @@ const SubirArchivo = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="descripcion">Descripción:</label>
-                        <textarea id="descripcion" name="descripcion" />
+                        <textarea className='inputSubirArchivo' id="descripcion" name="descripcion" />
                     </div>
                     </div>
                     <div className="cont2">
@@ -59,7 +59,7 @@ const SubirArchivo = () => {
                     </div>
                     <div className="cont3"> {/* Nuevo contenedor para el botón */}
                         <div className="form-group">
-                            <button className="custom-button blue">Subir</button>
+                            <button className="custom-button-subirArchivo blue">Subir</button>
                         </div>
                     </div>
                    

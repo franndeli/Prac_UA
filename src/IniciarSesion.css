@@ -42,7 +42,7 @@ form{
     width: 70%;
 }
 
-input[type=text], input[type=password] {
+.inputFormularioInicioSesion{
     margin-top: 0px;
     height: 30px;
     font-size: 18px;

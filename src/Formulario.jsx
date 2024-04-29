@@ -68,7 +68,7 @@ export default function Formulario() {
 
   return (
     <div>
-      <p>Ajustes</p>
+      <h1>Ajustes</h1>
       <div>
         {/* Botones para cambiar entre los formularios */}
         <button className={`custom-button ${formulario === 'usuario' ? 'blue' : ''}`} onClick={mostrarFormularioUsuario}>Usuario</button>
@@ -79,33 +79,33 @@ export default function Formulario() {
       {formulario === 'usuario' ? (
         <div>
           <fieldset className="Formulario">
-            <legend>Ajuste del sistema</legend>
+            <legend className='legendFormulario'>Ajuste del sistema</legend>
 
             <div className="form-group-user">
               <div className='label-group'>
                 <label htmlFor="Nombre">Nombre:</label>
-                <input type="text" id="Nombre" onChange={handleInputChange}/>
+                <input className="inputFormulario" type="text" id="Nombre" onChange={handleInputChange}/>
               </div>
             </div>
 
             <div className="form-group-user">
               <div className='label-group'>
                 <label htmlFor="Contrasena">Contraseña:</label>
-                <input type="password" id="Contrasena" onChange={handleInputChange}/>
+                <input className="inputFormulario" type="password" id="Contrasena" onChange={handleInputChange}/>
               </div>
             </div>
             
             <div className="form-group-user">
               <div className='label-group'>
                 <label htmlFor="Email">Correo electrónico:</label>
-                <input type="email" id="Email" onChange={handleInputChange}/>
+                <input className="inputFormulario" type="email" id="Email" onChange={handleInputChange}/>
               </div> 
             </div>
 
             <div className="form-group-user">
               <div className='label-group'>
                 <label htmlFor="Descripcion">Descripción:</label>
-                <textarea id="Descripcion" cols={20} onChange={handleInputChange}/>
+                <textarea className="inputFormulario" id="Descripcion" cols={20} onChange={handleInputChange}/>
               </div> 
             </div>
 
@@ -117,13 +117,13 @@ export default function Formulario() {
         </div>
       ) : (
         <div>
-          <fieldset>
-            <legend>Ajuste del sistema</legend>
+          <fieldset className="Formulario">
+            <legend className='legendFormulario'>Ajuste del sistema</legend>
             <div className="form-group">
             <div className="label-group">
                 <label>Color:</label>
                 <div>
-                  <input type="radio" id="Color" name="Color" value="Claro" onChange={handleInputChange}/>
+                  <input className="inputFormulario" type="radio" id="Color" name="Color" value="Claro" onChange={handleInputChange}/>
                   <label htmlFor="claro">Claro</label>
                 </div>
                 <div>
@@ -136,7 +136,7 @@ export default function Formulario() {
             <div className="form-group">
               <div className="label-group">
                   <label>Idioma:</label>
-                  <select className='Select' name="Idioma" id="Idioma" onChange={handleInputChange}>
+                  <select className="inputFormulario" name="Idioma" id="Idioma" onChange={handleInputChange}>
                     <option>Español</option>
                     <option>Inglés</option>
                     <option>Chino</option>
@@ -165,7 +165,7 @@ export default function Formulario() {
             <div className="form-group">
             <div className="label-group">
                 <label>Tamaño de letra:</label>
-                <select className='Select' name="Letra" id="Letra" onChange={handleInputChange}>
+                <select className="inputFormulario" name="Letra" id="Letra" onChange={handleInputChange}>
                   <option>12</option>
                   <option>16</option>
                   <option>20</option>

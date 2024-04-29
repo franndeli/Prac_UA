@@ -41,7 +41,7 @@ export default function IniciarSesion() {
                             <label htmlFor="nombre">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faFileSignature} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="text" 
                                         id="nombre" 
                                         name="nombre" 
@@ -54,7 +54,7 @@ export default function IniciarSesion() {
                             <label htmlFor="usuario">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faUser} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="text" 
                                         id="usuario" 
                                         name="usuario" 
@@ -67,7 +67,7 @@ export default function IniciarSesion() {
                             <label htmlFor="contraseña">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faLock} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="password" 
                                         id="contraseña" 
                                         name="contraseña" 
@@ -83,7 +83,7 @@ export default function IniciarSesion() {
                             <label htmlFor="email">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faAt} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="email" 
                                         id="email" 
                                         name="email" 
@@ -105,7 +105,7 @@ export default function IniciarSesion() {
                             <label htmlFor="repetir_contraseña">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faUnlock} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="password" 
                                         id="repetir_contraseña" 
                                         name="repetir_contraseña" 

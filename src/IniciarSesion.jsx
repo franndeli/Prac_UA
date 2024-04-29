@@ -31,7 +31,7 @@ export default function IniciarSesion() {
                     <label htmlFor="usuario">
                         <div className="input-icon-container">
                             <FontAwesomeIcon icon={fas.faUser} className="input-icon" />
-                            <input 
+                            <input className='inputFormularioInicioSesion'
                                 type="text" 
                                 id="usuario" 
                                 name="usuario" 
@@ -44,7 +44,7 @@ export default function IniciarSesion() {
                     <label htmlFor="contraseña">
                         <div className="input-icon-container">
                             <FontAwesomeIcon icon={fas.faLock} className="input-icon" />
-                            <input 
+                            <input className='inputFormularioInicioSesion'
                                 type="password" 
                                 id="contraseña" 
                                 name="contraseña" 

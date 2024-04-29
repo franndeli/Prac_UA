@@ -4,7 +4,7 @@
   text-align: center;
 }
 
-fieldset {
+.Formulario {
   width: 600px;
   border: 1px solid #0000ff; /* Cambia el ancho del borde */
   margin: 20px 0; /* Añade más espacio alrededor del fieldset */
@@ -12,7 +12,7 @@ fieldset {
   border-radius: 10px; /* Añade bordes redondeados al fieldset */
 }
 
-legend {
+.legendFormulario {
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -41,10 +41,7 @@ legend {
   margin-right: 10px;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="email"],
-textarea, .Select {
+.inputFormulario{
   flex: 1;
   padding: 0.5rem;
   border: 1px solid #ccc;

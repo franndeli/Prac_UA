@@ -8,7 +8,7 @@
   }
   
   /* A continuación, estiliza el fieldset para que tenga un aspecto moderno y limpio */
-  fieldset {
+  .fielsetSubirArchivo {
     border: 2px solid #0097EC;
     border-radius: 10px;
     padding: 20px;
@@ -60,9 +60,7 @@
   }
   
   /* Los estilos de tus inputs y selects pueden venir de Formulario.css, pero si necesitas ajustes, los haces aquí */
-  input[type="text"],
-  textarea,
-  .Select {
+  .inputSubirArchivo{
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
@@ -134,7 +132,7 @@
   margin-right: 0; /* Asegúrate de que no tenga margen a la derecha para alinearse correctamente */
 }
 
-.custom-button.blue {
+.custom-button-subirArchivo.blue {
     /* ... tus estilos previos ... */
     background-color: #007bff; /* Ajusta este color para que coincida con tu diseño */
     color: #fff;
