@@ -40,17 +40,10 @@ export default function PerfilPrivado() {
         <div className='Publicaciones'>
             <h2 className='Publi'>Publicaciones</h2>
                 <div className='select-container'>
-                    <label>Tipo</label>
+                    <label>Tipo de contenido</label>
                         <select name="Tipo" id="Tipo">
                             <option>TFG</option>
                             <option>TFM</option>
-                        </select>
-                    <label>Contenido</label>
-                        <select name="Contenido" id="Contenido">
-                            <option>Word</option>
-                            <option>Audio</option>
-                            <option>Video</option>
-                            <option>Excel</option>
                         </select>
                 </div>
                 <div className='cards-container'>

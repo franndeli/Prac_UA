@@ -28,13 +28,6 @@ export default function PerfilPublico() {
                             <option>TFG</option>
                             <option>TFM</option>
                         </select>
-                    <label>Contenido</label>
-                        <select name="Contenido" id="Contenido">
-                            <option>Word</option>
-                            <option>Audio</option>
-                            <option>Video</option>
-                            <option>Excel</option>
-                        </select>
                 </div>
                 <div className='cards-container'>
                     <Card className='card'/>
