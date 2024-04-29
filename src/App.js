@@ -5,6 +5,7 @@ import PerfilPublico from './PerfilPublico.jsx';
 import Inicio from './Inicio.jsx';
 import { Routes, Route } from "react-router-dom";
 import IniciarSesion from './IniciarSesion.jsx';
+import SubirArchivo from './SubirArchivo';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/formulario" element={<Formulario />} />
             <Route path="/perfil-privado" element={<PerfilPrivado />} />
             <Route path="/perfil-publico" element={<PerfilPublico />} />
+            <Route path="/subir-archivo" element={<SubirArchivo />} />
           </Routes>
       </header>
     </div>
