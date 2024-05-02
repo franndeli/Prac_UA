@@ -1,18 +1,20 @@
-import React from 'react';
+import { React } from 'react';
+import { useLocation } from 'react-router-dom';
 import './Nav.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import logo from './images/logo512.png';
 
 export default function Navbar() {
-
+    const currentPage = useLocation();
+    // console.log(currentPage);
     return (
         <nav className="navbar">
             <img src={logo} alt="Logo web"/>
             <div className="nav-container">
                 <ul className="nav-list">
-                    <li><a href='/inicio'>Inicio</a></li>
-                    <li><a href='/tu_biblioteca'>Tu Biblioteca</a></li>
+                    <li className={currentPage.pathname === '/inicio' ? 'active' : ''}><a href='/inicio'>Inicio</a></li>
+                    <li className={currentPage.pathname === '/tu_biblioteca' ? 'active' : ''}><a href='/tu_biblioteca'>Tu Biblioteca</a></li>
                 </ul>
             </div>
             <div className="icons-menu">

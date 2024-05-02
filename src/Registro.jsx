@@ -31,17 +31,17 @@ export default function IniciarSesion() {
         <div className='registro'>
             <div className="titulo-web">
                 <img src={logo} alt="Logo de la web"></img>
-                <h1>TÍTULO DE LA WEB</h1>
+                <h1 className="registro_h1">TÍTULO DE LA WEB</h1>
             </div>
             <div className='formulario-registro'>
                 <form onSubmit={handleSubmit}>
-                    <h2>REGISTRARSE</h2>
+                    <h2 className="registro_h2">REGISTRARSE</h2>
                     <div className="inputs_registro">
                         <div className="inputs_registro_0">
                             <label htmlFor="nombre">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faFileSignature} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="text" 
                                         id="nombre" 
                                         name="nombre" 
@@ -54,7 +54,7 @@ export default function IniciarSesion() {
                             <label htmlFor="usuario">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faUser} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="text" 
                                         id="usuario" 
                                         name="usuario" 
@@ -67,7 +67,7 @@ export default function IniciarSesion() {
                             <label htmlFor="contraseña">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faLock} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="password" 
                                         id="contraseña" 
                                         name="contraseña" 
@@ -83,7 +83,7 @@ export default function IniciarSesion() {
                             <label htmlFor="email">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faAt} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="email" 
                                         id="email" 
                                         name="email" 
@@ -96,7 +96,7 @@ export default function IniciarSesion() {
                             <label htmlFor="titulacion_cursada">
                                 <div className="input-icon-container_registro">
                                 <FontAwesomeIcon icon={fas.faSchool} className="input-icon" />
-                                    <select id="titulacion_cursada" name="titulacion_cursada" >
+                                    <select className="inputFormularioRegistro_select" name="titulacion_cursada" >
                                         <option value="" disabled selected hidden>Titulación cursada</option>
                                         <option value="ing_multimedia">Ing. Multimedia</option>
                                     </select>
@@ -105,7 +105,7 @@ export default function IniciarSesion() {
                             <label htmlFor="repetir_contraseña">
                                 <div className="input-icon-container_registro">
                                     <FontAwesomeIcon icon={fas.faUnlock} className="input-icon" />
-                                    <input 
+                                    <input className='inputFormularioRegistro'
                                         type="password" 
                                         id="repetir_contraseña" 
                                         name="repetir_contraseña" 

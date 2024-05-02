@@ -1,15 +1,51 @@
-.cards-container {
-    display: flex;
-    flex-direction: row;
-    margin-top: 20px; /* Espacio entre los selects y las cards */
-    margin-left: 75px; /* Margen izquierdo para separar del borde izquierdo */
-    padding: 0.75rem; /* Espacio alrededor de cada card */
-  }
-  
-  .card {
-        border: 1px solid #0000ff;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 20px; /* Espacio entre cada tarjeta */
-        /* Otros estilos que desees aplicar */
-  }
+.card {
+      width: 250px;
+      border: 2px solid #1B5EBE;
+      border-radius: 10px;
+      background-color: #ffffff;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-right: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+      cursor: pointer;
+}
+
+.card:hover{
+      transform: scale(1.05);
+}
+
+
+.card-titulo {
+      color: #333;
+      font-size: 16px;
+      padding: 10px;
+}
+
+.card-imagen {
+      padding: 10px;
+}
+
+.card-icons {
+      display: flex;
+      text-align: right;
+      justify-content: right;
+      align-items: center;
+      padding: 10px;
+      font-size: 14px;
+}
+
+.icon-card {
+      margin-left: 10px;
+      margin-right: 2px;
+}
+
+.card-autor {
+      color: #333;
+      font-size: 14px;
+      padding: 7px;
+      background-color: #1B5EBE;
+      color: #ffffff;
+      border-radius: 0 0 5px 5px;
+}

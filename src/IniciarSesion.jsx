@@ -23,15 +23,15 @@ export default function IniciarSesion() {
         <div className='iniciar-sesion'>
             <div className="titulo-web">
                 <img src={logo} alt="Logo de la web"></img>
-                <h1>TÍTULO DE LA WEB</h1>
+                <h1 className="iniciar_sesion_h1">TÍTULO DE LA WEB</h1>
             </div>
             <div className='formulario-iniciar-sesion'>
                 <form onSubmit={handleSubmit}>
-                    <h2>INICIAR SESIÓN</h2>
+                    <h2 className="iniciar_sesion_h2">INICIAR SESIÓN</h2>
                     <label htmlFor="usuario">
                         <div className="input-icon-container">
                             <FontAwesomeIcon icon={fas.faUser} className="input-icon" />
-                            <input 
+                            <input className='inputFormularioInicioSesion'
                                 type="text" 
                                 id="usuario" 
                                 name="usuario" 
@@ -44,7 +44,7 @@ export default function IniciarSesion() {
                     <label htmlFor="contraseña">
                         <div className="input-icon-container">
                             <FontAwesomeIcon icon={fas.faLock} className="input-icon" />
-                            <input 
+                            <input className='inputFormularioInicioSesion'
                                 type="password" 
                                 id="contraseña" 
                                 name="contraseña" 

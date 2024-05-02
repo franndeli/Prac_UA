@@ -18,7 +18,7 @@ const SubirArchivo = () => {
             <div><Nav></Nav></div> 
             <div className="SubirArchivo-container">
             <legend>SUBIR ARCHIVO</legend>
-                <fieldset>
+                <fieldset className="fielsetSubirArchivo">
                     
                     <div className="cont1">
                     <div className="form-group">

@@ -42,7 +42,7 @@ form{
     width: 70%;
 }
 
-input[type=text], input[type=password] {
+.inputFormularioInicioSesion{
     margin-top: 0px;
     height: 30px;
     font-size: 18px;
@@ -52,6 +52,7 @@ input[type=text], input[type=password] {
     background-color: rgba(217, 217, 217, 0.51);
     border: 1px solid black;
     margin-bottom: 15px ;
+    padding: 10px;
 }
 
 /* input[type=checkbox]{
@@ -79,6 +80,7 @@ input[type=text], input[type=password] {
 
 .label_recuerdame{
     margin-bottom: 0;
+    font-weight: 600;
 }
 
 .recuerdame_contrasena{
@@ -134,11 +136,11 @@ input[type=text], input[type=password] {
     font-weight: 500;
 }
 
-h1{
+.iniciar_sesion_h1{
     font-size: 80px;
 }
 
-h2 {
+.iniciar_sesion_h2 {
     margin-top: 20px;
     margin-bottom: 45px;
     font-weight: 600;

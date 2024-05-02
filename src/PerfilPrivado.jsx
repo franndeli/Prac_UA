@@ -14,10 +14,8 @@ export default function PerfilPrivado() {
   };
 
     return (
-      <div>
-        <div>
-          <Nav></Nav>
-        </div>
+      <div className="perfil-privado">
+        <Nav></Nav>
         <h1>Mi perfil</h1>
         <div className='container'>
           <div className='InfoUsuario'>

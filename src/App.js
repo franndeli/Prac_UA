@@ -8,13 +8,18 @@ import { Routes, Route } from "react-router-dom";
 import IniciarSesion from './IniciarSesion.jsx';
 import SubirArchivo from './SubirArchivo';
 import PubliDetalle from './PubliDetalle.jsx';
+import Inicio from './Inicio.jsx';
+import SubirArchivo from './SubirArchivo.jsx';
+import Categoria from './Categoria.jsx'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
           <Routes>
-            {/* <Route path="/inicio" element={<Inicio/>} /> */}
+            <Route path="/" element={<Navigate to="/iniciarsesion" replace />} />
+            <Route path="/inicio" element={<Inicio/>} />
+            <Route path="/categoria" element={<Categoria/>} />
             <Route path="/iniciarsesion" element={<IniciarSesion />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/formulario" element={<Formulario />} />
