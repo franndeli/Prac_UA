@@ -7,6 +7,7 @@ import Registro from './Registro.jsx';
 import { Routes, Route } from "react-router-dom";
 import IniciarSesion from './IniciarSesion.jsx';
 import SubirArchivo from './SubirArchivo';
+import PubliDetalle from './PubliDetalle.jsx';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/perfil-privado" element={<PerfilPrivado />} />
             <Route path="/perfil-publico" element={<PerfilPublico />} />
             <Route path="/subir-archivo" element={<SubirArchivo />} />
+            <Route path="/publidetalle" element={<PubliDetalle />} />
           </Routes>
       </header>
     </div>

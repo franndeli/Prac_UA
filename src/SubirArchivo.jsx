@@ -22,43 +22,51 @@ const SubirArchivo = () => {
                     
                     <div className="cont1">
                     <div className="form-group">
-                        <label htmlFor="titulo">Título:</label>
-                        <input type="text" id="titulo" name="titulo" />
+                        <label htmlFor="titulo" id="leibel">Título:</label>
+                        <input type="text" id="titulo" className="textarea-subir" name="titulo" />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="etiquetas">Etiquetas:</label>
-                        <input type="text" id="etiquetas" name="etiquetas" />
+                        <label htmlFor="etiquetas" id="leibel">Etiquetas:</label>
+                        <input type="text" id="etiquetas" className="textarea-subir" name="etiquetas" />
                     </div>
                     
                     <div className="form-group">
-                        <label htmlFor="tipo-archivo">Tipo de Contenido:</label>
+                        <label htmlFor="tipo-archivo" id="leibel">Tipo de Contenido:</label>
                         <select id="tipo-archivo" name="tipo-archivo">
+                        <option value="" disabled selected></option>
                             <option >TFG</option>
                             <option >TFM</option>
                             <option>Práctica</option>
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="descripcion">Descripción:</label>
-                        <textarea id="descripcion" name="descripcion" />
+                        <label htmlFor="descripcion" id="leibel">Descripción:</label>
+                        <textarea id="descripcion" className="textarea-subir" name="descripcion" />
                     </div>
                     </div>
                     <div className="cont2">
                     <div className="form-group imagen-subida">
                         <div className="image-upload-container">
-                            <img src={imagePreview} alt="Imagen por defecto" className="image-preview" /> {/* Previsualización de la imagen */}
+                            <img src={imagePreview} alt="Imagen por defecto" className="image-preview" /> 
+                            
                             <input type="file" id="file" name="file" className="inputfile" onChange={handleImageChange} />
                             <label htmlFor="file" className="image-upload-label">
-                                <div className="upload-icon-container">
+                            <div className="upload-icon-container">
                                     <img src={iconoSubir} alt="Subir" />
                                 </div>
-                                Subir imagen
+                                
                             </label>
+                            <label htmlFor="file"  id="leibel2">
+                            Subir Imagen
+                                    
+                                
+                            </label>
+                            
                         </div>
                     </div>
                     </div>
                     <div className="cont3"> {/* Nuevo contenedor para el botón */}
-                        <div className="form-group">
+                        <div className="form-group-botn">
                             <button className="custom-button blue">Subir</button>
                         </div>
                     </div>

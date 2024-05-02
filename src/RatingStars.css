@@ -1,0 +1,33 @@
+/* RatingStars.css */
+.rating-container {
+    display: flex;
+    align-items: center;
+    font-size: 44px;
+    margin-top:0;
+}
+
+.rating-container span {
+    cursor: pointer;
+    color: #ccc; /* Color de estrella no seleccionada */
+}
+
+.rating-container span:hover{
+    
+    color: #ffc107;
+}
+.rating-container span:hover ~ span {
+    color: #ffc107;
+}
+
+.rating-number {
+    margin-right: 10px;
+    font-weight: normal;
+    color:black;
+}
+
+
+
+/* Estrellas seleccionadas */
+.rating-container span {
+    color: gold; /* Color de estrella seleccionada */
+}
