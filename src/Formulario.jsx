@@ -71,8 +71,8 @@ export default function Formulario() {
       <h1>Ajustes</h1>
       <div>
         {/* Botones para cambiar entre los formularios */}
-        <button className={`custom-button ${formulario === 'usuario' ? 'blue' : ''}`} onClick={mostrarFormularioUsuario}>Usuario</button>
-        <button className={`custom-button ${formulario === 'sistema' ? 'blue' : ''}`} onClick={mostrarFormularioSistema}>Sistema</button>
+        <button className={`custom-button-Formulario ${formulario === 'usuario' ? 'blue' : ''}`} onClick={mostrarFormularioUsuario}>Usuario</button>
+        <button className={`custom-button-Formulario ${formulario === 'sistema' ? 'blue' : ''}`} onClick={mostrarFormularioSistema}>Sistema</button>
       </div>
       {/* Contenido del formulario */}
       {/* Renderizamos el formulario según el estado "formulario" */}
@@ -110,8 +110,8 @@ export default function Formulario() {
             </div>
 
             <div>
-              <button className="custom-button-red" onClick={handleBorrarCuenta}>Borrar cuenta</button>
-              <button className={`custom-button ${color}`} onClick={handleConfirmarCambios}>Guardar Cambios</button>
+              <button className="custom-button-Formulario-red" onClick={handleBorrarCuenta}>Borrar cuenta</button>
+              <button className={`custom-button-Formulario ${color}`} onClick={handleConfirmarCambios}>Guardar Cambios</button>
             </div>
           </fieldset>
         </div>
@@ -178,7 +178,7 @@ export default function Formulario() {
             </div>
 
             <div>
-              <button className={`custom-button ${color}`} onClick={handleConfirmarCambios}>Guardar Cambios</button>
+              <button className={`custom-button-Formulario ${color}`} onClick={handleConfirmarCambios}>Guardar Cambios</button>
             </div>
           </fieldset>
         </div>

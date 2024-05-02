@@ -20,10 +20,10 @@ export default function PerfilPublico() {
           </div>
         </div>
   
-        <div className='Publicaciones'>
-            <h2 className='Publi'>Publicaciones</h2>
-                <div className='select-container'>
-                    <label>Tipo de contenido</label>
+        <div className='PublicacionesPublico'>
+            <h2 className='PubliPublico'>Publicaciones</h2>
+                <div className='select-container-Publico'>
+                    <label className='TipoContenidoPublico'>Tipo de contenido</label>
                         <select name="Tipo" id="Tipo">
                             <option>TFG</option>
                             <option>TFM</option>

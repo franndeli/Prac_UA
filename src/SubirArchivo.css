@@ -1,266 +1,265 @@
-
 .SubirArchivo-container {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 20px;
-  }
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+
+.fielsetSubirArchivo {
+  border: 5px solid #0097ec;
+  border-bottom: 20px solid #0097EC;
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  padding: 20px;
+  margin: 20px;
+  width: 90%; 
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   
-  
-  fieldset {
-    border: 5px solid #0097ec;
-    border-bottom: 20px solid #0097EC;
-    border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    padding: 20px;
-    margin: 20px;
-    width: 90%; 
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    
-  }
- 
+}
+
 .cont1, .cont2 {
-  flex: 1;
-  margin: 60px 10px 0px 10px;
-  min-width: calc(50% - 20px); 
-  max-width: calc(50% - 20px); 
-  box-sizing: border-box;
+flex: 1;
+margin: 60px 10px 0px 10px;
+min-width: calc(50% - 20px); 
+max-width: calc(50% - 20px); 
+box-sizing: border-box;
 }
 
 
 .cont2 {
-  margin-top: 40px;
-  flex-grow: 0;
-  flex-basis: auto; 
+margin-top: 40px;
+flex-grow: 0;
+flex-basis: auto; 
 }
 .cont3 {
-  width: 100%; 
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    box-sizing: border-box; 
-    padding: 10px 0; 
-}
-.button-container {
+width: 100%; 
   display: flex;
   justify-content: center; 
-  padding-top: 20px; 
+  align-items: center; 
+  box-sizing: border-box; 
+  padding: 10px 0; 
 }
-  
-  
-  /* El legend será el título de tu formulario */
+.button-container {
+display: flex;
+justify-content: center; 
+padding-top: 20px; 
+}
 
-  /* El legend será el título de tu formulario */
+
+/* El legend será el título de tu formulario */
+
+/* El legend será el título de tu formulario */
 legend {
-  color: #010101;
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  width: auto;
-  padding: 0 10px;
-  border: none;
+color: #010101;
+font-weight: bold;
+font-size: 1.5rem;
+margin-top: 30px;
+margin-bottom: 10px;
+width: auto;
+padding: 0 10px;
+border: none;
 }
-  #titulo{
-    border: 1px solid #91bcd4;
-    border-radius: 30px;
-    padding: 10px;
-    
-    margin: 5px 5px 15px 15px ;
-    width: 100%;
-    height: 10px;
-    font-size: 0.9rem;
-    background-color: #e8eaec;
-  }
-  #etiquetas{
-    border: 1px solid #91bcd4;
-    border-radius: 30px;
-    padding: 10px;
-    
-    margin: 5px 5px 15px 15px ;
-    width: 100%;
-    height: 10px;
-    font-size: 0.9rem;
-    background-color: #e8eaec;
-  }
-  #tipo-archivo{
-    border: 1px solid #91bcd4;
-    border-radius: 30px;
-    padding: 10px;
-    
-    margin: 5px 5px 15px 15px ;
-    width: 100%;
-    height: 10px;
-    font-size: 0.9rem;
-    background-color: #e8eaec;
-  }
-  #descripcion{
-    border: 1px solid #91bcd4;
-    border-radius: 30px;
-    padding: 10px;
-    
-    margin: 5px 5px 15px 15px ;
-    width: 100%;
-    height: 10px;
-    font-size: 0.9rem;
-    background-color: #e8eaec;
-  }
+#titulo{
+  border: 1px solid #91bcd4;
+  border-radius: 30px;
+  padding: 10px;
   
+  margin: 5px 5px 15px 15px ;
+  width: 100%;
+  height: 10px;
+  font-size: 0.9rem;
+  background-color: #e8eaec;
+}
+#etiquetas{
+  border: 1px solid #91bcd4;
+  border-radius: 30px;
+  padding: 10px;
   
-  select{
-    border: 1px solid #91bcd4 !important;
-    margin: 10px;
-    border-radius: 30px;
-    padding:5px;
-    width: 300px;
-    background-color: #e8eaec;
-  }
+  margin: 5px 5px 15px 15px ;
+  width: 100%;
+  height: 10px;
+  font-size: 0.9rem;
+  background-color: #e8eaec;
+}
+#tipo-archivo{
+  border: 1px solid #91bcd4;
+  border-radius: 30px;
+  padding: 10px;
   
+  margin: 5px 5px 15px 15px ;
+  width: 100%;
+  height: 10px;
+  font-size: 0.9rem;
+  background-color: #e8eaec;
+}
+#descripcion{
+  border: 1px solid #91bcd4;
+  border-radius: 30px;
+  padding: 10px;
   
+  margin: 5px 5px 15px 15px ;
+  width: 100%;
+  height: 10px;
+  font-size: 0.9rem;
+  background-color: #e8eaec;
+}
+
+
+.selectArchivo{
+  border: 1px solid #91bcd4 !important;
+  margin: 10px;
+  border-radius: 30px;
+  padding:5px;
+  width: 300px;
+  background-color: #e8eaec;
+}
+
+
+
+
+
+.button-cambiar-imagen {
   
-  
- 
-  .button-cambiar-imagen {
-    
-    background-color: #f0f0f0; 
-  }
-  
+  background-color: #f0f0f0; 
+}
+
 
 .inputfile {
-    
-    display: none;
-    
+  
+  display: none;
+  
 }
 .image-upload-container {
-    
-    position: relative;
+  
+  position: relative;
 }
 .image-preview {
-  display: block; /* Asegura que la imagen ocupa todo el ancho de su contenedor */
-  width: 100%; /* Ajusta este valor según necesites */
+display: block; /* Asegura que la imagen ocupa todo el ancho de su contenedor */
+width: 100%; /* Ajusta este valor según necesites */
 }
 
 
 
 .upload-icon-container img{
-  max-width: 40px; 
-  
+max-width: 40px; 
+
 }
 
 #leibel2 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: black;
-    border: 2px solid black;
-    background-color: #e8eaec ;
-    display: inline-flex;
-    align-items: center;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 30px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  font-size: 1rem;
+  font-weight: 700;
+  color: black;
+  border: 2px solid black;
+  background-color: #e8eaec ;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 .image-upload-label {
-  position: absolute; 
-  bottom: 93px; 
-  right: 0px; 
-  padding:5px;
-  background-color: #51b5ed; 
-  color: white; 
-  border-radius: 5px; 
-  cursor: pointer; 
-  align-items: center;
+position: absolute; 
+bottom: 93px; 
+right: 0px; 
+padding:5px;
+background-color: #51b5ed; 
+color: white; 
+border-radius: 5px; 
+cursor: pointer; 
+align-items: center;
 }
 
 #leibel2:hover {
-    background-color: #2980b9;
+  background-color: #2980b9;
 }
 .image-upload-label:hover {
-  background-color: #2980b9;
+background-color: #2980b9;
 }
 
 .form-group {
-  
-  flex: 1; 
-  min-width: 250px; 
-  margin-top: 20px;
-  margin-left: 30px;
-  margin-right: 30px; 
+
+flex: 1; 
+min-width: 250px; 
+margin-top: 20px;
+margin-left: 30px;
+margin-right: 30px; 
 
 }
 .form-group #leibel{
-  padding-right: 30px;
-  font-weight: bold;
+padding-right: 30px;
+font-weight: bold;
 }
 .form-group-botn{
-  width: 400px;
+width: 400px;
 }
 .custom-button.blue{
   background-color: #5ebdf3;
   display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 27px;
-    font-family: 'Montserrat';
-    font-weight: 500;
-    width: 100%;
-    height: 45px;
-    color:black;
-    border-color: #010101;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 27px;
+  font-family: 'Montserrat';
+  font-weight: 500;
+  width: 100%;
+  height: 45px;
+  color:black;
+  border-color: #010101;
+  border-radius: 20px;
 }
 .custom-button.blue:hover {
-  background-color: #0056b3; 
+background-color: #0056b3; 
 }
 
 
 .imagen-subida {
-  
-   
-  position: relative; /* Asegura que el posicionamiento absoluto del hijo se base en este contenedor */
-  display: inline-block; /* Esto hace que el div se ajuste al contenido, útil si solo quieres que ocupe el espacio de la imagen */
+
+ 
+position: relative; /* Asegura que el posicionamiento absoluto del hijo se base en este contenedor */
+display: inline-block; /* Esto hace que el div se ajuste al contenido, útil si solo quieres que ocupe el espacio de la imagen */
 }
 
-  
+
 @media (max-width: 768px) {
-  .SubirArchivo-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    padding: 20px;
-    height: 100vh; 
-    box-sizing: border-box;
+.SubirArchivo-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 20px;
+  height: 100vh; 
+  box-sizing: border-box;
 }
 legend{
-  align-items: center;
+align-items: center;
 }
 
-fieldset {
-    width: 100%; 
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+.fielsetSubirArchivo {
+  width: 100%; 
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .cont1, .cont2, .cont3 {
-    width: 100%; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    max-width: none;
+  width: 100%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: none;
 }
 }
-  

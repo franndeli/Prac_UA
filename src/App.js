@@ -4,12 +4,11 @@ import PerfilPrivado from './PerfilPrivado.jsx';
 import PerfilPublico from './PerfilPublico.jsx';
 import Registro from './Registro.jsx';
 // import Inicio from './Inicio.jsx';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route , Navigate} from "react-router-dom";
 import IniciarSesion from './IniciarSesion.jsx';
-import SubirArchivo from './SubirArchivo';
+import SubirArchivo from './SubirArchivo.jsx';
 import PubliDetalle from './PubliDetalle.jsx';
 import Inicio from './Inicio.jsx';
-import SubirArchivo from './SubirArchivo.jsx';
 import Categoria from './Categoria.jsx'
 
 function App() {

@@ -32,7 +32,7 @@ const SubirArchivo = () => {
                     
                     <div className="form-group">
                         <label htmlFor="tipo-archivo" id="leibel">Tipo de Contenido:</label>
-                        <select id="tipo-archivo" name="tipo-archivo">
+                        <select className="selectArchivo" id="tipo-archivo" name="tipo-archivo">
                         <option value="" disabled selected></option>
                             <option >TFG</option>
                             <option >TFM</option>

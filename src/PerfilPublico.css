@@ -25,34 +25,43 @@ h1{
     padding-left: 20px; /* Espaciado entre la imagen y el texto */
   }
 
-.Publi{
+
+.PublicacionesPublico {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 110px;
+  }
+
+.PubliPublico{
     text-align: left;
-    margin-left: 75px;
+    
 }
 
-.Publicaciones {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .Publicaciones > div {
-    display: flex;
-    align-items: center;
-  }
-  
-  .select-container {
+.TipoContenidoPublico {
+  margin-top: 10px; /* Espacio entre el título y el selector */
+  padding-bottom: 10px;
+}
+
+  .select-container-Publico {
     display: flex;
     flex-direction: row;
-    margin-right: 20px; /* Ajusta según tu preferencia */
-    margin-left: 75px;
 }
   
-  .select-container select {
+  .select-container-Publico select {
     border-radius: 20px; /* Forma redonda */
     padding: 0.25rem;
     border: 1px solid #0000ff;
-    background-color: #0074d9;
+    background-color: #ffffff;
     margin-bottom: 10px; /* Espacio entre los selects */
   }
   
+  .select-container-Publico select option{
+    background-color: #ffffff;
+  }
+
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap; /* Permitir que las tarjetas se envuelvan en múltiples líneas */
+  }
  

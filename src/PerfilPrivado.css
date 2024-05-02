@@ -2,13 +2,6 @@ h1{
   text-align: center;
 }
 
-.perfil-privado{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
 .container {
     display: flex;
     flex-direction: column; /* Apila los elementos verticalmente */
@@ -48,51 +41,46 @@ h1{
     margin-left: 50px;
 }
 
-.Publi{
-    text-align: left;
-    margin-left: 75px;
-}
 
-
-
-.Publicaciones {
+.PublicacionesPrivado {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  margin-left: 110px;
 }
 
-.Publicaciones > div {
-  display: flex;
-  align-items: center;
+.PubliPrivate{
+  text-align: left;
+  /*margin-left: 75px;*/
+  margin-right: 25px;
 }
 
-.Publicaciones .select-container {
+.TipoContenidoPrivado {
+  margin-top: 10px; /* Espacio entre el título y el selector */
+  padding-bottom: 10px;
+}
+
+.PublicacionesPrivado .select-container-privado {
   display: flex;
   flex-direction: row;
-  margin-right: 20px; /* Ajusta según tu preferencia */
-  margin-left: 75px;
 }
 
-.Publicaciones .select-container select {
+.PublicacionesPrivado .select-container-privado select {
   border-radius: 20px; /* Forma redonda */
   padding: 0.25rem;
-  border: 1px solid #000000;
+  border: 1px solid #0000ff;
   background-color: #ffffff;
-  margin-bottom: 10px; /* Espacio entre los selects */
+  margin-left: 2px;
 }
 
-.Publicaciones .select-container select option{
+.PublicacionesPrivado .select-container-privado select option{
   background-color: #ffffff;
 }
-  
- .Publicaciones .select-container select {
-    border-radius: 20px; /* Forma redonda */
-    padding: 0.25rem;
-    border: 1px solid #0000ff;
-    background-color: #ffffff;
-    margin-bottom: 10px; /* Espacio entre los selects */
-  }
 
-  .Publicaciones .select-container select option{
-    background-color: #ffffff;
-  }
+.cards-container {
+  display: flex;
+  flex-wrap: wrap; /* Permitir que las tarjetas se envuelvan en múltiples líneas */
+}
+
+
   

@@ -50,7 +50,7 @@
 }
 
 /* Estilos para los botones */
-.custom-button {
+.custom-button-Formulario {
   background-color: #f9f9f9;
   color: #000000;
   border: 2px solid blue; /* Añade un borde azul a los botones */
@@ -60,7 +60,7 @@
   margin-top: 10px; /* Ajusta el espacio entre los botones */
 }
 
-.custom-button.blue {
+.custom-button-Formulario.blue {
   background-color: #0074d9;
   color: #ffffff; /* Cambia el color del texto para que sea legible */
   border: 2px solid #0000ff; /* Añade un borde azul a los botones */
@@ -70,7 +70,7 @@
   margin-top: 10px; /* Ajusta el espacio entre los botones */
 }
 
-.custom-button-red {
+.custom-button-Formulario-red {
   background-color: #f86150;
   color: #ffffff; /* Cambia el color del texto para que sea legible */
   border: 2px solid rgb(244, 63, 13); /* Añade un borde azul a los botones */

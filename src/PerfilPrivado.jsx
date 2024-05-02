@@ -35,10 +35,10 @@ export default function PerfilPrivado() {
             </div>
         </div>
   
-        <div className='Publicaciones'>
-            <h2 className='Publi'>Publicaciones</h2>
-                <div className='select-container'>
-                    <label>Tipo de contenido</label>
+        <div className='PublicacionesPrivado'>
+            <h2 className='PubliPrivate'>Publicaciones</h2>
+                <div className='select-container-privado'>
+                    <label className='TipoContenidoPrivado'>Tipo de contenido</label>
                         <select name="Tipo" id="Tipo">
                             <option>TFG</option>
                             <option>TFM</option>
