@@ -54,11 +54,12 @@ form{
     background-color: rgba(217, 217, 217, 0.51);
     border: 1px solid black;
     margin-bottom: 15px ;
+    padding: 10px;
 }
 
-#titulacion_cursada{
+.inputFormularioRegistro_select{
     margin-top: 0px;
-    height: 45px;
+    height: 53px;
     font-size: 18px;
     font-family: 'Montserrat';
     border-radius: 20px;
@@ -152,11 +153,11 @@ form{
     font-weight: 500;
 }
 
-h1{
+.registro_h1{
     font-size: 80px;
 }
 
-h2 {
+.registro_h2 {
     margin-top: 20px;
     margin-bottom: 45px;
     font-weight: 600;
