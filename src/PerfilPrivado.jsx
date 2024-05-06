@@ -3,8 +3,30 @@ import './PerfilPrivado.css';
 import { useNavigate } from 'react-router-dom';
 import Card from './Card.jsx';
 import Nav from './Nav.jsx'
+import { useEffect, useState } from 'react';
+import { wait } from '@testing-library/user-event/dist/utils/index.js';
 
 export default function PerfilPrivado() {
+
+  const [perfilPrivado, setDatosPrivados] = useState([]);
+
+  const fetchPrivado = async () => {
+    try{
+      const response = await fetch ('http://localhost:3001/api/perfilPrivado')
+      if(!response.ok){
+        throw new Error ('Error al obtener los datos del servidor !!')
+      }
+
+      const data = await response.json()
+      setDatosPrivados(data)
+    }catch(error){
+      console.log('Error al obtener los datos !!')
+    }
+  };
+
+  useEffect (() => {
+    fetchPrivado();
+  }, )
 
   const navigate = useNavigate(); // Usa useNavigate para la navegación
 
@@ -22,11 +44,15 @@ export default function PerfilPrivado() {
             <div className='InfoUsuarioImage'>
               <p>Poner Imagen</p>
             </div>
-            <div className='InfoUsuarioText'>
-              <p>Pablo Simón Nicolás</p>
-              <p>Ingenieria Multimedia</p>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae recusandae veritatis architecto accusantium ad illum voluptates autem eligendi nesciunt vitae, deserunt dolorum illo facere, alias quae totam eos odio sequi?</p>
-            </div>
+
+            {perfilPrivado.map((p) => (
+              <div className='InfoUsuarioText' key = {p.id}>
+                <p>{p.nombre}</p>
+                <p>{p.titulacion}</p>
+                <p>{p.descripcion}</p>
+              </div>
+            ))}
+              
           </div>
           <div className='button-custom'>
                 <button className='custom-button-blue' onClick={handleEditarPerfilClick}>
