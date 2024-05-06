@@ -14,8 +14,22 @@ export default function Formulario() {
 
   const navigate = useNavigate();
 
-  const handleConfirmarCambios = () => {
-    setShowModal(true); // Mostrar modal al confirmar cambios
+  const handleConfirmarCambios = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/ajustesUsuario', {
+        method: 'PUT', // Cambiar de POST a PUT
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        throw new Error('Error al guardar los datos del servidor !!');
+      }
+      setShowModal(true);
+    } catch (error) {
+      console.log('Error al guardar los datos !!', error);
+    }
   };
 
   const handleModalConfirm = () => {

@@ -12,7 +12,7 @@ export default function PerfilPrivado() {
 
   const fetchPrivado = async () => {
     try{
-      const response = await fetch ('http://localhost:3001/api/perfilPrivado')
+      const response = await fetch ('http://localhost:3001/api/perfil')
       if(!response.ok){
         throw new Error ('Error al obtener los datos del servidor !!')
       }

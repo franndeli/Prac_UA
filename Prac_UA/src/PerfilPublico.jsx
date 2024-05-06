@@ -1,8 +1,32 @@
 import './PerfilPublico.css';
 import Card from './Card.jsx';
-import Nav from './Nav.jsx'
+import Nav from './Nav.jsx';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { wait } from '@testing-library/user-event/dist/utils/index.js';
 
 export default function PerfilPublico() {
+
+  const [PerfilPublico, setDatosPrivados] = useState([]);
+
+  const fetchPublico = async () => {
+    try{
+      const response = await fetch ('http://localhost:3001/api/perfil')
+      if(!response.ok){
+        throw new Error ('Error al obtener los datos del servidor !!')
+      }
+
+      const data = await response.json()
+      setDatosPrivados(data)
+    }catch(error){
+      console.log('Error al obtener los datos !!')
+    }
+  };
+
+  useEffect (() => {
+    fetchPublico();
+  }, )
+
     return (
       <div>
        <div><Nav></Nav></div> 
@@ -12,11 +36,14 @@ export default function PerfilPublico() {
             <div className='InfoUsuarioImage'>
               <p>Poner Imagen</p>
             </div>
-            <div className='InfoUsuarioText'>
-              <p>Pablo Simón Nicolás</p>
-              <p>Ingenieria Multimedia</p>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae recusandae veritatis architecto accusantium ad illum voluptates autem eligendi nesciunt vitae, deserunt dolorum illo facere, alias quae totam eos odio sequi?</p>
-            </div>
+            {PerfilPublico.map((p) => (
+              <div className='InfoUsuarioText' key = {p.id}>
+                <p>{p.nombre}</p>
+                <p>{p.titulacion}</p>
+                <p>{p.descripcion}</p>
+                
+              </div>
+            ))}
           </div>
         </div>
   
