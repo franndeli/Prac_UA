@@ -3,21 +3,46 @@ import './IniciarSesion.css';
 import logo from './images/logo512.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 export default function IniciarSesion() {
+
+    const navigate = useNavigate();
 
     // useState para manejar los inputs
     const [usuario, setUsuario] = useState('');
     const [contraseña, setContraseña] = useState('');
+    const [error, setError] = useState('');
 
     // Manejadores para los inputs
     const handleUsuarioChange = (e) => setUsuario(e.target.value);
     const handleContraseñaChange = (e) => setContraseña(e.target.value);
 
     // Función para manejar el envío del formulario
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3001/api/iniciarSesion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ usuario, contraseña }),
+            });
+            
+            if (!response.ok) {
+                throw new Error('Error al iniciar sesión');
+            }
+
+            // Aquí puedes redirigir al usuario a la página correspondiente
+            console.log('Inicio de sesión exitoso');
+            navigate('/inicio');
+        } catch (error) {
+            setError('Error al iniciar sesión. Por favor, verifica tus credenciales.');
+        }
     };
+
+
 
     return (
         <div className='iniciar-sesion'>

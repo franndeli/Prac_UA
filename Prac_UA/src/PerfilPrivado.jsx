@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import Card from './Card.jsx';
 import Nav from './Nav.jsx'
 import { useEffect, useState } from 'react';
-import { wait } from '@testing-library/user-event/dist/utils/index.js';
 
 export default function PerfilPrivado() {
 
   const [perfilPrivado, setDatosPrivados] = useState([]);
+  const [publicaciones, setPublicaciones] = useState([]);
 
   const fetchPrivado = async () => {
     try{
@@ -24,8 +24,23 @@ export default function PerfilPrivado() {
     }
   };
 
+  const fetchPublicaciones = async () => {
+    try{
+      const response = await fetch ('http://localhost:3001/api/misPublicaciones')
+      if(!response.ok){
+        throw new Error ('Error al obtener las publicaciones del servidor !!')
+      }
+
+      const data = await response.json()
+      setPublicaciones(data)
+    }catch(error){
+      console.log('Error al obtener los datos !!')
+    }
+  };
+
   useEffect (() => {
     fetchPrivado();
+    fetchPublicaciones();
   }, )
 
   const navigate = useNavigate(); // Usa useNavigate para la navegación
@@ -46,7 +61,7 @@ export default function PerfilPrivado() {
             </div>
 
             {perfilPrivado.map((p) => (
-              <div className='InfoUsuarioText' key = {p.id}>
+              <div className='InfoUsuarioText' key = {p.ID}>
                 <p>{p.nombre}</p>
                 <p>{p.titulacion}</p>
                 <p>{p.descripcion}</p>
@@ -71,11 +86,11 @@ export default function PerfilPrivado() {
                             <option>TFM</option>
                         </select>
                 </div>
-                <div className='cards-container'>
-                    <Card className='card'/>
-                    <Card className='card'/>
-                    <Card className='card'/>
-                </div>
+                <div className="cards-container">
+                  {publicaciones.map(publicacion => (
+                    <Card key={publicacion.id} photoId={publicacion.id} className="card"/>
+                  ))}
+              </div>
         </div>
 
       </div>
