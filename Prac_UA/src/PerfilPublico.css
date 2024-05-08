@@ -51,7 +51,7 @@ h1{
   .select-container-Publico select {
     border-radius: 20px; /* Forma redonda */
     padding: 0.25rem;
-    border: 1px solid #0000ff;
+    border: 2px solid #0000ff;
     background-color: #ffffff;
     margin-bottom: 10px; /* Espacio entre los selects */
   }

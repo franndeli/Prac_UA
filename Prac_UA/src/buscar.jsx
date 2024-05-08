@@ -10,6 +10,8 @@ export default function Buscar() {
 
     const [fotos, setFotos] = useState([]);
     const [busqueda, setBusqueda] = useState("");
+    const [tipoSeleccionado, setTipoSeleccionado] = useState("");
+    const [contenidoSeleccionado, setContenidoSeleccionado] = useState("");
 
     useEffect(() => {
         fetchFotos();
@@ -29,15 +31,36 @@ export default function Buscar() {
     };
 
     const fotosFiltradas = fotos.filter(foto => {
-        return foto.Nombre && foto.Nombre.toLowerCase().includes(busqueda.toLowerCase());
+        const nombreValido = foto.Nombre && foto.Nombre.toLowerCase().includes(busqueda.toLowerCase());
+        const tipoValido = !tipoSeleccionado || foto.Tipo === tipoSeleccionado;
+        const contenidoValido = !contenidoSeleccionado || foto.Contenidos === contenidoSeleccionado;
+        return nombreValido && tipoValido && contenidoValido;
     });
+
+    const handleTipoSeleccionado = (e) => {
+        const valorSeleccionado = e.target.value;
+        if (valorSeleccionado === "Tipo") {
+          setTipoSeleccionado("");
+        } else {
+          setTipoSeleccionado(valorSeleccionado);
+        }
+      };
+
+      const handleContenidoSeleccionado = (e) => {
+        const valorSeleccionado = e.target.value;
+        if (valorSeleccionado === "Contenidos") {
+            setContenidoSeleccionado("");
+        } else {
+            setContenidoSeleccionado(valorSeleccionado);
+        }
+      };
 
     return (
       <div className="inicio">
         <Nav></Nav>
         
         <div className="search-bar">
-                <input 
+                <input className="search-input" 
                     type="text" 
                     value={busqueda} 
                     onChange={(e) => setBusqueda(e.target.value)} 
@@ -45,32 +68,38 @@ export default function Buscar() {
                 />
             </div>
 
+        <div className='SelectoresBuscar'>
+
+            <select name="Tipo" id="Tipo" onChange={handleTipoSeleccionado}>
+                <option selected>Tipo</option>
+                <option>Word</option>
+                <option>PDF</option>
+                <option>Excel</option>
+                <option>Video</option>
+                <option>Audio</option>
+                <option>Otro</option>
+            </select>
+
+            <select name="Contenidos" id="Contenidos" onChange={handleContenidoSeleccionado}>
+                <option selected>Contenidos</option>
+                <option>Practicas</option>
+                <option>TFG</option>
+                <option>TFM</option>
+                <option>Tesis</option>
+                <option>Otros</option>
+            </select>
+
+        </div>
+
         <div className="recomendaciones">
-            <a href="/categoria">
                 <div className="recomendaciones_icon">
-                    <h2 className="recomendaciones_h2">RECOMENDACIONES</h2>
+                    <h2 className="recomendaciones_h2">Resultado de la búsqueda</h2>
                     <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                 </div>
-            </a>
             <div className="cards-container">
                 {fotosFiltradas.map((foto, index) => (
-                <Card key={index} photoId={foto.id} />
+                <a href='publiDetalle'><Card key={index} photoId={foto.id} /></a>
                 ))}
-            </div>
-        </div>
-        <div className="recomendaciones">
-            <a href="/categoria">
-                <div href="/categorias" className="recomendaciones_icon">
-                    <h2 className="recomendaciones_h2">TUS ÚLTIMOS TRABAJOS VISTOS</h2>
-                    <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
-                </div>
-            </a>
-            <div className="pagina_inicio">
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
             </div>
         </div>
       </div>

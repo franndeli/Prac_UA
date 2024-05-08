@@ -40,7 +40,7 @@ export default function Inicio() {
             </a>
             <div className="cards-container">
                 {fotos.map((foto, index) => (
-                <Card key={index} photoId={foto.id} />
+                <a href='publiDetalle'><Card key={index} photoId={foto.id} /></a>
                 ))}
             </div>
         </div>
@@ -51,12 +51,10 @@ export default function Inicio() {
                     <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                 </div>
             </a>
-            <div className="pagina_inicio">
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
+            <div className="cards-container">
+                {fotos.map((foto, index) => (
+                <a href='publiDetalle'><Card key={index} photoId={foto.id} /></a>
+                ))}
             </div>
         </div>
       </div>
