@@ -1,0 +1,47 @@
+.recomendaciones_h2{
+    margin-bottom: 20px;
+    font-weight: 700;
+    transition: transform 0.3s ease;
+}
+
+.inicio{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.recomendaciones {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
+    margin-top: 40px;
+    width: 100%;
+}
+
+.recomendaciones_icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    color: black;
+}
+
+.recomendaciones_icon:hover {
+    transform: translateX(20px);
+}
+
+.more_than_icon {
+    transition: transform 0.3s ease;
+}
+
+.pagina_inicio {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start; 
+    justify-content: flex-start; 
+}

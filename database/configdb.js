@@ -3,6 +3,7 @@ const express = require ('express');
 const cors = require ('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = 3001;
@@ -40,9 +41,10 @@ app.post('/api/iniciarSesion', (req, res) => {
       res.status(500).json({ error: "Error al verificar las credenciales" });
       return;
     }
+    console.log(result);
     // Verifica si se encontró un usuario con las credenciales proporcionadas
     if (result.length > 0) {
-      req.session.usuario = result[0];
+
       // Usuario autenticado, devolver datos del usuario
       res.status(200).json({ message: "Inicio de sesión exitoso"});
     } else {
@@ -51,6 +53,8 @@ app.post('/api/iniciarSesion', (req, res) => {
     }
   });
 });
+
+
 
 app.post('/api/logout', (req, res) => {
   req.session.destroy(); // Destruye la sesión
@@ -83,9 +87,8 @@ app.get('/api/publicaciones/:id', (req, res) => {
 })
 
 app.get('/api/misPublicaciones', (req, res) => {
-  const userId = req.session.usuario.id; // Suponiendo que el objeto de sesión contiene el ID del usuario
-  const SQL_QUERY = 'SELECT * FROM publicaciones WHERE ID = ?';
-  connection.query(SQL_QUERY, [userId], (err, result) => {
+  const SQL_QUERY = 'SELECT * FROM publicaciones WHERE autor = 0';
+  connection.query(SQL_QUERY, (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones del usuario:", err);
       res.status(500).json({ error: "Error al obtener las publicaciones del usuario" });
@@ -96,7 +99,7 @@ app.get('/api/misPublicaciones', (req, res) => {
 });
 
 app.put('/api/ajustesUsuario', (req, res) => {
-  const idUsuario = req.session.usuario.id;
+  // Obtener el ID del usuario
   const { Nombre, Contraseña, Email, Descripcion, Color, Idioma, ModoDaltónico, Letra } = req.body; // Obtener datos del cuerpo de la solicitud
 
   let SQL_QUERY = 'UPDATE usuario SET ';
@@ -152,18 +155,39 @@ app.put('/api/ajustesUsuario', (req, res) => {
     }
     console.log("Datos modificados correctamente en la base de datos");
     res.status(200).json({ message: "Datos modificados correctamente" });
-  });
+    
+  })
 });
 
+
+
 app.get('/api/perfil', (req, res) => {
-  const SQL_QUERY = 'SELECT * FROM usuario';
-  connection.query(SQL_QUERY, [idUsuario], (err, result) => {
-    if(err){
-      throw err;
-    }
-    res.json(result);
+      const SQL_QUERY = 'SELECT * FROM usuario WHERE id = 1';
+      connection.query(SQL_QUERY, (err, result) => {
+        if (err) {
+          console.error("Error al obtener el perfil del usuario:", err);
+          res.status(500).json({ error: "Error al obtener el perfil del usuario" });
+        } else {
+          res.json(result);
+        }
+      });
+    });
+
+
+app.get('/api/busqueda', (req, res) => {
+      const { busqueda } = req.query; // Recibe el término de búsqueda desde la URL
+  
+      // Realiza la consulta a la base de datos para buscar fotos según el término de búsqueda
+      const SQL_QUERY = 'SELECT * FROM publicaciones WHERE nombre LIKE ?';
+      connection.query(SQL_QUERY, [`%${busqueda}%`], (err, result) => {
+          if (err) {
+              console.error("Error al buscar fotos:", err);
+              res.status(500).json({ error: "Error al buscar fotos" });
+              return;
+          }
+          res.json(result);
+      });
   });
-});
 
 app.listen(PORT, () =>{
   console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);

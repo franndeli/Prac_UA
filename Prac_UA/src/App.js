@@ -10,6 +10,7 @@ import SubirArchivo from './SubirArchivo.jsx';
 import PubliDetalle from './PubliDetalle.jsx';
 import Inicio from './Inicio.jsx';
 import Categoria from './Categoria.jsx'
+import Buscar from './buscar.jsx'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/perfil-publico" element={<PerfilPublico />} />
             <Route path="/subir-archivo" element={<SubirArchivo />} />
             <Route path="/publidetalle" element={<PubliDetalle />} />
+            <Route path="/buscar" element={<Buscar />} />
           </Routes>
       </header>
     </div>

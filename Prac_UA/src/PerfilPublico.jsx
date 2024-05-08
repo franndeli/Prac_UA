@@ -8,6 +8,7 @@ import { wait } from '@testing-library/user-event/dist/utils/index.js';
 export default function PerfilPublico() {
 
   const [PerfilPublico, setDatosPrivados] = useState([]);
+  const [publicaciones, setPublicaciones] = useState([]);
 
   const fetchPublico = async () => {
     try{
@@ -23,8 +24,23 @@ export default function PerfilPublico() {
     }
   };
 
+  const fetchPublicaciones = async () => {
+    try{
+      const response = await fetch ('http://localhost:3001/api/misPublicaciones')
+      if(!response.ok){
+        throw new Error ('Error al obtener las publicaciones del servidor !!')
+      }
+
+      const data = await response.json()
+      setPublicaciones(data)
+    }catch(error){
+      console.log('Error al obtener los datos !!')
+    }
+  };
+
   useEffect (() => {
     fetchPublico();
+    fetchPublicaciones();
   }, )
 
     return (
@@ -56,11 +72,11 @@ export default function PerfilPublico() {
                             <option>TFM</option>
                         </select>
                 </div>
-                <div className='cards-container'>
-                    <Card className='card'/>
-                    <Card className='card'/>
-                    <Card className='card'/>
-                </div>
+                <div className="cards-container">
+                  {publicaciones.map(publicacion => (
+                    <Card key={publicacion.id} photoId={publicacion.id} className="card"/>
+                  ))}
+              </div>
         </div>
 
       </div>
