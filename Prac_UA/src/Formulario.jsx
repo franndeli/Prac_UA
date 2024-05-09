@@ -137,11 +137,11 @@ export default function Formulario() {
             <div className="label-group">
                 <label>Color:</label>
                 <div>
-                  <input className="inputFormulario" type="radio" id="Color" name="Color" value="Claro" onChange={handleInputChange}/>
+                  <input className="inputFormulario" type="radio" id="Color" name="Claro" value="Claro" onChange={handleInputChange}/>
                   <label htmlFor="claro">Claro</label>
                 </div>
                 <div>
-                  <input type="radio" id="Color" name="Color" value="Oscuro" onChange={handleInputChange}/>
+                  <input type="radio" id="Color" name="Oscuro" value="Oscuro" onChange={handleInputChange}/>
                   <label htmlFor="oscuro">Oscuro</label>
                 </div>
               </div>

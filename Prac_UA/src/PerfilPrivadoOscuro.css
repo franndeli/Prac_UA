@@ -8,9 +8,9 @@ h1{
     justify-content: center; /* Centra los elementos horizontalmente */
   }
 
-.InfoUsuario {
+.InfoUsuario-dark {
     display: flex;
-    border: 1px solid #0000ff;
+    border: 1px solid #000068;
     border-radius: 5px;
     padding: 10px;
     max-width: 70%;
@@ -31,10 +31,10 @@ h1{
     margin-right: 215px
   }
 
-  .custom-button-blue {
-    background-color: #0074d9;
+  .custom-button-blue-dark {
+    background-color: #005197;
     color: #ffffff; /* Cambia el color del texto para que sea legible */
-    border: 2px solid #0000ff; /* Añade un borde azul a los botones */
+    border: 2px solid #000068; /* Añade un borde azul a los botones */
     border-radius: 20px; /* Añade bordes redondeados a los botones */
     padding: 0.5rem 1rem;
     cursor: pointer;
@@ -58,20 +58,20 @@ h1{
   padding-bottom: 10px;
 }
 
-.PublicacionesPrivado .select-container-privado {
+.PublicacionesPrivado .select-container-privado-dark {
   display: flex;
   flex-direction: row;
 }
 
-.PublicacionesPrivado .select-container-privado select {
+.PublicacionesPrivado .select-container-privado-dark select {
   border-radius: 20px; /* Forma redonda */
   padding: 0.25rem;
-  border: 2px solid #0000ff;
+  border: 2px solid #000068;
   background-color: #ffffff;
   margin-left: 2px;
 }
 
-.PublicacionesPrivado .select-container-privado select option{
+.PublicacionesPrivado .select-container-privado-dark select option{
   background-color: #ffffff;
 }
 
@@ -81,4 +81,4 @@ h1{
 }
 
 
-
+  
