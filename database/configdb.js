@@ -75,19 +75,19 @@ app.get('/api/publicaciones', (req, res) => {
 
 app.get('/api/publicaciones/:id', (req, res) => {
   const { id } = req.params;
-  const SQL_QUERY = 'SELECT * FROM publicaciones where ID = ?';
-  connection.query(SQL_QUERY, [id],(err, result) => {
-    if(err){
+  const SQL_QUERY = 'SELECT p.*, u.nombre AS nombre_usuario FROM publicaciones p INNER JOIN usuario u ON p.autor = u.id WHERE p.id = ?';
+  connection.query(SQL_QUERY, [id], (err, result) => {
+    if (err) {
       console.error("Error al obtener las publicaciones:", err);
       res.status(500).json({ error: "Error al obtener las publicaciones" });
       return;
     }
     res.json(result);
   });
-})
+});
 
 app.get('/api/misPublicaciones', (req, res) => {
-  const SQL_QUERY = 'SELECT * FROM publicaciones WHERE autor = 0';
+  const SQL_QUERY = 'SELECT * FROM publicaciones WHERE autor = 1';
   connection.query(SQL_QUERY, (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones del usuario:", err);
@@ -188,6 +188,37 @@ app.get('/api/busqueda', (req, res) => {
           res.json(result);
       });
   });
+
+  app.post('/api/registro', (req, res) => {
+    const { nombre, usuario, contraseña, email, titulacion, repetir_contraseña } = req.body;
+
+    // Verificar si el usuario ya está registrado
+    const SQL_QUERY = 'SELECT * FROM usuario WHERE usuario = ?';
+    connection.query(SQL_QUERY, [usuario], (err, result) => {
+        if (err) {
+            console.error("Error al verificar el usuario:", err);
+            res.status(500).json({ error: "Error al verificar el usuario" });
+            return;
+        }
+
+        if (result.length > 0) {
+            res.status(400).json({ error: "El usuario ya está registrado" });
+        } else {
+            // Insertar el nuevo usuario en la base de datos
+            const INSERT_QUERY = 'INSERT INTO usuario (nombre, usuario, contraseña, email, titulacion, repetircontraseña) VALUES (?, ?, ?, ?, ?, ?)';
+            connection.query(INSERT_QUERY, [nombre, usuario, contraseña, email, titulacion, repetir_contraseña], (err, result) => {
+                if (err) {
+                    console.error("Error al registrar el usuario:", err);
+                    res.status(500).json({ error: "Error al registrar el usuario" });
+                    return;
+                }
+                console.log('SQL Query:', SQL_QUERY);
+                console.log("Usuario registrado correctamente");
+                res.status(200).json({ message: "Usuario registrado correctamente" });
+            });
+        }
+    });
+});
 
 app.listen(PORT, () =>{
   console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);

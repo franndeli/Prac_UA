@@ -44,7 +44,7 @@ export default function Card({ photoId }) {
         </div>
         
           <div className="card-autor">
-          {p.Autor}
+          {p.nombre_usuario}
           </div>
     </div>
 

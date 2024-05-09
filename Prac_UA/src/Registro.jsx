@@ -3,29 +3,81 @@ import './Registro.css';
 import logo from './images/logo512.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
-export default function IniciarSesion() {
+export default function Registro() {
+
+    const navigate = useNavigate();
 
     // useState para manejar los inputs
     const [usuario, setUsuario] = useState('');
     const [contraseña, setContraseña] = useState('');
     const [email, setEmail] = useState('');
-    // const [titulacion_cursada, setTitulacion_cursada] = useState('');
     const [nombre, setNombre] = useState('');
     const [repetir_contraseña, setRepetirContraseña] = useState('');
+    const [titulacion, setTitulacion] = useState('');
 
-    // Manejadores para los inputs
     const handleUsuarioChange = (e) => setUsuario(e.target.value);
     const handleContraseñaChange = (e) => setContraseña(e.target.value);
     const handleEmailChange = (e) => setEmail(e.target.value);
-    // const handleTitulacion_cursadaChange = (e) => setTitulacion_cursada(e.target.value);
     const handleNombreChange = (e) => setNombre(e.target.value);
     const handleRepetirContraseñaChange = (e) => setRepetirContraseña(e.target.value);
+    const handleTitulacionChange = (e) => setTitulacion(e.target.value);
 
-    // Función para manejar el envío del formulario
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+
+
+
+        // Verificar las restricciones de longitud y contenido de usuario y contraseña
+        const usuarioValido = usuario.length >= 6 && usuario.length <= 20;
+    const contraseñaValida = contraseña.length >= 6 && contraseña.length <= 20 && /\d/.test(contraseña);
+    const contraseñasCoinciden = contraseña === repetir_contraseña;
+
+    if (!usuarioValido) {
+        alert('El usuario debe tener entre 6 y 20 caracteres.');
+        return;
+    } else if (!contraseñaValida) {
+        alert('La contraseña debe tener entre 6 y 20 caracteres y contener al menos un número.');
+        return;
+    } else if (!contraseñasCoinciden) {
+        alert('Las contraseñas no coinciden.');
+        return;
+    }
+
+    // Si todas las validaciones son exitosas, envía los datos al servidor
+    const formData = {
+        nombre,
+        usuario,
+        contraseña,
+        email,
+        titulacion,
+        repetir_contraseña
     };
+
+    try {
+        const response = await fetch('http://localhost:3001/api/registro', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            console.error(data); // Imprimir la respuesta del servidor en caso de error
+            throw new Error(data.error || 'Error al registrar el usuario');
+        }
+
+        alert('Registro exitoso!');
+        navigate('/iniciarsesion');
+        // Aquí puedes redirigir al usuario a la página de inicio de sesión o hacer cualquier otra acción
+    } catch (error) {
+        alert(error.message);
+    }
+};
 
     return (
         <div className='registro'>
@@ -96,7 +148,7 @@ export default function IniciarSesion() {
                             <label htmlFor="titulacion_cursada">
                                 <div className="input-icon-container_registro">
                                 <FontAwesomeIcon icon={fas.faSchool} className="input-icon" />
-                                    <select className="inputFormularioRegistro_select" name="titulacion_cursada" >
+                                    <select className="inputFormularioRegistro_select" name="titulacion_cursada" onChange={handleTitulacionChange}>
                                         <option value="" disabled selected hidden>Titulación cursada</option>
                                         <option value="ing_multimedia">Ing. Multimedia</option>
                                     </select>
