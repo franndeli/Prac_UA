@@ -5,6 +5,9 @@ import Datos from './Datos';
 import ConfirmationModal from './ConfirmarBorrarCuenta'; 
 
 export default function Formulario() {
+
+  const userId = 6;
+
   // Definimos el estado para controlar qué formulario se muestra y el color del botón
   const [formulario, setFormulario] = useState('usuario');
   const [color, setColor] = useState('blue');
@@ -32,24 +35,30 @@ export default function Formulario() {
     }
   };
 
+  const handleBorrarCuenta = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/borrarUsuario/${userId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Error al borrar la cuenta');
+      }
+      setShowConfirmationModal(false); // Ocultar modal después de borrar la cuenta
+      console.log('Cuenta borrada exitosamente');
+      navigate('/iniciarsesion');
+      // Aquí puedes redirigir o realizar otras acciones después de borrar la cuenta
+    } catch (error) {
+      console.error('Error al borrar la cuenta:', error);
+    }
+  };
+
   const handleModalConfirm = () => {
     // Realizar acción después de confirmar cambios (puedes redirigir aquí si es necesario)
     navigate('/perfil-privado');
   };
 
-  const handleBorrarCuenta = () => {
-    setShowConfirmationModal(true); // Mostrar modal de advertencia al intentar borrar cuenta
-  };
-  
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
-  };
-
-  const handleDeleteAccount = () => {
-    // Aquí puedes implementar la lógica para borrar la cuenta
-    // Una vez borrada la cuenta, puedes redirigir o realizar otras acciones necesarias
-    console.log('Cuenta borrada'); // Ejemplo de acción de borrado de cuenta
-    // Redirigir o realizar otras acciones después de borrar la cuenta
   };
 
   const handleCloseModal = () => {
@@ -124,7 +133,7 @@ export default function Formulario() {
             </div>
 
             <div>
-              <button className="custom-button-Formulario-red" onClick={handleBorrarCuenta}>Borrar cuenta</button>
+              <button className="custom-button-Formulario-red" onClick={() => setShowConfirmationModal(true)}>Borrar cuenta</button>
               <button className={`custom-button-Formulario ${color}`} onClick={handleConfirmarCambios}>Guardar Cambios</button>
             </div>
           </fieldset>
@@ -209,9 +218,9 @@ export default function Formulario() {
 
       {/* Renderizar el modal de advertencia al intentar borrar cuenta si showConfirmationModal es true */}
       {showConfirmationModal && (
-        <ConfirmationModal
-          onClose={handleCloseConfirmationModal}
-          onConfirm={handleDeleteAccount}
+        <ConfirmationModal 
+        onClose={handleCloseConfirmationModal}
+        onConfirm={handleBorrarCuenta }
         />
       )}
 

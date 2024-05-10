@@ -220,6 +220,19 @@ app.get('/api/busqueda', (req, res) => {
     });
 });
 
+app.delete('/api/borrarUsuario/:id', (req, res) => {
+  const { id } = req.params;
+  const DELETE_QUERY = 'DELETE FROM usuario WHERE id = ?';
+  connection.query(DELETE_QUERY, [id], (err, result) => {
+    if (err) {
+      console.error("Error al borrar el usuario:", err);
+      res.status(500).json({ error: "Error al borrar el usuario" });
+      return;
+    }
+    res.json({ message: "Usuario borrado correctamente" });
+  });
+});
+
 app.listen(PORT, () =>{
   console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);
 });

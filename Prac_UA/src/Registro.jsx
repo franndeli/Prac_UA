@@ -4,8 +4,18 @@ import logo from './images/logo512.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import ConfirmarNuevoUsuario from './ConfirmarNuevoUsuario'; 
 
 export default function Registro() {
+
+    const handleModalConfirm = () => {
+        // Realizar acción después de confirmar cambios (puedes redirigir aquí si es necesario)
+        navigate('/iniciarsesion');
+        setShowModal(false); // Ocultar el modal después de confirmar
+      };
+      const handleCloseModal = () => {
+        setShowModal(false);
+      };
 
     const navigate = useNavigate();
 
@@ -16,6 +26,7 @@ export default function Registro() {
     const [nombre, setNombre] = useState('');
     const [repetir_contraseña, setRepetirContraseña] = useState('');
     const [titulacion, setTitulacion] = useState('');
+    const [showModal, setShowModal] = useState(false);
 
     const handleUsuarioChange = (e) => setUsuario(e.target.value);
     const handleContraseñaChange = (e) => setContraseña(e.target.value);
@@ -71,8 +82,8 @@ export default function Registro() {
             throw new Error(data.error || 'Error al registrar el usuario');
         }
 
-        alert('Registro exitoso!');
-        navigate('/iniciarsesion');
+        {/* Renderizar el modal si showModal es true */}
+        setShowModal(true);
         // Aquí puedes redirigir al usuario a la página de inicio de sesión o hacer cualquier otra acción
     } catch (error) {
         alert(error.message);
@@ -175,6 +186,16 @@ export default function Registro() {
                 <hr className="separador"/>
                 <p className="registrate">¿Ya tienes una cuenta? <a href="/iniciarsesion">Inicia sesión</a> </p>
             </div>
+
+            {showModal && (
+            <ConfirmarNuevoUsuario
+                onClose={handleCloseModal}
+                onConfirm={handleModalConfirm}
+            />
+      )}
+
         </div>
+
+        
     );
   }
