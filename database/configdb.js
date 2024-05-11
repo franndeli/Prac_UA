@@ -143,7 +143,7 @@ app.put('/api/ajustesUsuario', (req, res) => {
   SQL_QUERY = SQL_QUERY.slice(0, -2);
 
   // Agrega la condición WHERE
-  SQL_QUERY += ' WHERE id = 1';
+  SQL_QUERY += ' WHERE id = ?';
 
   console.log('SQL Query:', SQL_QUERY); // Agregamos esto para verificar la consulta SQL generada
 
