@@ -21,7 +21,7 @@ app.use(session({
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'lhc15',
   database: 'prac_ua'
 });
 
@@ -242,3 +242,42 @@ app.listen(PORT, () =>{
 });
 
 //module.exports = connection;
+
+
+//PARA LA PARTE DE SUBIR ARCHIVOS
+
+//primero configuramos multer para que nos cree el directorio uploads si no lo tenemos
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
+// Verifica si el directorio existe, si no, lo crea
+const uploadsDir = path.join(__dirname, 'uploads');
+fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+
+//ahora para que se compenetre con la bd
+app.post('/api/subirArchivo', upload.single('file'), (req, res) => {
+  const { titulo, etiquetas, tipo_archivo, descripcion } = req.body;
+  const file = req.file;
+  const SQL_QUERY = `INSERT INTO publicacion (titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo) VALUES (?, ?, ?, ?, ?)`;
+
+  connection.query(SQL_QUERY, [titulo, etiquetas, tipo_archivo, descripcion, file.path], (err, result) => {
+    if (err) {
+      console.error("Error al insertar los datos:", err);
+      res.status(500).json({ error: "Error al insertar los datos" });
+      return;
+    }
+    res.status(200).json({ message: "Archivo subido y datos guardados correctamente" });
+  });
+});
