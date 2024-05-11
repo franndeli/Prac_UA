@@ -11,10 +11,11 @@ export default function PerfilPrivado() {
   const [datosPublicos, setDatosPublicos] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
   const [tipoSeleccionado, setTipoSeleccionado] = useState("");
+  const userId = 1;
 
   const fetchPublico = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/perfil');
+      const response = await fetch(`http://localhost:3001/api/perfil/${userId}`);
       if (!response.ok) {
         throw new Error('Error al obtener los datos del servidor !!');
       }
@@ -28,7 +29,7 @@ export default function PerfilPrivado() {
 
   const fetchPublicaciones = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/misPublicaciones');
+      const response = await fetch(`http://localhost:3001/api/misPublicaciones/${userId}`);
       if (!response.ok) {
         throw new Error('Error al obtener las publicaciones del servidor !!');
       }
