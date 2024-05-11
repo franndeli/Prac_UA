@@ -30,12 +30,20 @@ export default function IniciarSesion() {
                 body: JSON.stringify({ usuario, contraseña }),
             });
             
-            if (!response.ok) {
-                throw new Error('Error al iniciar sesión');
-            }
+            const data = await response.json(); // Asegurarse de manejar la respuesta JSON
 
-            // Aquí puedes redirigir al usuario a la página correspondiente
-            console.log('Inicio de sesión exitoso');
+            if (response.ok) {
+                console.log('Inicio de sesión exitoso desde el frontend', data);
+
+                // Almacenar datos del usuario en localStorage
+                localStorage.setItem('id_usuario', data.user.id);
+                localStorage.setItem('usuario', data.user.usuario);
+
+                navigate('/inicio'); // Redirige a la página de inicio
+            } else {
+                throw new Error(data.error || 'Error al iniciar sesión'); // Manejo de errores del servidor
+            }
+            
             navigate('/inicio');
         } catch (error) {
             setError('Error al iniciar sesión. Por favor, verifica tus credenciales.');
