@@ -75,7 +75,7 @@ app.get('/api/publicaciones', (req, res) => {
 
 app.get('/api/publicaciones/:id', (req, res) => {
   const { id } = req.params;
-  const SQL_QUERY = 'SELECT p.*, u.nombre AS nombre_usuario FROM publicaciones p INNER JOIN usuario u ON p.autor = u.id WHERE p.id = ?';
+  const SQL_QUERY = 'SELECT p.*, u.nombre AS nombre_usuario, u.id as id_usuario FROM publicaciones p INNER JOIN usuario u ON p.autor = u.id WHERE p.id = ?';
   connection.query(SQL_QUERY, [id], (err, result) => {
     if (err) {
       console.error("Error al obtener las publicaciones:", err);
@@ -86,8 +86,9 @@ app.get('/api/publicaciones/:id', (req, res) => {
   });
 });
 
-app.get('/api/misPublicaciones', (req, res) => {
-  const SQL_QUERY = 'SELECT * FROM publicaciones WHERE autor = 1';
+app.get('/api/misPublicaciones/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const SQL_QUERY = `SELECT * FROM publicaciones WHERE autor = ${userId}`;
   connection.query(SQL_QUERY, (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones del usuario:", err);
@@ -161,18 +162,18 @@ app.put('/api/ajustesUsuario', (req, res) => {
 
 
 
-app.get('/api/perfil', (req, res) => {
-      const SQL_QUERY = 'SELECT * FROM usuario WHERE id = 1';
-      connection.query(SQL_QUERY, (err, result) => {
-        if (err) {
-          console.error("Error al obtener el perfil del usuario:", err);
-          res.status(500).json({ error: "Error al obtener el perfil del usuario" });
-        } else {
-          res.json(result);
-        }
-      });
-    });
-
+app.get('/api/perfil/:idUsuario', (req, res) => {
+  const { idUsuario } = req.params;
+  const SQL_QUERY = 'SELECT * FROM usuario WHERE id = ?';
+  connection.query(SQL_QUERY, [idUsuario], (err, result) => {
+    if (err) {
+      console.error("Error al obtener el perfil del usuario:", err);
+      res.status(500).json({ error: "Error al obtener el perfil del usuario" });
+    } else {
+      res.json(result);
+    }
+  });
+});
 
 app.get('/api/busqueda', (req, res) => {
       const { busqueda } = req.query; // Recibe el término de búsqueda desde la URL

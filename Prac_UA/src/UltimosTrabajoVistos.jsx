@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './Inicio.css';
+import './UltimosTrabajosVistos.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Card from './Card.jsx';
 import Nav from './Nav.jsx'
 
-export default function Inicio() {
+export default function UltimosTrabajosVistos() {
 
     const [fotos, setFotos] = useState([]);
 
@@ -23,11 +23,8 @@ export default function Inicio() {
             
             // Reorganiza las fotos para que el último trabajo visto aparezca primero
             const fotosOrdenadas = data.reverse();
-
-            // Limita la cantidad de fotos a 5
-            const fotosLimitadas = fotosOrdenadas.slice(0, 5);
             
-            setFotos(fotosLimitadas);
+            setFotos(fotosOrdenadas);
         } catch (error) {
             console.error('Error al obtener las fotos:', error);
         }
@@ -36,27 +33,11 @@ export default function Inicio() {
     return (
         <div className="inicio">
             <Nav />
-            
             <div className="recomendaciones">
-                <a href="/categoria">
-                    <div className="recomendaciones_icon">
-                        <h2 className="recomendaciones_h2">RECOMENDACIONES</h2>
-                        <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
-                    </div>
-                </a>
-                <div className="cards-container">
-                    {fotos.map((foto, index) => (
-                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
-                    ))}
-                </div>
-            </div>
-            <div className="recomendaciones">
-                <a href="/ultimosTrabajosVistos">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">TUS ÚLTIMOS TRABAJOS VISTOS</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                     </div>
-                </a>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
                         <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>

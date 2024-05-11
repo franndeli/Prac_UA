@@ -1,4 +1,3 @@
-// Card.jsx
 import React, { useState, useEffect } from 'react';
 import './Card.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,29 +25,24 @@ export default function Card({ photoId }) {
   }, [photoId]); // photoId es la única dependencia necesaria en este efecto
 
   return (
-
-  <div>  
-    {photoData.map((p) => (
-
-      <div className="card" key = {p.id}>
-      
-        <div className="card-titulo">{p.Nombre}</div>
-      
-        <div className="card-imagen">
+    <div>  
+      {photoData.map((p) => (
+        <div className="card" key={p.id}>
+          <div className="card-titulo">{p.Nombre}</div>
+          <div className="card-imagen">
             <img src="https://via.placeholder.com/100" alt="Word Icon"></img>
-        </div>
-
+          </div>
           <div className="card-icons">
             <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.Likes}
-            <FontAwesomeIcon className="icon-card" icon={fas.faEye }  /> {p.Visitas}
-        </div>
-        
-          <div className="card-autor">
-          {p.nombre_usuario}
+            <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.Visitas}
           </div>
-    </div>
-
-    ))}
-  </div> 
+          <a href={`/perfil-publico?userId=${p.id_usuario}`}>      
+            <div className="card-autor">
+              {p.nombre_usuario}
+            </div>
+          </a>  
+        </div>
+      ))}
+    </div> 
   );
 }
