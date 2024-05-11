@@ -41,14 +41,17 @@ app.post('/api/iniciarSesion', (req, res) => {
       res.status(500).json({ error: "Error al verificar las credenciales" });
       return;
     }
-    console.log(result);
+    
     // Verifica si se encontró un usuario con las credenciales proporcionadas
     if (result.length > 0) {
-
-      // Usuario autenticado, devolver datos del usuario
-      res.status(200).json({ message: "Inicio de sesión exitoso"});
+      const user = result[0];
+      console.log(user);
+      // Devolver datos del usuario para uso en el cliente
+      res.status(200).json({
+        message: "Inicio de sesión exitoso desde el backend",
+        user: { id: user.id, usuario: user.usuario }
+      });
     } else {
-      // Usuario no encontrado o credenciales incorrectas
       res.status(401).json({ error: "Usuario no encontrado o credenciales incorrectas" });
     }
   });
