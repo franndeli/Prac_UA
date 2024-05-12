@@ -19,7 +19,14 @@ export default function Formulario() {
 
   const handleConfirmarCambios = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/ajustesUsuario', {
+
+      const userId = localStorage.getItem('id_usuario');
+      if (!userId) {
+      console.error('No se encontró el id_usuario en el localStorage');
+      return;
+      }
+
+      const response = await fetch(`http://localhost:3001/api/ajustesUsuario/${userId}`, {
         method: 'PUT', // Cambiar de POST a PUT
         headers: {
           'Content-Type': 'application/json',

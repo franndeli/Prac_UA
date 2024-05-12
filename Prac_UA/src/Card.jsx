@@ -6,6 +6,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 export default function Card({ photoId }) {
 
   const [photoData, setPhotoData] = useState([]);
+  const ruta = "http://localhost:3001/uploads/resized";
 
   const fetchPhotoData = async () => {
     try {
@@ -14,35 +15,47 @@ export default function Card({ photoId }) {
         throw new Error('Error al obtener los datos de la foto');
       }
       const data = await response.json();
+
+      if (data.length === 0) {
+        throw new Error('No se encontraron datos para la foto');
+      }
+
+      // Actualizar el estado con los datos y la URL de la imagen
       setPhotoData(data);
+
+      console.log(data);
+
     } catch (error) {
       console.error('Error fetching photo data:', error);
     }
   };
-  
+
   useEffect(() => {
     fetchPhotoData(); // Llamada inicial a la función
   }, [photoId]); // photoId es la única dependencia necesaria en este efecto
 
+  
+
   return (
-    <div>  
+    <div>
       {photoData.map((p) => (
         <div className="card" key={p.id}>
-          <div className="card-titulo">{p.Nombre}</div>
+          <div className="card-titulo">{p.titulo}</div>
           <div className="card-imagen">
-            <img src="https://via.placeholder.com/100" alt="Word Icon"></img>
+            {/* Utiliza la URL de la imagen recibida del servidor */}
+            <img src={ruta + "/" + encodeURIComponent(p.ruta_archivo)} alt="Word Icon" />
           </div>
           <div className="card-icons">
-            <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.Likes}
-            <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.Visitas}
+            <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.likes}
+            <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.visitas}
           </div>
-          <a href={`/perfil-publico?userId=${p.id_usuario}`}>      
+          <a href={`/perfil-publico?userId=${p.id_usuario}`}>
             <div className="card-autor">
               {p.nombre_usuario}
             </div>
-          </a>  
+          </a>
         </div>
       ))}
-    </div> 
+    </div>
   );
 }

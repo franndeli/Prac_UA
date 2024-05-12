@@ -21,7 +21,7 @@ export default function Navbar() {
                 <ul className="icons-menu-list">
                     <li className="logo-item"><a href='/subir-archivo'><FontAwesomeIcon icon={fas.faCirclePlus} size="2xl" style={{color: "#ffffff",}} /></a></li>
                     <li className="logo-item"><a href='/buscar'><FontAwesomeIcon icon={fas.faMagnifyingGlass} size="xl" style={{color: "#000000",}} /></a></li>
-                    <li className="logo-item"><a href='/perfil-privado?userId=${p.id_usuario}'><FontAwesomeIcon icon={fas.faUser} size="xl" style={{color: "#000000",}} /></a></li>
+                    <li className="logo-item"><a href='/perfil-privado'><FontAwesomeIcon icon={fas.faUser} size="xl" style={{color: "#000000",}} /></a></li>
                 </ul>
             </div>
         </nav>
