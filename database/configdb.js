@@ -6,6 +6,8 @@ const session = require('express-session');
 const jwt = require('jsonwebtoken');
 
 const app = express();
+
+
 const PORT = 3001;
 app.use(cors());
 app.use(bodyParser.json()); // Para analizar solicitudes con cuerpo en formato JSON
@@ -58,14 +60,8 @@ app.post('/api/iniciarSesion', (req, res) => {
 });
 
 
-
-app.post('/api/logout', (req, res) => {
-  req.session.destroy(); // Destruye la sesión
-  res.status(200).json({ message: "Sesión cerrada correctamente" });
-});
-
 app.get('/api/publicaciones', (req, res) => {
-  const SQL_QUERY = 'SELECT * FROM publicaciones';
+  const SQL_QUERY = 'SELECT * FROM publicacion';
   connection.query(SQL_QUERY, (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones:", err);
@@ -78,7 +74,7 @@ app.get('/api/publicaciones', (req, res) => {
 
 app.get('/api/publicaciones/:id', (req, res) => {
   const { id } = req.params;
-  const SQL_QUERY = 'SELECT p.*, u.nombre AS nombre_usuario, u.id as id_usuario FROM publicaciones p INNER JOIN usuario u ON p.autor = u.id WHERE p.id = ?';
+  const SQL_QUERY = 'SELECT p.*, u.nombre AS nombre_usuario, u.id as id_usuario FROM publicacion p INNER JOIN usuario u ON p.autor = u.id WHERE p.id = ?';
   connection.query(SQL_QUERY, [id], (err, result) => {
     if (err) {
       console.error("Error al obtener las publicaciones:", err);
@@ -89,10 +85,10 @@ app.get('/api/publicaciones/:id', (req, res) => {
   });
 });
 
-app.get('/api/misPublicaciones/:userId', (req, res) => {
-  const userId = req.params.userId;
-  const SQL_QUERY = `SELECT * FROM publicaciones WHERE autor = ${userId}`;
-  connection.query(SQL_QUERY, (err, result) => {
+app.get('/api/misPublicaciones/:id', (req, res) => {
+  const userId = req.params.id; // Obtener userId de los parámetros de la solicitud
+  const SQL_QUERY = 'SELECT * FROM publicacion WHERE autor = ?';
+  connection.query(SQL_QUERY, [userId], (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones del usuario:", err);
       res.status(500).json({ error: "Error al obtener las publicaciones del usuario" });
@@ -102,8 +98,9 @@ app.get('/api/misPublicaciones/:userId', (req, res) => {
   });
 });
 
-app.put('/api/ajustesUsuario', (req, res) => {
+app.put('/api/ajustesUsuario/:id', (req, res) => {
   // Obtener el ID del usuario
+  const userId = req.params.id;
   const { Nombre, Contraseña, Email, Descripcion, Color, Idioma, ModoDaltónico, Letra } = req.body; // Obtener datos del cuerpo de la solicitud
 
   let SQL_QUERY = 'UPDATE usuario SET ';
@@ -146,12 +143,12 @@ app.put('/api/ajustesUsuario', (req, res) => {
   SQL_QUERY = SQL_QUERY.slice(0, -2);
 
   // Agrega la condición WHERE
-  SQL_QUERY += ' WHERE id = 1';
+  SQL_QUERY += ' WHERE id = ?';
 
   console.log('SQL Query:', SQL_QUERY); // Agregamos esto para verificar la consulta SQL generada
 
   // Inserta los datos en la base de datos
-  connection.query(SQL_QUERY, values, (err, result) => {
+  connection.query(SQL_QUERY, [...values, userId], (err, result) => {
     if (err) {
       console.error("Error al modificar los datos:", err);
       res.status(500).json({ error: "Error al modificar los datos" });
@@ -182,7 +179,7 @@ app.get('/api/busqueda', (req, res) => {
       const { busqueda } = req.query; // Recibe el término de búsqueda desde la URL
   
       // Realiza la consulta a la base de datos para buscar fotos según el término de búsqueda
-      const SQL_QUERY = 'SELECT * FROM publicaciones WHERE nombre LIKE ?';
+      const SQL_QUERY = 'SELECT * FROM publicacion WHERE nombre LIKE ?';
       connection.query(SQL_QUERY, [`%${busqueda}%`], (err, result) => {
           if (err) {
               console.error("Error al buscar fotos:", err);
@@ -242,3 +239,59 @@ app.listen(PORT, () =>{
 });
 
 //module.exports = connection;
+
+
+//PARA LA PARTE DE SUBIR ARCHIVOS
+
+//primero configuramos multer para que nos cree el directorio uploads si no lo tenemos
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp'); // Importa Sharp
+
+const uploadsDir = path.join(__dirname, 'uploads');
+const resizedDir = path.join(__dirname, 'uploads', 'resized'); // Ruta de la carpeta redimensionada
+
+// Verifica si el directorio existe, si no, lo crea
+fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
+fs.existsSync(resizedDir) || fs.mkdirSync(resizedDir, { recursive: true }); // Crea la carpeta resized si no existe
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+app.use('/uploads', express.static('uploads'));
+
+app.post('/api/subirArchivo', upload.single('file'), async (req, res) => {
+  const { titulo, etiquetas, tipo_archivo, descripcion } = req.body;
+  const file = req.file.filename;
+  const filePath = path.join(uploadsDir, file);
+  const resizedFilePath = path.join(resizedDir, file); // Ruta del archivo redimensionado
+
+  try {
+    // Redimensiona la imagen a 300x300 píxeles
+    await sharp(filePath)
+      .resize(150, 150)
+      .toFile(resizedFilePath); // Guarda la imagen redimensionada en la carpeta resized
+
+    const SQL_QUERY = `INSERT INTO publicacion (titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo) VALUES (?, ?, ?, ?, ?)`;
+
+    connection.query(SQL_QUERY, [titulo, etiquetas, tipo_archivo, descripcion, file], (err, result) => {
+      if (err) {
+        console.error("Error al insertar los datos:", err);
+        res.status(500).json({ error: "Error al insertar los datos" });
+        return;
+      }
+      res.status(200).json({ message: "Archivo subido y datos guardados correctamente" });
+    });
+  } catch (error) {
+    console.error("Error al redimensionar la imagen:", error);
+    res.status(500).json({ error: "Error al redimensionar la imagen" });
+  }
+});

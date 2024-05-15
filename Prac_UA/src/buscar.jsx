@@ -31,10 +31,9 @@ export default function Buscar() {
     };
 
     const fotosFiltradas = fotos.filter(foto => {
-        const nombreValido = foto.Nombre && foto.Nombre.toLowerCase().includes(busqueda.toLowerCase());
-        const tipoValido = !tipoSeleccionado || foto.Tipo === tipoSeleccionado;
-        const contenidoValido = !contenidoSeleccionado || foto.Contenidos === contenidoSeleccionado;
-        return nombreValido && tipoValido && contenidoValido;
+        const nombreValido = foto.titulo && foto.titulo.toLowerCase().includes(busqueda.toLowerCase());
+        const tipoValido = !tipoSeleccionado || foto.tipo_archivo === tipoSeleccionado;
+        return nombreValido && tipoValido;
     });
 
     const handleTipoSeleccionado = (e) => {
@@ -43,15 +42,6 @@ export default function Buscar() {
           setTipoSeleccionado("");
         } else {
           setTipoSeleccionado(valorSeleccionado);
-        }
-      };
-
-      const handleContenidoSeleccionado = (e) => {
-        const valorSeleccionado = e.target.value;
-        if (valorSeleccionado === "Contenidos") {
-            setContenidoSeleccionado("");
-        } else {
-            setContenidoSeleccionado(valorSeleccionado);
         }
       };
 
@@ -77,16 +67,11 @@ export default function Buscar() {
                 <option>Excel</option>
                 <option>Video</option>
                 <option>Audio</option>
-                <option>Otro</option>
-            </select>
-
-            <select name="Contenidos" id="Contenidos" onChange={handleContenidoSeleccionado}>
-                <option selected>Contenidos</option>
                 <option>Practicas</option>
                 <option>TFG</option>
                 <option>TFM</option>
                 <option>Tesis</option>
-                <option>Otros</option>
+                <option>Otro</option>
             </select>
 
         </div>
