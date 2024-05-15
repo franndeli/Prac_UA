@@ -268,27 +268,34 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 app.use('/uploads', express.static('uploads'));
 
-app.post('/api/subirArchivo', upload.single('file'), async (req, res) => {
+app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: 'file-array' }]), async (req, res) => {
+  const userId = req.params.userId;
   const { titulo, etiquetas, tipo_archivo, descripcion } = req.body;
-  const file = req.file.filename;
-  const filePath = path.join(uploadsDir, file);
-  const resizedFilePath = path.join(resizedDir, file); // Ruta del archivo redimensionado
+  const singleFilePath = req.files['file'][0].path;
+
+  // Obtén solo el nombre del archivo único
+  const singleFileName = path.basename(singleFilePath);
+  const resizedFilePath = path.join(resizedDir, singleFileName);
+
+  // Obtén solo los nombres de los archivos múltiples
+  const multipleFilesNames = req.files['file-array'].map(file => path.basename(file.path)).join(',');
 
   try {
-    // Redimensiona la imagen a 300x300 píxeles
-    await sharp(filePath)
+    // Redimensiona la imagen a 150x150 píxeles
+    await sharp(singleFilePath)
       .resize(150, 150)
       .toFile(resizedFilePath); // Guarda la imagen redimensionada en la carpeta resized
 
-    const SQL_QUERY = `INSERT INTO publicacion (titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo) VALUES (?, ?, ?, ?, ?)`;
+    const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const values = [userId, titulo, etiquetas, tipo_archivo, descripcion, singleFileName, multipleFilesNames];
 
-    connection.query(SQL_QUERY, [titulo, etiquetas, tipo_archivo, descripcion, file], (err, result) => {
+    connection.query(query, values, (err, result) => {
       if (err) {
-        console.error("Error al insertar los datos:", err);
-        res.status(500).json({ error: "Error al insertar los datos" });
-        return;
+        console.error('Error al insertar archivo en la base de datos:', err);
+        res.status(500).send('Error al subir archivo');
+      } else {
+        res.status(200).send('Archivo subido correctamente');
       }
-      res.status(200).json({ message: "Archivo subido y datos guardados correctamente" });
     });
   } catch (error) {
     console.error("Error al redimensionar la imagen:", error);

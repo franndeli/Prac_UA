@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import iconoSubir from './images/cam.svg';
-import './SubirArchivo.css'; // Asegúrate de que los estilos están enlazados
-import camDefault from './images/cam_default.png';
-import Nav from './Nav.jsx'
+import './SubirArchivo.css';
+import Nav from './Nav.jsx';
 import { useNavigate } from 'react-router-dom';
+import camDefault from './images/cam_default.png';
 
 const SubirArchivo = () => {
-    const [imagePreview, setImagePreview] = useState(camDefault); // Estado para manejar la previsualización de la imagen
-    const [tipoArchivo, setTipoArchivo] = useState(''); // Estado para manejar el tipo de archivo
+    const [imagePreview, setImagePreview] = useState(camDefault);
+    const [imagePreviewsArray, setImagePreviewsArray] = useState([camDefault]);
+    const [tipoArchivo, setTipoArchivo] = useState('');
+    const storedUserId = localStorage.getItem('id_usuario');
     const navigate = useNavigate();
 
     const handleImageChange = (e) => {
-        if (e.target.files[0]) {
-            setImagePreview(URL.createObjectURL(e.target.files[0]));
-        }
+        const file = e.target.files[0];
+        setImagePreview(URL.createObjectURL(file));
+    };
+
+    const handleMultipleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        const previews = files.map(file => URL.createObjectURL(file));
+        setImagePreviewsArray(previews);
     };
 
     const handleTipoArchivoChange = (event) => {
@@ -23,42 +30,42 @@ const SubirArchivo = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('file', document.getElementById('file').files[0]);
+        const singleFile = document.getElementById('file').files[0];
+        const multipleFiles = document.getElementById('file-array').files;
+
+        formData.append('file', singleFile);
+        Array.from(multipleFiles).forEach((file, index) => {
+            formData.append('file-array', file);
+        });
         formData.append('titulo', document.getElementById('titulo').value);
         formData.append('etiquetas', document.getElementById('etiquetas').value);
         formData.append('tipo_archivo', document.getElementById('tipo-archivo').value);
         formData.append('descripcion', document.getElementById('descripcion').value);
-    
+
         try {
-            const response = await fetch('http://localhost:3001/api/subirArchivo', {
+            const response = await fetch(`http://localhost:3001/api/subirArchivo/${storedUserId}`, {
                 method: 'POST',
-                body: formData, // No establecer 'Content-Type' aquí; FormData lo hará automáticamente
+                body: formData,
             });
-            
+
             if (!response.ok) {
                 throw new Error('Error al subir archivo');
             }
-    
+
             console.log('Archivo subido correctamente');
-            //redirección al subir archivo
             navigate('/inicio');
-            
-            // Manejar la respuesta adecuadamente
         } catch (error) {
             console.error('Error en la carga:', error);
         }
     };
-    
 
     return (
         <>
             <Nav />
             <legend>SUBIR ARCHIVO</legend>
             <div className="SubirArchivo-container">
-            
-                <form  method="POST" action="/tu-endpoint" enctype="multipart/form-data" onSubmit={handleSubmit}>
-                    
-                    <fieldset className="fielsetSubirArchivo"  >
+                <form method="POST" action="/tu-endpoint" encType="multipart/form-data" onSubmit={handleSubmit}>
+                    <fieldset className="fielsetSubirArchivo">
                         <div className="cont1">
                             <div className="form-group">
                                 <label htmlFor="titulo" id="leibel">Título:</label>
@@ -74,12 +81,19 @@ const SubirArchivo = () => {
                                     <option value="" disabled>Selecciona una opción</option>
                                     <option value="TFG">TFG</option>
                                     <option value="TFM">TFM</option>
+                                    <option value="Tesis">Tesis</option>
                                     <option value="Práctica">Práctica</option>
+                                    <option value="Word">Word</option>
+                                    <option value="PDF">PDF</option>
+                                    <option value="Excel">Excel</option>
+                                    <option value="Video">Video</option>
+                                    <option value="Audio">Audio</option>
+                                    <option value="Otro">Otro</option>
                                 </select>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="descripcion" id="leibel">Descripción:</label>
-                                <textarea id="descripcion" className="textarea-subir" name="descripcion" required />
+                                <textarea id="descripcion" className="textarea-subir" name="descripcion" cols={20} required />
                             </div>
                         </div>
                         <div className="cont2">
@@ -94,6 +108,23 @@ const SubirArchivo = () => {
                                     </label>
                                 </div>
                             </div>
+                                <div className='MultiArchivo'>
+                                    <h3>MultiArchivos</h3>
+                                    <div className="form-group imagen-subida">
+                                        <div className="image-upload-container">
+                                            {imagePreviewsArray.map((preview, index) => (
+                                                <img key={index} src={preview} alt={`Preview ${index}`} className="image-preview-array" />
+                                            ))}
+                                            <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleImageChange} multiple required />
+                                            <label htmlFor="file-array" className="image-upload-label-array">
+                                                <div className="upload-icon-container">
+                                                    <img src={iconoSubir} alt="Subir" />
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                         </div>
                         <div className="cont3">
                             <div className="form-group-botn">
