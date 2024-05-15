@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Registro.css';
 import logo from './images/logo512.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -38,57 +38,73 @@ export default function Registro() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
-
-
         // Verificar las restricciones de longitud y contenido de usuario y contraseña
         const usuarioValido = usuario.length >= 6 && usuario.length <= 20;
-    const contraseñaValida = contraseña.length >= 6 && contraseña.length <= 20 && /\d/.test(contraseña);
-    const contraseñasCoinciden = contraseña === repetir_contraseña;
+        const contraseñaValida = contraseña.length >= 6 && contraseña.length <= 20 && /\d/.test(contraseña);
+        const contraseñasCoinciden = contraseña === repetir_contraseña;
 
-    if (!usuarioValido) {
-        alert('El usuario debe tener entre 6 y 20 caracteres.');
-        return;
-    } else if (!contraseñaValida) {
-        alert('La contraseña debe tener entre 6 y 20 caracteres y contener al menos un número.');
-        return;
-    } else if (!contraseñasCoinciden) {
-        alert('Las contraseñas no coinciden.');
-        return;
-    }
-
-    // Si todas las validaciones son exitosas, envía los datos al servidor
-    const formData = {
-        nombre,
-        usuario,
-        contraseña,
-        email,
-        titulacion,
-        repetir_contraseña
-    };
-
-    try {
-        const response = await fetch('http://localhost:3001/api/registro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
-
-        if (!response.ok) {
-            const data = await response.json();
-            console.error(data); // Imprimir la respuesta del servidor en caso de error
-            throw new Error(data.error || 'Error al registrar el usuario');
+        if (!usuarioValido) {
+            alert('El usuario debe tener entre 6 y 20 caracteres.');
+            return;
+        } else if (!contraseñaValida) {
+            alert('La contraseña debe tener entre 6 y 20 caracteres y contener al menos un número.');
+            return;
+        } else if (!contraseñasCoinciden) {
+            alert('Las contraseñas no coinciden.');
+            return;
         }
 
-        {/* Renderizar el modal si showModal es true */}
-        setShowModal(true);
-        // Aquí puedes redirigir al usuario a la página de inicio de sesión o hacer cualquier otra acción
-    } catch (error) {
-        alert(error.message);
-    }
-};
+        // Si todas las validaciones son exitosas, envía los datos al servidor
+        const formData = {
+            nombre,
+            usuario,
+            contraseña,
+            email,
+            titulacion,
+            repetir_contraseña
+        };
+
+        try {
+            const response = await fetch('http://localhost:3001/api/registro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                console.error(data); // Imprimir la respuesta del servidor en caso de error
+                throw new Error(data.error || 'Error al registrar el usuario');
+            }
+
+            {/* Renderizar el modal si showModal es true */}
+            setShowModal(true);
+            // Aquí puedes redirigir al usuario a la página de inicio de sesión o hacer cualquier otra acción
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const [titulaciones, setTitulaciones] = useState([]);
+
+    useEffect(() => {
+        const fetchTitulaciones = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/api/titulaciones');
+                if (!response.ok) {
+                    throw new Error('Error al cargar titulaciones');
+                }
+                const data = await response.json();
+                setTitulaciones(data);
+            } catch (error) {
+                console.error('Error al cargar las titulaciones:', error);
+            }
+        };
+
+        fetchTitulaciones();
+    }, []);
 
     return (
         <div className='registro'>
@@ -159,9 +175,11 @@ export default function Registro() {
                             <label htmlFor="titulacion_cursada">
                                 <div className="input-icon-container_registro">
                                 <FontAwesomeIcon icon={fas.faSchool} className="input-icon" />
-                                    <select className="inputFormularioRegistro_select" name="titulacion_cursada" onChange={handleTitulacionChange}>
-                                        <option value="" disabled selected hidden>Titulación cursada</option>
-                                        <option value="ing_multimedia">Ing. Multimedia</option>
+                                    <select className="inputFormularioRegistro_select" name="titulacion_cursada" value={titulacion} onChange={handleTitulacionChange}>
+                                    <option value="" disabled selected>Titulación cursada</option>
+                                    {titulaciones.map(t => (
+                                        <option key={t.nombre} value={t.nombre}>{t.nombre}</option>
+                                    ))}
                                     </select>
                                 </div>
                             </label>
