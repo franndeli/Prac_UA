@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Card from './Card.jsx';
 import Nav from './Nav.jsx'
+import { Link } from 'react-router-dom';
 
 export default function Inicio() {
 
@@ -46,7 +47,9 @@ export default function Inicio() {
                 </a>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
-                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                        <Link to={`/publiDetalle?id=${foto.id}`} key={index}>
+                            <Card photoId={foto.id} />
+                        </Link>
                     ))}
                 </div>
             </div>
@@ -59,7 +62,7 @@ export default function Inicio() {
                 </a>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
-                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                        <a href='publiDetalle' key={index} publiID = {foto.id}><Card photoId={foto.id} /></a>
                     ))}
                 </div>
             </div>

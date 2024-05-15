@@ -234,6 +234,49 @@ app.delete('/api/borrarUsuario/:id', (req, res) => {
   });
 });
 
+app.get('/api/mostrarComentarios/:idPublicacion', (req, res) => {
+  const idPublicacion = req.params.idPublicacion;
+  const query = 'SELECT c.*, u.usuario AS usuario FROM comentarios c , publicacion p, usuario u where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+
+  connection.query(query, [idPublicacion] ,(error, results) => {
+    if (error) {
+      console.error('Error al obtener comentarios:', error);
+      res.status(500).json({ error: 'Error al obtener comentarios' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.post('/api/guardarComentarios', (req, res) => {
+  const { comment, rating, userId ,photoId, commentTitle} = req.body;
+
+  const query = 'INSERT INTO comentarios (id_usuario, id_publicacion, comentario, valoraciones, titulo) VALUES (?, ?, ?, ?, ?)';
+  connection.query(query, [userId, photoId, comment, rating, commentTitle], (error, result) => {
+    if (error) {
+      console.error('Error al crear comentario:', error);
+      res.status(500).json({ error: 'Error al crear comentario' });
+    }else{
+      res.status(200).json("Comentario subido con exito");
+    }
+  });
+});
+
+app.get('/api/datosUsuarioPubli/:idPublicacion', (req, res) => {
+  const idPublicacion = req.params.idPublicacion;
+
+  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor FROM publicacion p, usuario u, comentarios c where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+  connection.query(query, [idPublicacion] ,(error, results) => {
+    if (error) {
+      console.error('Error al obtener comentarios:', error);
+      res.status(500).json({ error: 'Error al obtener comentarios' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+
 app.listen(PORT, () =>{
   console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);
 });

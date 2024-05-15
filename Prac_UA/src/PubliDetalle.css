@@ -186,7 +186,7 @@
   .separador-coment2 {
     position: absolute;
     left:100px;
-    width: 50vw; 
+    width: 85%;
     border: none; 
     height: 1.5px; 
     background-color: #ccc; 
@@ -226,6 +226,12 @@
     color: #b2b3b3;
 }
 
+#fecha-coment2{
+  margin:0px 0px 0px 10px;
+  padding:0;
+  color: #000000;
+}
+
 
 
 .comentario2{
@@ -247,7 +253,7 @@
 .separeitor {
     width: 1px; 
     background-color: black; 
-    height: 230px;
+    height: 329px;
     margin:0px 30px; 
 }
 .estrellitas{
@@ -271,6 +277,12 @@
     margin: 0 0 10px 0; 
     font-weight: normal;
   }
+
+  .titulo-final3 {
+    text-align: left; 
+    margin: 5px 0 10px 0; 
+    font-weight: normal;
+  }
   
   .area-coment {
     width: 100%; 
@@ -279,6 +291,15 @@
     border: 1px solid #ccc; 
     margin: 0; 
     min-height: 200px;
+  }
+
+  .area-coment2 {
+    width: 100%; 
+    padding: 8px 10px; 
+    box-sizing: border-box; 
+    border: 1px solid #ccc; 
+    margin: 0; 
+    min-height: 50px;
   }
   
   .final-btn {
