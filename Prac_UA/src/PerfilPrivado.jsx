@@ -123,7 +123,9 @@ export default function PerfilPrivado() {
             </div>
             <div className="cards-container">
               {fotosFiltradas.map(publicacion => (
-                <Card key={publicacion.id} photoId={publicacion.id} className="card"/>
+                <a href={`/publiDetalle?id=${publicacion.id}`}>
+                  <Card key={publicacion.id} photoId={publicacion.id} className="card"/>
+                </a>
               ))}
             </div>
           </div>

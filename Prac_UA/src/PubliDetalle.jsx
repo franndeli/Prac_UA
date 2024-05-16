@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function PubliDetalle() {
 
-    const ruta = "http://localhost:3001/uploads/resized";
+    const ruta = "http://localhost:3001/uploads/resizedPubliDetalle";
 
     const [datosUser, setUser] = useState([]);
 
@@ -148,11 +148,18 @@ export default function PubliDetalle() {
                 <div>
                     <div className="infocont">
                         <div className="izqcont">
-                        <img 
-                            className="Img-archivo" 
-                            src={ruta + '/' + encodeURIComponent(images[currentImageIndex])} 
-                            alt="archivo" 
-                        />
+                            <div className='multiImage'>
+                                <img 
+                                    className="Img-archivo" 
+                                    src={ruta + '/' + encodeURIComponent(images[currentImageIndex])} 
+                                    alt="archivo" 
+                                />
+                                <div className='BotonesImage'>
+                                    <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
+                                    <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
+                                </div>
+                            </div>
+                            
                             <div className="botons-archivo">
                                 <div id="btn-desc">
                                     <p>DESCARGAR</p>
@@ -162,8 +169,6 @@ export default function PubliDetalle() {
                                     <p>GUARDAR</p>
                                     <img id="guard" src={Btnguardar} alt="Guardar" />
                                     </div>
-                                    <button onClick={handlePrevImage}>Anterior</button>
-                                    <button onClick={handleNextImage}>Siguiente</button>
                             </div>
                         </div>
 

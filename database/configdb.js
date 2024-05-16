@@ -294,10 +294,12 @@ const sharp = require('sharp'); // Importa Sharp
 
 const uploadsDir = path.join(__dirname, 'uploads');
 const resizedDir = path.join(__dirname, 'uploads', 'resized'); // Ruta de la carpeta redimensionada
+const resizedDirPubliDetalle = path.join(__dirname, 'uploads', 'resizedPubliDetalle'); // Ruta de la carpeta redimensionada
 
 // Verifica si el directorio existe, si no, lo crea
 fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
 fs.existsSync(resizedDir) || fs.mkdirSync(resizedDir, { recursive: true }); // Crea la carpeta resized si no existe
+fs.existsSync(resizedDirPubliDetalle) || fs.mkdirSync(resizedDirPubliDetalle, { recursive: true }); // Crea la carpeta resized si no existe
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -319,18 +321,21 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
   // Obtén solo el nombre del archivo único
   const singleFileName = path.basename(singleFilePath);
   const resizedFilePath = path.join(resizedDir, singleFileName);
+  const resizedFilePathPubliDetalle = path.join(resizedDirPubliDetalle, singleFileName);
 
   // Obtén solo los nombres de los archivos múltiples
-  const multipleFilesNames = req.files['file-array'].map(file => {
+  const multipleFilesNames = await Promise.all (req.files['file-array'].map(async (file) => {
     const filePath = file.path;
     const fileName = path.basename(filePath);
-    const resizedFilePath = path.join(resizedDir, fileName);
+    const resizedFilePathPubliDetalle = path.join(resizedDirPubliDetalle, fileName);
 
-    // Copiar la imagen a la carpeta resized
-    fs.copyFileSync(filePath, resizedFilePath);
+    // Redimensiona la imagen del file-array a 300x200 píxeles
+    await sharp(filePath)
+      .resize(450, 300)
+      .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resizedPubliDetalle
 
     return fileName;
-  }).join(',');
+  }));
 
   try {
     // Redimensiona la imagen a 150x150 píxeles
@@ -338,8 +343,12 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
       .resize(150, 150)
       .toFile(resizedFilePath); // Guarda la imagen redimensionada en la carpeta resized
 
+    await sharp(singleFilePath)
+    .resize(450, 300)
+    .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resized  
+
     const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    const values = [userId, titulo, etiquetas, tipo_archivo, descripcion, singleFileName, multipleFilesNames];
+    const values = [userId, titulo, etiquetas, tipo_archivo, descripcion, singleFileName, multipleFilesNames.join(',')];
 
     connection.query(query, values, (err, result) => {
       if (err) {
