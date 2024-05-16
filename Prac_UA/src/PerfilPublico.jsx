@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Card from './Card.jsx';
 import Nav from './Nav.jsx';
 import './PerfilPublico.css';
+import { Link } from 'react-router-dom';
 
 export default function PerfilPublico() {
   const [datosPublicos, setDatosPublicos] = useState([]);
@@ -97,9 +98,9 @@ export default function PerfilPublico() {
         </div>
           <div className="cards-container">
             {fotosFiltradas.map(publicacion => (
-            <a href={`/publiDetalle?id=${publicacion.id}`}>
-              <Card key={publicacion.id} photoId={publicacion.id} className="card" />
-              </a>
+              <Link to={`/publiDetalle?id=${publicacion.id}`} key={publicacion.id}>
+                <Card photoId={publicacion.id} />
+              </Link>
             ))}
           </div>
       </div>

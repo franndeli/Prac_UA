@@ -8,6 +8,7 @@ import AdjustableSelect from './helpers/AdjustableSelects.jsx';
 
 const SubirArchivo = () => {
     const [imagePreview, setImagePreview] = useState(camDefault); // Estado para manejar la previsualización de la imagen
+    const [imagePreviewsArray, setImagePreviewsArray] = useState([camDefault]);
     const [tipoArchivo, setTipoArchivo] = useState(''); // Estado para manejar el tipo de archivo
     const [tipo_academico, setTipo_academico] = useState([]);
     const storedUserId = localStorage.getItem('id_usuario');

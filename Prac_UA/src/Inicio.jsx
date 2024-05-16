@@ -62,7 +62,9 @@ export default function Inicio() {
                 </a>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
-                        <a href='publiDetalle' key={index} publiID = {foto.id}><Card photoId={foto.id} /></a>
+                        <Link to={`/publiDetalle?id=${foto.id}`} key={index}>
+                            <Card photoId={foto.id} />
+                        </Link>
                     ))}
                 </div>
             </div>
