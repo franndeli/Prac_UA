@@ -38,7 +38,7 @@ export default function Inicio() {
             <Nav />
             
             <div className="recomendaciones">
-                <a href="/categoria">
+                <a href="/categoria?titulo=RECOMENDACIONES">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">RECOMENDACIONES</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
@@ -51,9 +51,61 @@ export default function Inicio() {
                 </div>
             </div>
             <div className="recomendaciones">
-                <a href="/ultimosTrabajosVistos">
+                <a href="/categoria?titulo=TUS ÚLTIMOS TRABAJOS VISTOS">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">TUS ÚLTIMOS TRABAJOS VISTOS</h2>
+                        <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
+                    </div>
+                </a>
+                <div className="cards-container">
+                    {fotos.map((foto, index) => (
+                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                    ))}
+                </div>
+            </div>
+            <div className="recomendaciones">
+                <a href="/categoria?titulo=MÁS POPULARES">
+                    <div className="recomendaciones_icon">
+                        <h2 className="recomendaciones_h2">MÁS POPULARES</h2>
+                        <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
+                    </div>
+                </a>
+                <div className="cards-container">
+                    {fotos.map((foto, index) => (
+                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                    ))}
+                </div>
+            </div>
+            <div className="recomendaciones">
+                <a href="/categoria?titulo=FAVORITOS DEL PROFESORADO">
+                    <div className="recomendaciones_icon">
+                        <h2 className="recomendaciones_h2">FAVORITOS DEL PROFESORADO</h2>
+                        <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
+                    </div>
+                </a>
+                <div className="cards-container">
+                    {fotos.map((foto, index) => (
+                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                    ))}
+                </div>
+            </div>
+            <div className="recomendaciones">
+                <a href="/categoria?titulo=RECIÉN SUBIDOS">
+                    <div className="recomendaciones_icon">
+                        <h2 className="recomendaciones_h2">RECIÉN SUBIDOS</h2>
+                        <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
+                    </div>
+                </a>
+                <div className="cards-container">
+                    {fotos.map((foto, index) => (
+                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                    ))}
+                </div>
+            </div>
+            <div className="recomendaciones">
+                <a href="/categoria?titulo=PROYECTOS INTERNACIONALES">
+                    <div className="recomendaciones_icon">
+                        <h2 className="recomendaciones_h2">PROYECTOS INTERNACIONALES</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                     </div>
                 </a>

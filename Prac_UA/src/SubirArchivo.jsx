@@ -1,14 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import iconoSubir from './images/cam.svg';
-import './SubirArchivo.css'; // Asegúrate de que los estilos están enlazados
+import './SubirArchivo.css';
 import camDefault from './images/cam_default.png';
 import Nav from './Nav.jsx'
 import { useNavigate } from 'react-router-dom';
+import AdjustableSelect from './helpers/AdjustableSelects.jsx';
 
 const SubirArchivo = () => {
     const [imagePreview, setImagePreview] = useState(camDefault); // Estado para manejar la previsualización de la imagen
     const [tipoArchivo, setTipoArchivo] = useState(''); // Estado para manejar el tipo de archivo
+    const [tipo_academico, setTipo_academico] = useState([]);
     const navigate = useNavigate();
+
+    useEffect(() =>{
+        const fetchTipo_academico = async () => {
+            try {
+              const response = await fetch('http://localhost:3001/api/tipo_academico');
+              if (!response.ok) {
+                throw new Error('Error al cargar tipo_academico');
+              }
+              const data = await response.json();
+              setTipo_academico(data);
+            } catch (error) {
+              console.error('Error al cargar las tipo_academico:', error);
+            }
+          };
+        
+        fetchTipo_academico();
+    }, []);
 
     const handleImageChange = (e) => {
         if (e.target.files[0]) {
@@ -70,12 +89,7 @@ const SubirArchivo = () => {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="tipo-archivo" id="leibel">Tipo de Contenido:</label>
-                                <select className="selectArchivo" id="tipo-archivo" name="tipo_archivo" value={tipoArchivo} onChange={handleTipoArchivoChange} required>
-                                    <option value="" disabled>Selecciona una opción</option>
-                                    <option value="TFG">TFG</option>
-                                    <option value="TFM">TFM</option>
-                                    <option value="Práctica">Práctica</option>
-                                </select>
+                                <AdjustableSelect options={tipo_academico} defaultText="Tipo" />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="descripcion" id="leibel">Descripción:</label>

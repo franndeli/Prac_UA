@@ -23,7 +23,7 @@ export default function Card({ photoId }) {
       // Actualizar el estado con los datos y la URL de la imagen
       setPhotoData(data);
 
-      console.log(data);
+      // console.log(data);
 
     } catch (error) {
       console.error('Error fetching photo data:', error);
@@ -31,8 +31,8 @@ export default function Card({ photoId }) {
   };
 
   useEffect(() => {
-    fetchPhotoData(); // Llamada inicial a la función
-  }, [photoId]); // photoId es la única dependencia necesaria en este efecto
+    fetchPhotoData(); 
+  }, [photoId]);
 
   
 
@@ -40,16 +40,15 @@ export default function Card({ photoId }) {
     <div>
       {photoData.map((p) => (
         <div className="card" key={p.id}>
-          <div className="card-titulo">{p.titulo}</div>
-          <div className="card-imagen">
-            {/* Utiliza la URL de la imagen recibida del servidor */}
-            <img src={ruta + "/" + encodeURIComponent(p.ruta_archivo)} alt="Word Icon" />
-          </div>
-          <div className="card-icons">
-            <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.likes}
-            <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.visitas}
-          </div>
-          <a href={`/perfil-publico?userId=${p.id_usuario}`}>
+          <a href={`/perfil-publico?userId=${p.id_usuario}`} className="card-link">
+            <div className="card-titulo">{p.titulo}</div>
+            <div className="card-imagen">
+              <img src={`${ruta}/${encodeURIComponent(p.ruta_archivo)}`} alt="Word Icon" />
+            </div>
+            <div className="card-icons">
+              <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.likes}
+              <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.visitas}
+            </div>
             <div className="card-autor">
               {p.nombre_usuario}
             </div>

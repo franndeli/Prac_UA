@@ -175,6 +175,42 @@ app.get('/api/perfil/:idUsuario', (req, res) => {
   });
 });
 
+app.get('/api/titulaciones', (req, res) => {
+  const SQL_QUERY = 'SELECT nombre FROM titulaciones';
+  connection.query(SQL_QUERY, (err, results) => {
+      if (err) {
+          console.error("Error al obtener las titulaciones:", err);
+          res.status(500).json({ error: "Error al obtener las titulaciones" });
+          return;
+      }
+      res.json(results);
+  });
+});
+
+app.get('/api/tipo_academico', (req, res) => {
+  const SQL_QUERY = 'SELECT nombre FROM tipo_academico';
+  connection.query(SQL_QUERY, (err, results) => {
+      if (err) {
+          console.error("Error al obtener los tipo_academico:", err);
+          res.status(500).json({ error: "Error al obtener los tipo_academico" });
+          return;
+      }
+      res.json(results);
+  });
+});
+
+app.get('/api/publicacion_tipo/:id', (req, res) => {
+  const SQL_QUERY = 'SELECT * FROM tipo_academico';
+  connection.query(SQL_QUERY, (err, results) => {
+      if (err) {
+          console.error("Error al obtener los tipo_academico:", err);
+          res.status(500).json({ error: "Error al obtener los tipo_academico" });
+          return;
+      }
+      res.json(results);
+  });
+});
+
 app.get('/api/busqueda', (req, res) => {
       const { busqueda } = req.query; // Recibe el término de búsqueda desde la URL
   
