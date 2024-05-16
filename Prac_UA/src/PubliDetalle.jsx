@@ -6,13 +6,16 @@ import RatingStars from './RatingStars';
 import ImgArchivo from './images/img_archivo.png';
 import BtnDescargar from './images/btn-descargar.png';
 import Btnguardar from './images/btn-guardar.png';
+import Modal from './Modal.jsx';
 import { useLocation } from 'react-router-dom';
+
 
 export default function PubliDetalle() {
 
     const ruta = "http://localhost:3001/uploads/resizedPubliDetalle";
 
     const [datosUser, setUser] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
@@ -139,6 +142,14 @@ export default function PubliDetalle() {
         }
     };
 
+      const handleModalConfirm = () => {
+    // Realizar acción después de confirmar cambios (puedes redirigir aquí si es necesario)
+        setShowModal(false); // Ocultar el modal después de confirmar
+    };
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
     return (
         <>
             <div><Nav></Nav></div> 
@@ -162,11 +173,11 @@ export default function PubliDetalle() {
                             
                             <div className="botons-archivo">
                                 <div id="btn-desc">
-                                    <p>DESCARGAR</p>
+                                <a href={ruta + '/' + encodeURIComponent(images[currentImageIndex])} download>Descargar</a>
                                     <img id="desc"src={BtnDescargar} alt="Descargar" />
                                 </div>
                                 <div id="btn-guard">
-                                    <p>GUARDAR</p>
+                                <button onClick={() => setShowModal(true)}>GUARDAR</button>
                                     <img id="guard" src={Btnguardar} alt="Guardar" />
                                     </div>
                             </div>
@@ -281,7 +292,13 @@ export default function PubliDetalle() {
                         </div>
                     </div>
                     
-                </div>               
+                </div>
+                {showModal && (
+            <Modal
+                onClose={handleCloseModal}
+                onConfirm={handleModalConfirm}
+            />
+      )}
             </div>
         </>
     );
