@@ -9,9 +9,8 @@ import ConfirmarNuevoUsuario from './ConfirmarNuevoUsuario';
 export default function Registro() {
 
     const handleModalConfirm = () => {
-        // Realizar acción después de confirmar cambios (puedes redirigir aquí si es necesario)
         navigate('/iniciarsesion');
-        setShowModal(false); // Ocultar el modal después de confirmar
+        setShowModal(false);
       };
       const handleCloseModal = () => {
         setShowModal(false);
@@ -178,7 +177,7 @@ export default function Registro() {
                                     <select className="inputFormularioRegistro_select" name="titulacion_cursada" value={titulacion} onChange={handleTitulacionChange}>
                                     <option value="" disabled selected>Titulación cursada</option>
                                     {titulaciones.map(t => (
-                                        <option key={t.nombre} value={t.nombre}>{t.nombre}</option>
+                                        <option key={t.id} value={t.id}>{t.nombre}</option>
                                     ))}
                                     </select>
                                 </div>

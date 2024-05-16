@@ -71,7 +71,8 @@ export default function PerfilPrivado() {
   const handleCerrarSesion = () => {
     // Limpiar el localStorage
     localStorage.removeItem('id_usuario');
-    localStorage.removeItem('usuario')
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('recuerdame');
     // Redirigir a la página de inicio de sesión
     navigate('/iniciarsesion');
   };

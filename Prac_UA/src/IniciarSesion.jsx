@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './IniciarSesion.css';
 import logo from './images/logo512.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,10 +13,12 @@ export default function IniciarSesion() {
     const [usuario, setUsuario] = useState('');
     const [contraseña, setContraseña] = useState('');
     const [error, setError] = useState('');
+    const [recuerdame, setRecuerdame] = useState(false);
 
     // Manejadores para los inputs
     const handleUsuarioChange = (e) => setUsuario(e.target.value);
     const handleContraseñaChange = (e) => setContraseña(e.target.value);
+    const handleRecuerdameChange = (e) => setRecuerdame(e.target.checked);
 
     // Función para manejar el envío del formulario
     const handleSubmit = async (e) => {
@@ -39,6 +41,12 @@ export default function IniciarSesion() {
                 localStorage.setItem('id_usuario', data.user.id);
                 localStorage.setItem('usuario', data.user.usuario);
 
+                if (recuerdame) {
+                    localStorage.setItem('recuerdame', 'true');
+                } else {
+                    localStorage.removeItem('recuerdame');
+                }
+
                 navigate('/inicio'); // Redirige a la página de inicio
             } else {
                 throw new Error(data.error || 'Error al iniciar sesión'); // Manejo de errores del servidor
@@ -50,8 +58,13 @@ export default function IniciarSesion() {
         }
     };
 
-
-
+    useEffect(() => {
+        const recuerdameState = localStorage.getItem('recuerdame');
+        if (recuerdameState === 'true') {
+            navigate('/inicio');
+        }
+    }, [navigate]);
+    
     return (
         <div className='iniciar-sesion'>
             <div className="titulo-web">
@@ -89,7 +102,7 @@ export default function IniciarSesion() {
                     </label>
                     <span className="recuerdame_contrasena">
                         <div className="recuerdame">
-                            <input type="checkbox" id="recuerdame" name="recuerdame" />
+                            <input type="checkbox" id="recuerdame" name="recuerdame" checked={recuerdame} onChange={handleRecuerdameChange} />
                             <label className="label_recuerdame" htmlFor="recuerdame">Recuérdame</label>
                         </div>
                         <a href="/olvido-contraseña" className="olvido-contraseña">¿Has olvidado tu contraseña?</a>

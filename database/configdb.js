@@ -228,34 +228,50 @@ app.get('/api/busqueda', (req, res) => {
 
   app.post('/api/registro', (req, res) => {
     const { nombre, usuario, contraseña, email, titulacion, repetir_contraseña } = req.body;
-
-    // Verificar si el usuario ya está registrado
-    const SQL_QUERY = 'SELECT * FROM usuario WHERE usuario = ?';
-    connection.query(SQL_QUERY, [usuario], (err, result) => {
+    console.log(req.body);
+    // Verificar si la titulación existe
+    const TITULACION_QUERY = 'SELECT * FROM titulaciones WHERE id = ?';
+    connection.query(TITULACION_QUERY, [titulacion], (err, result) => {
         if (err) {
-            console.error("Error al verificar el usuario:", err);
-            res.status(500).json({ error: "Error al verificar el usuario" });
+            console.error("Error al verificar la titulación:", err);
+            res.status(500).json({ error: "Error al verificar la titulación" });
             return;
         }
 
-        if (result.length > 0) {
-            res.status(400).json({ error: "El usuario ya está registrado" });
-        } else {
-            // Insertar el nuevo usuario en la base de datos
-            const INSERT_QUERY = 'INSERT INTO usuario (nombre, usuario, contraseña, email, titulacion, repetircontraseña) VALUES (?, ?, ?, ?, ?, ?)';
-            connection.query(INSERT_QUERY, [nombre, usuario, contraseña, email, titulacion, repetir_contraseña], (err, result) => {
-                if (err) {
-                    console.error("Error al registrar el usuario:", err);
-                    res.status(500).json({ error: "Error al registrar el usuario" });
-                    return;
-                }
-                console.log('SQL Query:', SQL_QUERY);
-                console.log("Usuario registrado correctamente");
-                res.status(200).json({ message: "Usuario registrado correctamente" });
-            });
+        if (result.length === 0) {
+            res.status(400).json({ error: "La titulación no existe" });
+            return;
         }
+
+        // Verificar si el usuario ya está registrado
+        const SQL_QUERY = 'SELECT * FROM usuario WHERE usuario = ?';
+        connection.query(SQL_QUERY, [usuario], (err, result) => {
+            if (err) {
+                console.error("Error al verificar el usuario:", err);
+                res.status(500).json({ error: "Error al verificar el usuario" });
+                return;
+            }
+
+            if (result.length > 0) {
+                res.status(400).json({ error: "El usuario ya está registrado" });
+            } else {
+                // Insertar el nuevo usuario en la base de datos
+                const INSERT_QUERY = 'INSERT INTO usuario (nombre, usuario, contraseña, email, titulacion, repetircontraseña) VALUES (?, ?, ?, ?, ?, ?)';
+                connection.query(INSERT_QUERY, [nombre, usuario, contraseña, email, titulacion, repetir_contraseña], (err, result) => {
+                    if (err) {
+                        console.error("Error al registrar el usuario:", err);
+                        res.status(500).json({ error: "Error al registrar el usuario" });
+                        return;
+                    }
+                    console.log('SQL Query:', SQL_QUERY);
+                    console.log("Usuario registrado correctamente");
+                    res.status(200).json({ message: "Usuario registrado correctamente" });
+                });
+            }
+        });
     });
-});
+  });
+
 
 app.delete('/api/borrarUsuario/:id', (req, res) => {
   const { id } = req.params;
