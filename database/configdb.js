@@ -286,6 +286,49 @@ app.delete('/api/borrarUsuario/:id', (req, res) => {
   });
 });
 
+app.get('/api/mostrarComentarios/:idPublicacion', (req, res) => {
+  const idPublicacion = req.params.idPublicacion;
+  const query = 'SELECT c.*, u.usuario AS usuario FROM comentarios c , publicacion p, usuario u where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+
+  connection.query(query, [idPublicacion] ,(error, results) => {
+    if (error) {
+      console.error('Error al obtener comentarios:', error);
+      res.status(500).json({ error: 'Error al obtener comentarios' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.post('/api/guardarComentarios', (req, res) => {
+  const { comment, rating, userId ,photoId, commentTitle} = req.body;
+
+  const query = 'INSERT INTO comentarios (id_usuario, id_publicacion, comentario, valoraciones, titulo) VALUES (?, ?, ?, ?, ?)';
+  connection.query(query, [userId, photoId, comment, rating, commentTitle], (error, result) => {
+    if (error) {
+      console.error('Error al crear comentario:', error);
+      res.status(500).json({ error: 'Error al crear comentario' });
+    }else{
+      res.status(200).json("Comentario subido con exito");
+    }
+  });
+});
+
+app.get('/api/datosUsuarioPubli/:idPublicacion', (req, res) => {
+  const idPublicacion = req.params.idPublicacion;
+
+  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor, u.id as id_usuario FROM publicacion p, usuario u, comentarios c where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+  connection.query(query, [idPublicacion] ,(error, results) => {
+    if (error) {
+      console.error('Error al obtener comentarios:', error);
+      res.status(500).json({ error: 'Error al obtener comentarios' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+
 app.listen(PORT, () =>{
   console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);
 });
@@ -303,10 +346,12 @@ const sharp = require('sharp'); // Importa Sharp
 
 const uploadsDir = path.join(__dirname, 'uploads');
 const resizedDir = path.join(__dirname, 'uploads', 'resized'); // Ruta de la carpeta redimensionada
+const resizedDirPubliDetalle = path.join(__dirname, 'uploads', 'resizedPubliDetalle'); // Ruta de la carpeta redimensionada
 
 // Verifica si el directorio existe, si no, lo crea
 fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
 fs.existsSync(resizedDir) || fs.mkdirSync(resizedDir, { recursive: true }); // Crea la carpeta resized si no existe
+fs.existsSync(resizedDirPubliDetalle) || fs.mkdirSync(resizedDirPubliDetalle, { recursive: true }); // Crea la carpeta resized si no existe
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -320,27 +365,50 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 app.use('/uploads', express.static('uploads'));
 
-app.post('/api/subirArchivo', upload.single('file'), async (req, res) => {
+app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: 'file-array' }]), async (req, res) => {
+  const userId = req.params.userId;
   const { titulo, etiquetas, tipo_archivo, descripcion } = req.body;
-  const file = req.file.filename;
-  const filePath = path.join(uploadsDir, file);
-  const resizedFilePath = path.join(resizedDir, file); // Ruta del archivo redimensionado
+  const singleFilePath = req.files['file'][0].path;
+
+  // Obtén solo el nombre del archivo único
+  const singleFileName = path.basename(singleFilePath);
+  const resizedFilePath = path.join(resizedDir, singleFileName);
+  const resizedFilePathPubliDetalle = path.join(resizedDirPubliDetalle, singleFileName);
+
+  // Obtén solo los nombres de los archivos múltiples
+  const multipleFilesNames = await Promise.all (req.files['file-array'].map(async (file) => {
+    const filePath = file.path;
+    const fileName = path.basename(filePath);
+    const resizedFilePathPubliDetalle = path.join(resizedDirPubliDetalle, fileName);
+
+    // Redimensiona la imagen del file-array a 300x200 píxeles
+    await sharp(filePath)
+      .resize(450, 300)
+      .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resizedPubliDetalle
+
+    return fileName;
+  }));
 
   try {
-    // Redimensiona la imagen a 300x300 píxeles
-    await sharp(filePath)
+    // Redimensiona la imagen a 150x150 píxeles
+    await sharp(singleFilePath)
       .resize(150, 150)
       .toFile(resizedFilePath); // Guarda la imagen redimensionada en la carpeta resized
 
-    const SQL_QUERY = `INSERT INTO publicacion (titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo) VALUES (?, ?, ?, ?, ?)`;
+    await sharp(singleFilePath)
+    .resize(450, 300)
+    .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resized  
 
-    connection.query(SQL_QUERY, [titulo, etiquetas, tipo_archivo, descripcion, file], (err, result) => {
+    const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const values = [userId, titulo, etiquetas, tipo_archivo, descripcion, singleFileName, multipleFilesNames.join(',')];
+
+    connection.query(query, values, (err, result) => {
       if (err) {
-        console.error("Error al insertar los datos:", err);
-        res.status(500).json({ error: "Error al insertar los datos" });
-        return;
+        console.error('Error al insertar archivo en la base de datos:', err);
+        res.status(500).send('Error al subir archivo');
+      } else {
+        res.status(200).send('Archivo subido correctamente');
       }
-      res.status(200).json({ message: "Archivo subido y datos guardados correctamente" });
     });
   } catch (error) {
     console.error("Error al redimensionar la imagen:", error);
