@@ -10,7 +10,7 @@ const SubirArchivo = () => {
     const [imagePreview, setImagePreview] = useState(camDefault); // Estado para manejar la previsualización de la imagen
     const [imagePreviewsArray, setImagePreviewsArray] = useState([camDefault]);
     const [tipoArchivo, setTipoArchivo] = useState(''); // Estado para manejar el tipo de archivo
-    const [tipo_academico, setTipo_academico] = useState([]);
+    const [tipo_academicos, setTipo_academico] = useState([]);
     const storedUserId = localStorage.getItem('id_usuario');
     const navigate = useNavigate();
 
@@ -58,7 +58,7 @@ const SubirArchivo = () => {
         });
         formData.append('titulo', document.getElementById('titulo').value);
         formData.append('etiquetas', document.getElementById('etiquetas').value);
-        formData.append('tipo_archivo', document.getElementById('tipo-archivo').value);
+        formData.append('tipoArchivo', document.getElementById('tipo-archivo').value);
         formData.append('descripcion', document.getElementById('descripcion').value);
 
         try {
@@ -68,7 +68,7 @@ const SubirArchivo = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Error al subir archivo');
+                throw new Error('Error al subir archivo desde el frontend');
             }
 
             console.log('Archivo subido correctamente');
@@ -96,7 +96,13 @@ const SubirArchivo = () => {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="tipo-archivo" id="leibel">Tipo de Contenido:</label>
-                                <AdjustableSelect options={tipo_academico} defaultText="Tipo" />
+                                {/* <AdjustableSelect options={tipo_academico} defaultText="Tipo" /> */}
+                                <select className="" id="tipo-archivo" name="tipoArchivo" value={tipoArchivo} onChange={handleTipoArchivoChange}>
+                                    <option value="" disabled selected>Tipo de contenido</option>
+                                    {tipo_academicos.map(t => (
+                                        <option key={t.id} value={t.nombre}>{t.nombre}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="descripcion" id="leibel">Descripción:</label>

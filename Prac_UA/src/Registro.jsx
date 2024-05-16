@@ -4,17 +4,18 @@ import logo from './images/logo512.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import ConfirmarNuevoUsuario from './ConfirmarNuevoUsuario'; 
+import ConfirmarNuevoUsuario from './ConfirmarNuevoUsuario';
 
 export default function Registro() {
 
     const handleModalConfirm = () => {
         navigate('/iniciarsesion');
         setShowModal(false);
-      };
-      const handleCloseModal = () => {
+    };
+
+    const handleCloseModal = () => {
         setShowModal(false);
-      };
+    };
 
     const navigate = useNavigate();
 
@@ -24,7 +25,8 @@ export default function Registro() {
     const [email, setEmail] = useState('');
     const [nombre, setNombre] = useState('');
     const [repetir_contraseña, setRepetirContraseña] = useState('');
-    const [titulacion, setTitulacion] = useState('');
+    const [titulacion, setTitulacion] = useState(''); // Estado para el ID de la titulación seleccionada
+    const [titulaciones, setTitulaciones] = useState([]); // Estado para la lista de todas las titulaciones
     const [showModal, setShowModal] = useState(false);
 
     const handleUsuarioChange = (e) => setUsuario(e.target.value);
@@ -32,7 +34,7 @@ export default function Registro() {
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handleNombreChange = (e) => setNombre(e.target.value);
     const handleRepetirContraseñaChange = (e) => setRepetirContraseña(e.target.value);
-    const handleTitulacionChange = (e) => setTitulacion(e.target.value);
+    const handleTitulacionChange = (e) => setTitulacion(e.target.value); // Actualizar el estado de titulacion con el ID seleccionado
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -78,15 +80,13 @@ export default function Registro() {
                 throw new Error(data.error || 'Error al registrar el usuario');
             }
 
-            {/* Renderizar el modal si showModal es true */}
+            // Renderizar el modal si showModal es true
             setShowModal(true);
             // Aquí puedes redirigir al usuario a la página de inicio de sesión o hacer cualquier otra acción
         } catch (error) {
             alert(error.message);
         }
     };
-
-    const [titulaciones, setTitulaciones] = useState([]);
 
     useEffect(() => {
         const fetchTitulaciones = async () => {
@@ -212,7 +212,5 @@ export default function Registro() {
       )}
 
         </div>
-
-        
     );
-  }
+}

@@ -12,6 +12,7 @@ import Inicio from './Inicio.jsx';
 import Categoria from './Categoria.jsx'
 import Buscar from './buscar.jsx'
 import UltimosTrabajos from './UltimosTrabajoVistos.jsx'
+import Biblioteca from './Biblioteca.jsx';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<Navigate to="/iniciarsesion" replace />} />
             <Route path="/inicio" element={<Inicio/>} />
             <Route path="/categoria" element={<Categoria/>} />
+            <Route path="/tu_biblioteca" element={<Biblioteca/>} />
             <Route path="/iniciarsesion" element={<IniciarSesion />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/formulario" element={<Formulario />} />

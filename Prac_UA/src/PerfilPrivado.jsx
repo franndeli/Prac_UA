@@ -5,12 +5,15 @@ import Nav from './Nav.jsx';
 import { useEffect, useState } from 'react';
 import './PerfilPrivado.css'; // Importa el CSS por defecto
 import './PerfilPrivadoOscuro.css'; // Importa el CSS oscuro
+import AdjustableSelect from './helpers/AdjustableSelects.jsx';
 
 export default function PerfilPrivado() {
 
   const [datosPublicos, setDatosPublicos] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
-  const [tipoSeleccionado, setTipoSeleccionado] = useState("");
+  const [tipo_contenido, setTipoSeleccionado] = useState("");
+  const [tipo_contenidos, setTipoSeleccionados] = useState([]);
+
   const storedUserId = localStorage.getItem('id_usuario');
 
   const fetchPublico = async () => {
@@ -43,22 +46,32 @@ export default function PerfilPrivado() {
 
   const fotosFiltradas = publicaciones.filter(publicacion => {
     const nombreValido = publicacion.titulo;
-    const tipoValido = !tipoSeleccionado || publicacion.tipo_archivo === tipoSeleccionado;
+    const tipoValido = !tipo_contenido || publicacion.tipo_archivo === tipo_contenido;
     return nombreValido && tipoValido;
   });
 
   const handleTipoSeleccionado = (e) => {
     const valorSeleccionado = e.target.value;
-    if (valorSeleccionado === "Tipo") {
-      setTipoSeleccionado("");
-    } else {
-      setTipoSeleccionado(valorSeleccionado);
+    setTipoSeleccionado(valorSeleccionado);
+  }
+
+  const fetchTipo_academico = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/tipo_academico');
+      if (!response.ok) {
+        throw new Error('Error al cargar tipo_academico');
+      }
+      const data = await response.json();
+      setTipoSeleccionados(data);
+    } catch (error) {
+      console.error('Error al cargar las tipo_academico:', error);
     }
   };
 
   useEffect(() => {
     fetchPublico();
     fetchPublicaciones();
+    fetchTipo_academico();
   }, []);
 
   const navigate = useNavigate(); // Usa useNavigate para la navegación
@@ -107,21 +120,7 @@ export default function PerfilPrivado() {
           </div>
           <div className='PublicacionesPrivado'>
             <h2 className='PubliPrivate'>Publicaciones</h2>
-            <div className={p.color === "Claro" ? 'select-container-privado' : 'select-container-privado-dark'}>
-              <select name="Tipo" id="Tipo" onChange={handleTipoSeleccionado}>
-                <option selected>Tipo</option>
-                <option>Word</option>
-                <option>PDF</option>
-                <option>Excel</option>
-                <option>Video</option>
-                <option>Audio</option>
-                <option>Practicas</option>
-                <option>TFG</option>
-                <option>TFM</option>
-                <option>Tesis</option>
-                <option>Otro</option>
-              </select>
-            </div>
+            <AdjustableSelect options={tipo_contenidos} defaultText="Tipo" />
             <div className="cards-container">
               {fotosFiltradas.map(publicacion => (
                 <a href={`/publiDetalle?id=${publicacion.id}`}>
@@ -134,4 +133,6 @@ export default function PerfilPrivado() {
       ))}
     </div>
   );
-}
+};
+
+  

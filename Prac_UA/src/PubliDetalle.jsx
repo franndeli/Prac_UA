@@ -142,10 +142,32 @@ export default function PubliDetalle() {
         }
     };
 
-      const handleModalConfirm = () => {
+    const handleSavePubli = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/guardarPubli/${publiID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al guardar la publicación');
+            }
+
+            const data = await response.json();
+            console.log('Publicación guardada:', data);
+        } catch (error) {
+            console.error('Error al guardar la publicación:', error);
+            alert('Error al guardar la publicación');
+        }
+    };
+
+    const handleModalConfirm = () => {
     // Realizar acción después de confirmar cambios (puedes redirigir aquí si es necesario)
         setShowModal(false); // Ocultar el modal después de confirmar
     };
+
     const handleCloseModal = () => {
         setShowModal(false);
     };
@@ -177,9 +199,9 @@ export default function PubliDetalle() {
                                     <img id="desc"src={BtnDescargar} alt="Descargar" />
                                 </div>
                                 <div id="btn-guard">
-                                <button onClick={() => setShowModal(true)}>GUARDAR</button>
+                                <button onClick={() => { setShowModal(true); handleSavePubli(); }}>GUARDAR</button>
                                     <img id="guard" src={Btnguardar} alt="Guardar" />
-                                    </div>
+                                </div>
                             </div>
                         </div>
 

@@ -160,6 +160,23 @@ app.put('/api/ajustesUsuario/:id', (req, res) => {
   })
 });
 
+app.put('/api/guardarPubli/:idpubli', (req, res) => {
+  // Obtener el ID del usuario
+  const idpubli = req.params.idpubli;
+  let SQL_QUERY = 'UPDATE publicacion SET guardado = 1 WHERE id = ?';
+
+  connection.query(SQL_QUERY, [idpubli], (err, result) => {
+    if (err) {
+      console.error("Error al guardar la publicación:", err);
+      res.status(500).json({ error: "Error al guardar la publicación" });
+      return;
+    }
+    console.log("Archivo guardado correctamente");
+    res.status(200).json({ message: "Archivo guardado correctamente" });
+    
+  })
+});
+
 
 
 app.get('/api/perfil/:idUsuario', (req, res) => {
@@ -228,9 +245,11 @@ app.get('/api/busqueda', (req, res) => {
 
   app.post('/api/registro', (req, res) => {
     const { nombre, usuario, contraseña, email, titulacion, repetir_contraseña } = req.body;
-    console.log(req.body);
-    // Verificar si la titulación existe
-    const TITULACION_QUERY = 'SELECT * FROM titulaciones WHERE id = ?';
+    // console.log(req.body);
+
+    // Verificar si la titulación existe utilizando el nombre de la titulación
+    const TITULACION_QUERY = 'SELECT id FROM titulaciones WHERE nombre = ?';
+    // console.log(TITULACION_QUERY);
     connection.query(TITULACION_QUERY, [titulacion], (err, result) => {
         if (err) {
             console.error("Error al verificar la titulación:", err);
@@ -242,6 +261,8 @@ app.get('/api/busqueda', (req, res) => {
             res.status(400).json({ error: "La titulación no existe" });
             return;
         }
+
+        const titulacionId = result[0].id;
 
         // Verificar si el usuario ya está registrado
         const SQL_QUERY = 'SELECT * FROM usuario WHERE usuario = ?';
@@ -257,7 +278,7 @@ app.get('/api/busqueda', (req, res) => {
             } else {
                 // Insertar el nuevo usuario en la base de datos
                 const INSERT_QUERY = 'INSERT INTO usuario (nombre, usuario, contraseña, email, titulacion, repetircontraseña) VALUES (?, ?, ?, ?, ?, ?)';
-                connection.query(INSERT_QUERY, [nombre, usuario, contraseña, email, titulacion, repetir_contraseña], (err, result) => {
+                connection.query(INSERT_QUERY, [nombre, usuario, contraseña, email, titulacionId, repetir_contraseña], (err, result) => {
                     if (err) {
                         console.error("Error al registrar el usuario:", err);
                         res.status(500).json({ error: "Error al registrar el usuario" });
@@ -270,8 +291,7 @@ app.get('/api/busqueda', (req, res) => {
             }
         });
     });
-  });
-
+});
 
 app.delete('/api/borrarUsuario/:id', (req, res) => {
   const { id } = req.params;
@@ -294,6 +314,20 @@ app.get('/api/mostrarComentarios/:idPublicacion', (req, res) => {
     if (error) {
       console.error('Error al obtener comentarios:', error);
       res.status(500).json({ error: 'Error al obtener comentarios' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get('/api/biblioteca', (req, res) => {
+  const idPublicacion = req.params.idPublicacion;
+  const query = 'SELECT * FROM publicacion WHERE guardado = 1';
+
+  connection.query(query, [idPublicacion] ,(error, results) => {
+    if (error) {
+      console.error('Error al obtener publicaciones de tu biblioteca:', error);
+      res.status(500).json({ error: 'Error al obtener publicaciones de tu biblioteca' });
     } else {
       res.json(results);
     }
@@ -367,7 +401,8 @@ app.use('/uploads', express.static('uploads'));
 
 app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: 'file-array' }]), async (req, res) => {
   const userId = req.params.userId;
-  const { titulo, etiquetas, tipo_archivo, descripcion } = req.body;
+
+  const { titulo, etiquetas, tipoArchivo, descripcion } = req.body;
   const singleFilePath = req.files['file'][0].path;
 
   // Obtén solo el nombre del archivo único
@@ -387,31 +422,53 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
       .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resizedPubliDetalle
 
     return fileName;
-  }));
+    }));
 
-  try {
-    // Redimensiona la imagen a 150x150 píxeles
-    await sharp(singleFilePath)
-      .resize(150, 150)
-      .toFile(resizedFilePath); // Guarda la imagen redimensionada en la carpeta resized
+    try {
+      // Redimensiona la imagen a 150x150 píxeles
+      await sharp(singleFilePath)
+        .resize(150, 150)
+        .toFile(resizedFilePath); // Guarda la imagen redimensionada en la carpeta resized
 
-    await sharp(singleFilePath)
-    .resize(450, 300)
-    .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resized  
+      await sharp(singleFilePath)
+      .resize(450, 300)
+      .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resized  
 
-    const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    const values = [userId, titulo, etiquetas, tipo_archivo, descripcion, singleFileName, multipleFilesNames.join(',')];
+      const TIPO_ARCHIVO_QUERY = 'SELECT id FROM tipo_academico WHERE nombre = ?';
+      console.log(TIPO_ARCHIVO_QUERY);
 
-    connection.query(query, values, (err, result) => {
-      if (err) {
-        console.error('Error al insertar archivo en la base de datos:', err);
-        res.status(500).send('Error al subir archivo');
-      } else {
-        res.status(200).send('Archivo subido correctamente');
-      }
-    });
-  } catch (error) {
-    console.error("Error al redimensionar la imagen:", error);
-    res.status(500).json({ error: "Error al redimensionar la imagen" });
-  }
-});
+      connection.query(TIPO_ARCHIVO_QUERY, [tipoArchivo], (err, result) => {
+        console.log('hola')
+        if (err) {
+          console.error("Error al verificar el tipo de archivo:", err);
+          res.status(500).json({ error: "Error al verificar el tipo de archivo" });
+          return;
+        }
+
+        console.log('hola1')
+        console.log(tipoArchivo);
+
+        if (result.length === 0) {
+          res.status(400).json({ error: "El tipo de archivo no existe" });
+          return;
+        }
+
+        const tipoArchivoId = result[0].id;
+        
+        const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const values = [userId, titulo, etiquetas, tipoArchivoId, descripcion, singleFileName, multipleFilesNames.join(',')];
+
+        connection.query(query, values, (err, result) => {
+          if (err) {
+            console.error('Error al insertar archivo en la base de datos:', err);
+            res.status(500).send('Error al subir archivo aaaaaaaaaaaaaaah');
+          } else {
+            res.status(200).send('Archivo subido correctamente');
+          }
+        });
+      });
+    } catch (error) {
+      console.error("Error al redimensionar la imagen:", error);
+      res.status(500).json({ error: "Error al redimensionar la imagen" });
+    }
+  });
