@@ -265,7 +265,7 @@ app.post('/api/guardarComentarios', (req, res) => {
 app.get('/api/datosUsuarioPubli/:idPublicacion', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
 
-  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor FROM publicacion p, usuario u, comentarios c where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor, u.id as id_usuario FROM publicacion p, usuario u, comentarios c where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {
       console.error('Error al obtener comentarios:', error);
@@ -321,7 +321,16 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
   const resizedFilePath = path.join(resizedDir, singleFileName);
 
   // Obtén solo los nombres de los archivos múltiples
-  const multipleFilesNames = req.files['file-array'].map(file => path.basename(file.path)).join(',');
+  const multipleFilesNames = req.files['file-array'].map(file => {
+    const filePath = file.path;
+    const fileName = path.basename(filePath);
+    const resizedFilePath = path.join(resizedDir, fileName);
+
+    // Copiar la imagen a la carpeta resized
+    fs.copyFileSync(filePath, resizedFilePath);
+
+    return fileName;
+  }).join(',');
 
   try {
     // Redimensiona la imagen a 150x150 píxeles
