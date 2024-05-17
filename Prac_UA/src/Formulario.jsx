@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import './Formulario.css';
 import { useNavigate } from 'react-router-dom';
 import Datos from './Datos';
-import ConfirmationModal from './ConfirmarBorrarCuenta'; 
+import ConfirmationModal from './ConfirmarBorrarCuenta';
+import iconoSubir from './images/cam.svg';
+import camDefault from './images/cam_default.png';
 
 export default function Formulario() {
-
+  
   const userId = 6;
 
   // Definimos el estado para controlar qué formulario se muestra y el color del botón
+  const [imagePreview, setImagePreview] = useState(camDefault); // Estado para manejar la previsualización de la imagen
   const [formulario, setFormulario] = useState('usuario');
   const [color, setColor] = useState('blue');
   const [formData, setFormData] = useState({}); // Estado para almacenar datos del formulario
@@ -17,30 +20,39 @@ export default function Formulario() {
 
   const navigate = useNavigate();
 
-  const handleConfirmarCambios = async () => {
-    try {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImagePreview(URL.createObjectURL(file));
+};
 
+const handleConfirmarCambios = async () => {
+  try {
       const userId = localStorage.getItem('id_usuario');
       if (!userId) {
-      console.error('No se encontró el id_usuario en el localStorage');
-      return;
+          console.error('No se encontró el id_usuario en el localStorage');
+          return;
+      }
+
+      // Crear una instancia de FormData
+      const data = new FormData();
+      data.append('file', document.getElementById('file').files[0]);
+      for (const key in formData) {
+          data.append(key, formData[key]);
       }
 
       const response = await fetch(`http://localhost:3001/api/ajustesUsuario/${userId}`, {
-        method: 'PUT', // Cambiar de POST a PUT
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+          method: 'PUT', // Cambiar de POST a PUT
+          body: data,
       });
+
       if (!response.ok) {
-        throw new Error('Error al guardar los datos del servidor !!');
+          throw new Error('Error al guardar los datos del servidor !!');
       }
       setShowModal(true);
-    } catch (error) {
+  } catch (error) {
       console.log('Error al guardar los datos !!', error);
-    }
-  };
+  }
+};
 
   const handleBorrarCuenta = async () => {
     try {
@@ -138,11 +150,23 @@ export default function Formulario() {
                 <textarea className="inputFormulario" id="Descripcion" cols={20} onChange={handleInputChange}/>
               </div> 
             </div>
+            <div className="form-group-formulario imagen-subida-formulario">
+              <div className="image-upload-container-formulario">
+                  <img src={imagePreview} alt="Imagen por defecto" className="image-preview" />
+                  <input type="file" id="file" name="file" className="inputfile" onChange={handleImageChange} />
+                  <label htmlFor="file" className="image-upload-label-formulario">
+                      <div className="upload-icon-container">
+                          <img src={iconoSubir} alt="Subir" />
+                      </div>
+                  </label>
+              </div>
+            </div>
 
             <div>
               <button className="custom-button-Formulario-red" onClick={() => setShowConfirmationModal(true)}>Borrar cuenta</button>
               <button className={`custom-button-Formulario ${color}`} onClick={handleConfirmarCambios}>Guardar Cambios</button>
             </div>
+
           </fieldset>
         </div>
       ) : (

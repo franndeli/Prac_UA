@@ -19,6 +19,34 @@ app.use(session({
   saveUninitialized: false
 }));
 
+//PARA LA PARTE DE SUBIR ARCHIVOS
+
+//primero configuramos multer para que nos cree el directorio uploads si no lo tenemos
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp'); // Importa Sharp
+
+const uploadsDir = path.join(__dirname, 'uploads');
+const resizedDir = path.join(__dirname, 'uploads', 'resized'); // Ruta de la carpeta redimensionada
+const resizedDirPubliDetalle = path.join(__dirname, 'uploads', 'resizedPubliDetalle'); // Ruta de la carpeta redimensionada
+
+// Verifica si el directorio existe, si no, lo crea
+fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
+fs.existsSync(resizedDir) || fs.mkdirSync(resizedDir, { recursive: true }); // Crea la carpeta resized si no existe
+fs.existsSync(resizedDirPubliDetalle) || fs.mkdirSync(resizedDirPubliDetalle, { recursive: true }); // Crea la carpeta resized si no existe
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+app.use('/uploads', express.static('uploads'));
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -61,7 +89,7 @@ app.post('/api/iniciarSesion', (req, res) => {
 
 
 app.get('/api/publicaciones', (req, res) => {
-  const SQL_QUERY = 'SELECT * FROM publicacion';
+  const SQL_QUERY = 'SELECT p.*, tiAc.nombre as TiAc_Nombre FROM publicacion p, tipo_academico tiAc where p.tipo_archivo = tiAc.id';
   connection.query(SQL_QUERY, (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones:", err);
@@ -87,7 +115,7 @@ app.get('/api/publicaciones/:id', (req, res) => {
 
 app.get('/api/misPublicaciones/:id', (req, res) => {
   const userId = req.params.id; // Obtener userId de los parámetros de la solicitud
-  const SQL_QUERY = 'SELECT * FROM publicacion WHERE autor = ?';
+  const SQL_QUERY = 'SELECT p.*, tiAc.nombre as TiAc_Nombre FROM publicacion p, tipo_academico tiAc where p.tipo_archivo = tiAc.id and autor = ?';
   connection.query(SQL_QUERY, [userId], (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones del usuario:", err);
@@ -98,66 +126,80 @@ app.get('/api/misPublicaciones/:id', (req, res) => {
   });
 });
 
-app.put('/api/ajustesUsuario/:id', (req, res) => {
+app.put('/api/ajustesUsuario/:id', upload.fields([{ name: 'file' }]), async (req, res) => {
   // Obtener el ID del usuario
   const userId = req.params.id;
   const { Nombre, Contraseña, Email, Descripcion, Color, Idioma, ModoDaltónico, Letra } = req.body; // Obtener datos del cuerpo de la solicitud
 
-  let SQL_QUERY = 'UPDATE usuario SET ';
-  const values = [];
-
-  if (Nombre !== undefined) {
-    SQL_QUERY += 'nombre = ?, ';
-    values.push(Nombre);
-  }
-  if (Contraseña !== undefined) {
-    SQL_QUERY += 'contraseña = ?, ';
-    values.push(Contraseña);
-  }
-  if (Email !== undefined) {
-    SQL_QUERY += 'email = ?, ';
-    values.push(Email);
-  }
-  if (Descripcion !== undefined) {
-    SQL_QUERY += 'descripcion = ?, ';
-    values.push(Descripcion);
-  }
-  if (Color !== undefined) {
-    SQL_QUERY += 'color = ?, ';
-    values.push(Color);
-  }
-  if (Idioma !== undefined) {
-    SQL_QUERY += 'idioma = ?, ';
-    values.push(Idioma);
-  }
-  if (ModoDaltónico !== undefined) {
-    SQL_QUERY += 'daltonico = ?, ';
-    values.push(ModoDaltónico);
-  }
-  if (Letra !== undefined) {
-    SQL_QUERY += 'letra = ?, ';
-    values.push(Letra);
+  // Verificar si se recibió el archivo
+  if (!req.files || !req.files['file']) {
+      return res.status(400).json({ error: "No se recibió ningún archivo" });
   }
 
-  // Elimina la coma y el espacio extra al final de la cadena SQL
-  SQL_QUERY = SQL_QUERY.slice(0, -2);
+  const singleFilePath = req.files['file'][0].path;
+  const singleFileName = path.basename(singleFilePath);
+  const resizedFilePath = path.join(resizedDir, singleFileName);
 
-  // Agrega la condición WHERE
-  SQL_QUERY += ' WHERE id = ?';
+  try {
+      await sharp(singleFilePath)
+          .resize(150, 150)
+          .toFile(resizedFilePath);
 
-  console.log('SQL Query:', SQL_QUERY); // Agregamos esto para verificar la consulta SQL generada
+      let SQL_QUERY = 'UPDATE usuario SET ';
+      const values = [];
 
-  // Inserta los datos en la base de datos
-  connection.query(SQL_QUERY, [...values, userId], (err, result) => {
-    if (err) {
-      console.error("Error al modificar los datos:", err);
-      res.status(500).json({ error: "Error al modificar los datos" });
-      return;
-    }
-    console.log("Datos modificados correctamente en la base de datos");
-    res.status(200).json({ message: "Datos modificados correctamente" });
-    
-  })
+      if (Nombre !== undefined) {
+          SQL_QUERY += 'nombre = ?, ';
+          values.push(Nombre);
+      }
+      if (Contraseña !== undefined) {
+          SQL_QUERY += 'contraseña = ?, ';
+          values.push(Contraseña);
+      }
+      if (Email !== undefined) {
+          SQL_QUERY += 'email = ?, ';
+          values.push(Email);
+      }
+      if (Descripcion !== undefined) {
+          SQL_QUERY += 'descripcion = ?, ';
+          values.push(Descripcion);
+      }
+      if (Color !== undefined) {
+          SQL_QUERY += 'color = ?, ';
+          values.push(Color);
+      }
+      if (Idioma !== undefined) {
+          SQL_QUERY += 'idioma = ?, ';
+          values.push(Idioma);
+      }
+      if (ModoDaltónico !== undefined) {
+          SQL_QUERY += 'daltonico = ?, ';
+          values.push(ModoDaltónico);
+      }
+      if (Letra !== undefined) {
+          SQL_QUERY += 'letra = ?, ';
+          values.push(Letra);
+      }
+      if (singleFileName !== undefined) {
+          SQL_QUERY += 'foto = ?, ';
+          values.push(singleFileName);
+      }
+
+      SQL_QUERY = SQL_QUERY.slice(0, -2);
+      SQL_QUERY += ' WHERE id = ?';
+
+      connection.query(SQL_QUERY, [...values, userId], (err, result) => {
+          if (err) {
+              console.error("Error al modificar los datos:", err);
+              res.status(500).json({ error: "Error al modificar los datos" });
+              return;
+          }
+          res.status(200).json({ message: "Datos modificados correctamente" });
+      });
+  } catch (err) {
+      console.error("Error al procesar la solicitud:", err);
+      res.status(500).json({ error: "Error al procesar la solicitud" });
+  }
 });
 
 app.put('/api/guardarPubli/:idpubli', (req, res) => {
@@ -181,7 +223,7 @@ app.put('/api/guardarPubli/:idpubli', (req, res) => {
 
 app.get('/api/perfil/:idUsuario', (req, res) => {
   const { idUsuario } = req.params;
-  const SQL_QUERY = 'SELECT * FROM usuario WHERE id = ?';
+  const SQL_QUERY = 'SELECT u.*, t.nombre as nombre_titulacion FROM usuario u , titulaciones t WHERE u.id = ? and u.titulacion = t.id';
   connection.query(SQL_QUERY, [idUsuario], (err, result) => {
     if (err) {
       console.error("Error al obtener el perfil del usuario:", err);
@@ -308,7 +350,7 @@ app.delete('/api/borrarUsuario/:id', (req, res) => {
 
 app.get('/api/mostrarComentarios/:idPublicacion', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
-  const query = 'SELECT c.*, u.usuario AS usuario FROM comentarios c , publicacion p, usuario u where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+  const query = 'SELECT c.*, u.usuario AS usuario FROM comentarios c , publicacion p, usuario u where p.id = ? and c.id_publicacion = p.id and u.id = c.id_usuario';
 
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {
@@ -322,7 +364,7 @@ app.get('/api/mostrarComentarios/:idPublicacion', (req, res) => {
 
 app.get('/api/biblioteca', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
-  const query = 'SELECT * FROM publicacion WHERE guardado = 1';
+  const query = 'SELECT p.*, tiAc.nombre as TipoAcademicoNombre, ti.nombre as TitulacionNombre FROM publicacion p, tipo_academico tiAc, titulaciones ti, usuario u WHERE guardado = 1 and p.tipo_archivo=tiAc.id';
 
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {
@@ -351,7 +393,7 @@ app.post('/api/guardarComentarios', (req, res) => {
 app.get('/api/datosUsuarioPubli/:idPublicacion', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
 
-  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor, u.id as id_usuario FROM publicacion p, usuario u, comentarios c where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor, u.id as id_usuario, ti.nombre as Titulacion_nombre, tiAc.nombre as TituloAcademico FROM publicacion p, usuario u, comentarios c, titulaciones ti, tipo_academico tiAc where p.id = ? and p.autor = u.id and c.id_publicacion = p.id and u.titulacion = ti.id and p.tipo_archivo = tiAc.id';
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {
       console.error('Error al obtener comentarios:', error);
@@ -368,36 +410,6 @@ app.listen(PORT, () =>{
 });
 
 //module.exports = connection;
-
-
-//PARA LA PARTE DE SUBIR ARCHIVOS
-
-//primero configuramos multer para que nos cree el directorio uploads si no lo tenemos
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
-const sharp = require('sharp'); // Importa Sharp
-
-const uploadsDir = path.join(__dirname, 'uploads');
-const resizedDir = path.join(__dirname, 'uploads', 'resized'); // Ruta de la carpeta redimensionada
-const resizedDirPubliDetalle = path.join(__dirname, 'uploads', 'resizedPubliDetalle'); // Ruta de la carpeta redimensionada
-
-// Verifica si el directorio existe, si no, lo crea
-fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
-fs.existsSync(resizedDir) || fs.mkdirSync(resizedDir, { recursive: true }); // Crea la carpeta resized si no existe
-fs.existsSync(resizedDirPubliDetalle) || fs.mkdirSync(resizedDirPubliDetalle, { recursive: true }); // Crea la carpeta resized si no existe
-
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, uploadsDir);
-  },
-  filename: function(req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ storage: storage });
-app.use('/uploads', express.static('uploads'));
 
 app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: 'file-array' }]), async (req, res) => {
   const userId = req.params.userId;

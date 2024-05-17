@@ -8,6 +8,8 @@ import BtnDescargar from './images/btn-descargar.png';
 import Btnguardar from './images/btn-guardar.png';
 import Modal from './Modal.jsx';
 import { useLocation } from 'react-router-dom';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 
 export default function PubliDetalle() {
@@ -172,8 +174,23 @@ export default function PubliDetalle() {
         setShowModal(false);
     };
 
+    const handleDownload = async () => {
+        const zip = new JSZip();
+        const imgFolder = zip.folder("images");
+
+        for (const image of images) {
+            const response = await fetch(ruta + '/' + encodeURIComponent(image));
+            const blob = await response.blob();
+            imgFolder.file(image, blob);
+        }
+
+        zip.generateAsync({ type: "blob" }).then((content) => {
+            saveAs(content, "Contenidos.zip");
+        });
+    };
+
     return (
-        <>
+        <div>
             <div><Nav></Nav></div> 
             <div className="publidetalle-container">
                 {datosUser.map((user) => (
@@ -195,11 +212,11 @@ export default function PubliDetalle() {
                             
                             <div className="botons-archivo">
                                 <div id="btn-desc">
-                                <a href={ruta + '/' + encodeURIComponent(images[currentImageIndex])} download>Descargar</a>
+                                <button className="btn-guard" onClick={handleDownload}>Descargar</button>
                                     <img id="desc"src={BtnDescargar} alt="Descargar" />
                                 </div>
                                 <div id="btn-guard">
-                                <button onClick={() => { setShowModal(true); handleSavePubli(); }}>GUARDAR</button>
+                                <button className="btn-guard" onClick={() => { setShowModal(true); handleSavePubli(); }}>GUARDAR</button>
                                     <img id="guard" src={Btnguardar} alt="Guardar" />
                                 </div>
                             </div>
@@ -209,8 +226,9 @@ export default function PubliDetalle() {
                         <div className="drchcont">
                             <div className="infor-detalle">
                             <h2 className="titulo-det">{user.titulo}</h2>
-                            <h5 className="titulo-det2">{user.titulacion}</h5>
-                            <a href={`/perfil-publico?userId=${user.id_usuario}`}>
+                            <h5 className="titulo-det2">{user.Titulacion_nombre}</h5>
+                            <h5 className="titulo-det3">{user.TituloAcademico}</h5>
+                            <a className="userDirection" href={`/perfil-publico?userId=${user.id_usuario}`}>
                                 <div className="nom-y-logo">
                                     <img src={Persona} alt="usuario" />
                                     <p id="nomUsuario">{user.nombre}</p>
@@ -322,6 +340,6 @@ export default function PubliDetalle() {
             />
       )}
             </div>
-        </>
+        </div>
     );
 };

@@ -13,7 +13,7 @@ h1{
     border: 1px solid #0000ff;
     border-radius: 5px;
     padding: 10px;
-    max-width: 70%;
+    width: 1030px;
     margin: auto;
   }
   
@@ -36,6 +36,11 @@ h1{
 .PubliPublico{
     text-align: left;
     
+}
+
+.Img-archivo-Perfil{
+  border: 3px solid black;
+  border-radius: 8px;
 }
 
 .TipoContenidoPublico {

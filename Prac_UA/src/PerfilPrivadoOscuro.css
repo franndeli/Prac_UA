@@ -28,7 +28,12 @@ h1{
 
   .button-custom{
     align-self: flex-end;
-    margin-right: 215px
+    margin-left: 180px;
+  }
+
+  .Img-archivo-Perfil{
+    border: 3px solid black;
+    border-radius: 8px;
   }
 
   .custom-button-blue-dark {

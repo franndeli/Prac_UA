@@ -1,6 +1,6 @@
 .publidetalle-container {
     display: block;
-    width: 100%;
+    width: 1100px;
   }
   
   .infocont {
@@ -12,10 +12,15 @@
     flex: 1; 
     margin:50px 0px 50px 20px;
   }
-  .drchcont .titulo-det2{
+  .drchcont .titulo-det3{
     margin-bottom: 50px;
     font-weight: normal;
   }
+
+  .titulo-det2{
+    font-weight: normal;
+  }
+
   .nom-y-logo {
     display: flex;
     align-items: center; 
@@ -33,7 +38,7 @@
   
   .comentcont {
     
-    width: 100%;
+    width: 1000px;
     
   }
   
@@ -45,6 +50,8 @@
   .titulo-det {
     text-align: left;
   }
+
+
   
   .infor-detalle > * {
     width: 100%;
@@ -154,6 +161,15 @@
     display: flex;
     align-items: center;
   }
+  .btn-guard{
+    background: none;        /* Elimina el fondo del botón */
+    border: none;            /* Elimina el borde del botón */
+    padding: 0;              /* Elimina el relleno del botón */
+    font: inherit;           /* Hereda la fuente del elemento padre */
+    color: inherit;          /* Hereda el color del texto del elemento padre */
+    cursor: pointer;         /* Asegura que el cursor sea una mano al pasar por encima */
+    text-decoration: none;   /* Elimina cualquier subrayado del texto */
+  }
   #desc{
     width: 40px;
     height: 20px;
@@ -166,7 +182,7 @@
   }
   
   .separador-coment{
-    width: 80%;
+    width: 950px;
     border: 1px solid;
   }
   .coment1{
@@ -341,5 +357,15 @@
     border-radius: 10px; 
     text-align: center; 
     font-weight: bold;
+  }
+
+  .descargar{
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .userDirection{
+    color: #000000;
+    text-decoration: none;
   }
   

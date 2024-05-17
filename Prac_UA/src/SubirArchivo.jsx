@@ -79,7 +79,7 @@ const SubirArchivo = () => {
     };
 
     return (
-        <>
+        <div>
             <Nav />
             <legend>SUBIR ARCHIVO</legend>
             <div className="SubirArchivo-container">
@@ -95,9 +95,9 @@ const SubirArchivo = () => {
                                 <input type="text" id="etiquetas" className="textarea-subir" name="etiquetas" required />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="tipo-archivo" id="leibel">Tipo de Contenido:</label>
+                                <label htmlFor="tipo-archivo" id="leibel">Tipo de contenido:</label>
                                 {/* <AdjustableSelect options={tipo_academico} defaultText="Tipo" /> */}
-                                <select className="" id="tipo-archivo" name="tipoArchivo" value={tipoArchivo} onChange={handleTipoArchivoChange}>
+                                <select className="textarea-subir-select" id="tipo-archivo" name="tipoArchivo" value={tipoArchivo} onChange={handleTipoArchivoChange}>
                                     <option value="" disabled selected>Tipo de contenido</option>
                                     {tipo_academicos.map(t => (
                                         <option key={t.id} value={t.nombre}>{t.nombre}</option>
@@ -124,16 +124,18 @@ const SubirArchivo = () => {
                                 <div className='MultiArchivo'>
                                     <h3>MultiArchivos</h3>
                                     <div className="form-group imagen-subida">
-                                        <div className="image-upload-container">
+                                        <div className="image-upload-container-array">
                                             {imagePreviewsArray.map((preview, index) => (
                                                 <img key={index} src={preview} alt={`Preview ${index}`} className="image-preview-array" />
                                             ))}
-                                            <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleImageChange} multiple required />
-                                            <label htmlFor="file-array" className="image-upload-label-array">
-                                                <div className="upload-icon-container">
-                                                    <img src={iconoSubir} alt="Subir" />
-                                                </div>
-                                            </label>
+                                            <div className='icon_upload'>
+                                                <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleImageChange} multiple required />
+                                                <label htmlFor="file-array" className="image-upload-label-array">
+                                                    <div className="upload-icon-container">
+                                                        <img src={iconoSubir} alt="Subir" />
+                                                    </div>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +149,7 @@ const SubirArchivo = () => {
                     </fieldset>
                 </form>
             </div>
-        </>
+        </div>
     );
 };
 

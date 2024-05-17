@@ -11,6 +11,10 @@
     text-align: center;
 }
 
+.textarea-subir-select-buscar{
+    height: 30px;
+}
+
 .recomendaciones {
     display: flex;
     flex-direction: column;
@@ -92,7 +96,6 @@
 
 .SelectoresBuscar select{
     border-radius: 20px; /* Forma redonda */
-    padding: 0.25rem;
     border: 2px solid #0000ff;
     background-color: #ffffff;
     margin-left: 2px;
