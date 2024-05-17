@@ -8,7 +8,7 @@ import AdjustableSelect from './helpers/AdjustableSelects.jsx';
 
 const SubirArchivo = () => {
     const [imagePreview, setImagePreview] = useState(camDefault); // Estado para manejar la previsualización de la imagen
-    const [imagePreviewsArray, setImagePreviewsArray] = useState([camDefault]);
+    // const [imagePreviewsArray, setImagePreviewsArray] = useState([camDefault]);
     const [tipoArchivo, setTipoArchivo] = useState(''); // Estado para manejar el tipo de archivo
     const [tipo_academicos, setTipo_academico] = useState([]);
     const storedUserId = localStorage.getItem('id_usuario');
@@ -36,10 +36,16 @@ const SubirArchivo = () => {
         setImagePreview(URL.createObjectURL(file));
     };
 
-    const handleMultipleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        const previews = files.map(file => URL.createObjectURL(file));
-        setImagePreviewsArray(previews);
+    // const handleMultipleImageChange = (e) => {
+    //     const files = Array.from(e.target.files);
+    //     const previews = files.map(file => URL.createObjectURL(file));
+    //     setImagePreviewsArray(previews);
+    // };
+
+    const handleMultipleFileChange = (e) => {
+        // const files = Array.from(e.target.files);
+        // const previews = files.map(file => URL.createObjectURL(file));
+        // setImagePreview(previews[0]);
     };
 
     const handleTipoArchivoChange = (event) => {
@@ -79,7 +85,7 @@ const SubirArchivo = () => {
     };
 
     return (
-        <>
+        <div>
             <Nav />
             <legend>SUBIR ARCHIVO</legend>
             <div className="SubirArchivo-container">
@@ -110,7 +116,7 @@ const SubirArchivo = () => {
                             </div>
                         </div>
                         <div className="cont2">
-                            <div className="form-group imagen-subida">
+                            <div className="form-group imagen-subida lol">
                                 <div className="image-upload-container">
                                     <img src={imagePreview} alt="Imagen por defecto" className="image-preview" />
                                     <input type="file" id="file" name="file" className="inputfile" onChange={handleImageChange} required />
@@ -121,23 +127,14 @@ const SubirArchivo = () => {
                                     </label>
                                 </div>
                             </div>
-                                <div className='MultiArchivo'>
-                                    <h3>MultiArchivos</h3>
-                                    <div className="form-group imagen-subida">
-                                        <div className="image-upload-container">
-                                            {imagePreviewsArray.map((preview, index) => (
-                                                <img key={index} src={preview} alt={`Preview ${index}`} className="image-preview-array" />
-                                            ))}
-                                            <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleImageChange} multiple required />
-                                            <label htmlFor="file-array" className="image-upload-label-array">
-                                                <div className="upload-icon-container">
-                                                    <img src={iconoSubir} alt="Subir" />
-                                                </div>
-                                            </label>
-                                        </div>
+                            <div className='MultiArchivo'>
+                                <h3 className="MultiArchivo_h3">MultiArchivos</h3>
+                                <div className="form-group imagen-subida">
+                                    <div className="image-upload-container">
+                                        <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleFileChange} multiple required />
                                     </div>
                                 </div>
-                                
+                            </div> 
                         </div>
                         <div className="cont3">
                             <div className="form-group-botn">
@@ -147,7 +144,7 @@ const SubirArchivo = () => {
                     </fieldset>
                 </form>
             </div>
-        </>
+        </div>
     );
 };
 

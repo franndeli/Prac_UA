@@ -177,6 +177,22 @@ app.put('/api/guardarPubli/:idpubli', (req, res) => {
   })
 });
 
+app.put('/api/desguardarPubli/:idpubli', (req, res) => {
+  // Obtener el ID del usuario
+  const idpubli = req.params.idpubli;
+  let SQL_QUERY = 'UPDATE publicacion SET guardado = 0 WHERE id = ?';
+
+  connection.query(SQL_QUERY, [idpubli], (err, result) => {
+    if (err) {
+      console.error("Error al desguardar la publicación:", err);
+      res.status(500).json({ error: "Error al desguardar la publicación" });
+      return;
+    }
+    console.log("Archivo desguardado correctamente");
+    res.status(200).json({ message: "Archivo desguardado correctamente" });
+    
+  })
+});
 
 
 app.get('/api/perfil/:idUsuario', (req, res) => {
@@ -376,16 +392,11 @@ app.listen(PORT, () =>{
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-const sharp = require('sharp'); // Importa Sharp
 
 const uploadsDir = path.join(__dirname, 'uploads');
-const resizedDir = path.join(__dirname, 'uploads', 'resized'); // Ruta de la carpeta redimensionada
-const resizedDirPubliDetalle = path.join(__dirname, 'uploads', 'resizedPubliDetalle'); // Ruta de la carpeta redimensionada
 
 // Verifica si el directorio existe, si no, lo crea
 fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
-fs.existsSync(resizedDir) || fs.mkdirSync(resizedDir, { recursive: true }); // Crea la carpeta resized si no existe
-fs.existsSync(resizedDirPubliDetalle) || fs.mkdirSync(resizedDirPubliDetalle, { recursive: true }); // Crea la carpeta resized si no existe
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -407,68 +418,50 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
 
   // Obtén solo el nombre del archivo único
   const singleFileName = path.basename(singleFilePath);
-  const resizedFilePath = path.join(resizedDir, singleFileName);
-  const resizedFilePathPubliDetalle = path.join(resizedDirPubliDetalle, singleFileName);
 
   // Obtén solo los nombres de los archivos múltiples
-  const multipleFilesNames = await Promise.all (req.files['file-array'].map(async (file) => {
+  const multipleFilesNames = req.files['file-array'].map((file) => {
     const filePath = file.path;
     const fileName = path.basename(filePath);
-    const resizedFilePathPubliDetalle = path.join(resizedDirPubliDetalle, fileName);
-
-    // Redimensiona la imagen del file-array a 300x200 píxeles
-    await sharp(filePath)
-      .resize(450, 300)
-      .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resizedPubliDetalle
-
     return fileName;
-    }));
-
-    try {
-      // Redimensiona la imagen a 150x150 píxeles
-      await sharp(singleFilePath)
-        .resize(150, 150)
-        .toFile(resizedFilePath); // Guarda la imagen redimensionada en la carpeta resized
-
-      await sharp(singleFilePath)
-      .resize(450, 300)
-      .toFile(resizedFilePathPubliDetalle); // Guarda la imagen redimensionada en la carpeta resized  
-
-      const TIPO_ARCHIVO_QUERY = 'SELECT id FROM tipo_academico WHERE nombre = ?';
-      console.log(TIPO_ARCHIVO_QUERY);
-
-      connection.query(TIPO_ARCHIVO_QUERY, [tipoArchivo], (err, result) => {
-        console.log('hola')
-        if (err) {
-          console.error("Error al verificar el tipo de archivo:", err);
-          res.status(500).json({ error: "Error al verificar el tipo de archivo" });
-          return;
-        }
-
-        console.log('hola1')
-        console.log(tipoArchivo);
-
-        if (result.length === 0) {
-          res.status(400).json({ error: "El tipo de archivo no existe" });
-          return;
-        }
-
-        const tipoArchivoId = result[0].id;
-        
-        const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        const values = [userId, titulo, etiquetas, tipoArchivoId, descripcion, singleFileName, multipleFilesNames.join(',')];
-
-        connection.query(query, values, (err, result) => {
-          if (err) {
-            console.error('Error al insertar archivo en la base de datos:', err);
-            res.status(500).send('Error al subir archivo aaaaaaaaaaaaaaah');
-          } else {
-            res.status(200).send('Archivo subido correctamente');
-          }
-        });
-      });
-    } catch (error) {
-      console.error("Error al redimensionar la imagen:", error);
-      res.status(500).json({ error: "Error al redimensionar la imagen" });
-    }
   });
+
+  try {
+    const TIPO_ARCHIVO_QUERY = 'SELECT id FROM tipo_academico WHERE nombre = ?';
+    console.log(TIPO_ARCHIVO_QUERY);
+
+    connection.query(TIPO_ARCHIVO_QUERY, [tipoArchivo], (err, result) => {
+      // console.log('hola')
+      if (err) {
+        console.error("Error al verificar el tipo de archivo:", err);
+        res.status(500).json({ error: "Error al verificar el tipo de archivo" });
+        return;
+      }
+
+      console.log('hola1')
+      console.log(tipoArchivo);
+
+      if (result.length === 0) {
+        res.status(400).json({ error: "El tipo de archivo no existe" });
+        return;
+      }
+
+      const tipoArchivoId = result[0].id;
+      
+      const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      const values = [userId, titulo, etiquetas, tipoArchivoId, descripcion, singleFileName, multipleFilesNames.join(',')];
+
+      connection.query(query, values, (err, result) => {
+        if (err) {
+          console.error('Error al insertar archivo en la base de datos:', err);
+          res.status(500).send('Error al subir archivo aaaaaaaaaaaaaaah');
+        } else {
+          res.status(200).send('Archivo subido correctamente');
+        }
+      });
+    });
+  } catch (error) {
+    console.error("Error al redimensionar la imagen:", error);
+    res.status(500).json({ error: "Error al redimensionar la imagen" });
+  }
+});

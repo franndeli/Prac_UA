@@ -8,11 +8,19 @@ import BtnDescargar from './images/btn-descargar.png';
 import Btnguardar from './images/btn-guardar.png';
 import Modal from './Modal.jsx';
 import { useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
+//Para visualizar documentos
+// import { Worker, Viewer } from '@react-pdf-viewer/core';
+// import '@react-pdf-viewer/core/lib/styles/index.css';
+// import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+// import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+// import OfficeViewer from 'office-viewer';
 
 
 export default function PubliDetalle() {
 
-    const ruta = "http://localhost:3001/uploads/resizedPubliDetalle";
+    const ruta = "http://localhost:3001/uploads";
 
     const [datosUser, setUser] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -53,15 +61,16 @@ export default function PubliDetalle() {
     
             if (Array.isArray(data) && data.length > 0) {
                 const firstItem = data[0];
-                primaryImage = firstItem.ruta_archivo;
-                console.log(primaryImage);
+                // primaryImage = firstItem.ruta_archivo;
+                // console.log(primaryImage);
                 if (firstItem.ruta_archivo_array && firstItem.ruta_archivo_array.length > 0) {
                     additionalImages = firstItem.ruta_archivo_array.split(',');
                     console.log(additionalImages);
                 }
             }
     
-            setImages(primaryImage ? [primaryImage, ...additionalImages] : []);
+            // setImages(primaryImage ? [primaryImage, ...additionalImages] : []);
+            setImages(additionalImages);
             setUser(data);
             setLoading(false);
         } catch (error) {
@@ -157,41 +166,118 @@ export default function PubliDetalle() {
 
             const data = await response.json();
             console.log('Publicación guardada:', data);
+        
+            Swal.fire({
+                icon: 'success',
+                title: 'Publicación guardada',
+                text: 'La publicación se ha guardado correctamente.',
+            }).then(() => {
+                window.location.reload();
+            });
+
+            // Actualiza el estado de datosUser
+            // setUser(prevState => 
+            //     prevState.map(user => 
+            //         user.id_usuario === storedUserId ? { ...user, guardado: 0 } : user
+            //     )
+            // );
         } catch (error) {
             console.error('Error al guardar la publicación:', error);
-            alert('Error al guardar la publicación');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al guardar la publicación.',
+            });
         }
     };
 
-    const handleModalConfirm = () => {
-    // Realizar acción después de confirmar cambios (puedes redirigir aquí si es necesario)
-        setShowModal(false); // Ocultar el modal después de confirmar
+    const handleDesguardarPubli = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/desguardarPubli/${publiID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al guardar la publicación');
+            }
+
+            const data = await response.json();
+            console.log('Publicación guardada:', data);
+        
+            Swal.fire({
+                icon: 'success',
+                title: 'Publicación eliminada',
+                text: 'La publicación se ha eliminado correctamente de tu biblioteca.',
+            }).then(() => {
+                window.location.reload();
+            });
+
+            // Actualiza el estado de datosUser
+            // setUser(prevState => 
+            //     prevState.map(user => 
+            //         user.id_usuario === storedUserId ? { ...user, guardado: 1 } : user
+            //     )
+            // );
+        } catch (error) {
+            console.error('Error al guardar la publicación:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al desguardar la publicación.',
+            });
+        }
     };
 
-    const handleCloseModal = () => {
-        setShowModal(false);
+    const renderPreview = (fileName) => {
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        const filePath = `${ruta}/${encodeURIComponent(fileName)}`;
+        const googleViewerUrl = `https://docs.google.com/gview?url=${filePath}&embedded=true`;
+    
+        switch (fileExtension) {
+            case 'pdf':
+                return filePath;
+            case 'doc':
+            case 'docx':
+            case 'xls':
+            case 'xlsx':
+                return googleViewerUrl;
+            default:
+                return filePath;
+        }
     };
 
     return (
-        <>
-            <div><Nav></Nav></div> 
+        <div>
+            <Nav /> 
             <div className="publidetalle-container">
                 {datosUser.map((user) => (
                                 
                 <div>
                     <div className="infocont">
                         <div className="izqcont">
-                            <div className='multiImage'>
-                                <img 
-                                    className="Img-archivo" 
-                                    src={ruta + '/' + encodeURIComponent(images[currentImageIndex])} 
-                                    alt="archivo" 
-                                />
-                                <div className='BotonesImage'>
-                                    <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
-                                    <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
-                                </div>
+                        <div className='multiImage'>
+                            {['pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(images[currentImageIndex].split('.').pop().toLowerCase()) ? (
+                                        <iframe
+                                            className="Img-archivo"
+                                            src={renderPreview(images[currentImageIndex])}
+                                            title="Document Preview"
+                                            style={{ width: '900px', height: '550px' }}
+                                        />
+                                    ) : (
+                                        <img 
+                                            className="Img-archivo" 
+                                            src={ruta + '/' + encodeURIComponent(images[currentImageIndex])} 
+                                            alt="archivo" 
+                                        />
+                                    )}
+                            <div className='BotonesImage'>
+                                <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
+                                <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
                             </div>
+                        </div>
                             
                             <div className="botons-archivo">
                                 <div id="btn-desc">
@@ -199,8 +285,16 @@ export default function PubliDetalle() {
                                     <img id="desc"src={BtnDescargar} alt="Descargar" />
                                 </div>
                                 <div id="btn-guard">
-                                <button onClick={() => { setShowModal(true); handleSavePubli(); }}>GUARDAR</button>
-                                    <img id="guard" src={Btnguardar} alt="Guardar" />
+                                <button onClick={() => { 
+                                        if (user.guardado === 0) {
+                                            handleSavePubli();
+                                        } else {
+                                            handleDesguardarPubli();
+                                        }
+                                        }}>
+                                    {user.guardado === 0 ? "Guardar" : "Quitar de Guardados"}
+                                </button>
+                                    <img id="guard" src={Btnguardar} alt={user.guardado === 0 ? "Guardar" : "Quitar de Guardados"} />
                                 </div>
                             </div>
                         </div>
@@ -208,43 +302,41 @@ export default function PubliDetalle() {
                         
                         <div className="drchcont">
                             <div className="infor-detalle">
-                            <h2 className="titulo-det">{user.titulo}</h2>
-                            <h5 className="titulo-det2">{user.titulacion}</h5>
-                            <a href={`/perfil-publico?userId=${user.id_usuario}`}>
-                                <div className="nom-y-logo">
-                                    <img src={Persona} alt="usuario" />
-                                    <p id="nomUsuario">{user.nombre}</p>
+                                <h2 className="titulo-det">{user.titulo}</h2>
+                                <h5 className="titulo-det2">{user.titulacion}</h5>
+                                <a href={`/perfil-publico?userId=${user.id_usuario}`}>
+                                    <div className="nom-y-logo">
+                                        <img src={Persona} alt="usuario" />
+                                        <p id="nomUsuario">{user.nombre}</p>
+                                    </div>
+                                </a>
+                                <p id="descripci-det">{user.descripcion}</p>
+                                <div id="etiquetas-det">
+                                    <div id="eti1"><p id="pe">{user.etiquetas}</p></div>
+                                    <div id="eti2"><p id="pe">{user.etiquetas}</p></div>
+                                    <div id="eti3"><p id="pe">{user.etiquetas}</p></div>
                                 </div>
-                            </a>
-                            <p id="descripci-det">{user.descripcion}</p>
-                            <div id="etiquetas-det">
-                                <div id="eti1"><p id="pe">{user.etiquetas}</p></div>
-                                <div id="eti2"><p id="pe">{user.etiquetas}</p></div>
-                                <div id="eti3"><p id="pe">{user.etiquetas}</p></div>
-                            </div>
-                            <div className="estrellas-valoraciones">
-                                <p className="rating-count"></p>
-                                <div className="star-rating">
-                                    {user.Valor}
-                                    {typeof user.Valor === 'number' && [...Array(parseInt(user.Valor))].map((_, index) => (
-                                        <span key={index} className="star">&#9733;</span>
-                                    ))}
-                                    { typeof user.Valor === 'number' && [...Array(5 - parseInt(user.Valor))].map((_, index) => (
-                                        <span key={index} className="star grey">&#9733;</span>
-                                    ))}
+                                <div className="estrellas-valoraciones">
+                                    <p className="rating-count"></p>
+                                    <div className="star-rating">
+                                        {user.Valor}
+                                        {typeof user.Valor === 'number' && [...Array(parseInt(user.Valor))].map((_, index) => (
+                                            <span key={index} className="star">&#9733;</span>
+                                        ))}
+                                        { typeof user.Valor === 'number' && [...Array(5 - parseInt(user.Valor))].map((_, index) => (
+                                            <span key={index} className="star grey">&#9733;</span>
+                                        ))}
+                                    </div>
+                                    <div className="rating-separator"></div>
+                                    <p className="rating-count">{user.totalValoraciones} valoraciones</p>
                                 </div>
-                                <div className="rating-separator"></div>
-                                <p className="rating-count">{user.totalValoraciones} valoraciones</p>
+                                <div className="boton-opinion-det"> 
+                                    <button id="btn-det" onClick={() => 
+                                        {document.getElementById('destino').scrollIntoView({ behavior: 'smooth' });}}>
+                                    Escribir mi opinión
+                                    </button>
+                                </div>
                             </div>
-                            <div className="boton-opinion-det"> 
-                                <button id="btn-det" onClick={() => 
-                                    {document.getElementById('destino').scrollIntoView({ behavior: 'smooth' });}}>
-                                Escribir mi opinión
-                                </button>
-                            </div>
-                        </div>
-                        
-                            
                         </div>
                     </div>
                 </div>
@@ -315,13 +407,7 @@ export default function PubliDetalle() {
                     </div>
                     
                 </div>
-                {showModal && (
-            <Modal
-                onClose={handleCloseModal}
-                onConfirm={handleModalConfirm}
-            />
-      )}
             </div>
-        </>
+        </div>
     );
 };

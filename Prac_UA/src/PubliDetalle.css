@@ -1,15 +1,23 @@
 .publidetalle-container {
-    display: block;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vh;
   }
   
   .infocont {
     display: flex;
-    justify-content: space-between; 
+    /* justify-content: space-between;  */
+    /* width: 100vh; */
+    gap: 50px;
   }
+
+  /* .drchcont{
+    flex: 3;
+  } */
   
   .izqcont, .drchcont {
-    flex: 1; 
+    /* flex: 1;  */
     margin:50px 0px 50px 20px;
   }
   .drchcont .titulo-det2{
@@ -114,16 +122,26 @@
     cursor: pointer;
     font-family: 'Montserrat';
   }
-.izqcont{
 
+  .BotonesImage{
+    display: flex;
+    gap: 20px;
+  }
+
+  .izqcont{
     display: flex;
     flex-direction: column;
-    align-items: flex-end; 
-}
+    flex: 1;
+    /* justify-content: center;
+    align-items: center; */
+    /* align-items: flex-end;  */
+  }
+
   .Img-archivo{
     border: 3px solid black;
     border-radius: 8px;
     margin-bottom: 10px;
+    width: 700px;
   }
 
   .botons-archivo{
@@ -328,8 +346,6 @@
     display: flex;
     flex-direction: column;
     align-items: center; 
-    width: 500px;
-    height: 350px;
   }
 
   .botonImagesPasar{
