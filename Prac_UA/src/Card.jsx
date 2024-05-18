@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './Card.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 export default function Card({ photoId }) {
-
   const [photoData, setPhotoData] = useState([]);
   const ruta = "http://localhost:3001/uploads";
   const location = useLocation();
+  const navigate = useNavigate();
 
   const fetchPhotoData = async () => {
     try {
@@ -24,10 +24,7 @@ export default function Card({ photoId }) {
       }
 
       console.log(photoId);
-      // Actualizar el estado con los datos y la URL de la imagen
       setPhotoData(data);
-
-      // console.log(data);
 
     } catch (error) {
       console.error('Error fetching photo data:', error);
@@ -36,46 +33,87 @@ export default function Card({ photoId }) {
 
   const handleDesguardarPubli = async () => {
     try {
-        const response = await fetch(`http://localhost:3001/api/desguardarPubli/${photoId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al desguardar la publicación');
+      const response = await fetch(`http://localhost:3001/api/desguardarPubli/${photoId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
         }
+      });
 
-        const data = await response.json();
-        console.log('Publicación desguardada:', data);
-    
-        Swal.fire({
-            icon: 'success',
-            title: 'Publicación eliminada',
-            text: 'La publicación se ha eliminado correctamente de tu biblioteca.',
-        }).then(() => {
-            window.location.reload();
-        });
+      if (!response.ok) {
+        throw new Error('Error al desguardar la publicación');
+      }
 
-        // // Actualiza el estado de datosUser
-        // setUser(prevState => 
-        //     prevState.map(user => 
-        //         user.id_usuario === storedUserId ? { ...user, guardado: 1 } : user
-        //     )
-        // );
+      const data = await response.json();
+      console.log('Publicación desguardada:', data);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Publicación eliminada',
+        text: 'La publicación se ha eliminado correctamente de tu biblioteca.',
+      }).then(() => {
+        window.location.reload();
+      });
+
     } catch (error) {
-        console.error('Error al desguardar la publicación:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error al desguardar la publicación.',
-        });
+      console.error('Error al desguardar la publicación:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error al desguardar la publicación.',
+      });
     }
   };
 
+  const BorrarPubli = async () => {
+    Swal.fire({
+      title: '¿Estás seguro de que quieres borrar la publicación?',
+      text: "Esta acción no se puede deshacer",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(`http://localhost:3001/api/borrarPubli/${photoId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error('Error al borrar la publicación');
+          }
+
+          const data = await response.json();
+          console.log('Publicación borrada:', data);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Publicación eliminada',
+            text: 'La publicación se ha eliminado correctamente de tu biblioteca.',
+          }).then(() => {
+            window.location.reload();
+          });
+
+        } catch (error) {
+          console.error('Error al borrar la publicación:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al borrar la publicación.',
+          });
+        }
+      }
+    });
+  };
+
   useEffect(() => {
-    fetchPhotoData(); 
+    fetchPhotoData();
   }, [photoId]);
 
   return (
@@ -106,6 +144,30 @@ export default function Card({ photoId }) {
                     handleDesguardarPubli();
                   }}
                 />
+              )}
+              {location.pathname === '/perfil-privado' && (
+                <>
+                  <FontAwesomeIcon
+                    className="icon-card-borrar"
+                    size="lg"
+                    icon={fas.faTrash}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      BorrarPubli();
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    className="icon-card-editar"
+                    size="lg"
+                    icon={fas.faEdit}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      navigate(`/editar-archivo/${p.id}`);
+                    }}
+                  />
+                </>
               )}
             </div>
           </div>

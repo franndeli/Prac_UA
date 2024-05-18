@@ -61,20 +61,72 @@ app.post('/api/iniciarSesion', (req, res) => {
 
 
 app.get('/api/publicaciones', (req, res) => {
-  const SQL_QUERY = 'SELECT * FROM publicacion';
+  const SQL_QUERY = `
+    SELECT 
+      p.*,
+      u.nombre AS autor_nombre,
+      u.usuario AS autor_usuario,
+      u.email AS autor_email,
+      u.descripcion AS autor_descripcion,
+      ta.nombre AS tipo_academico_nombre,
+      c.id AS comentario_id,
+      c.comentario AS comentario_texto,
+      c.titulo AS comentario_titulo,
+      c.valoraciones AS comentario_valoraciones,
+      c.fecha AS comentario_fecha,
+      cu.nombre AS comentario_usuario_nombre,
+      cu.usuario AS comentario_usuario_usuario
+    FROM 
+      publicacion p
+      LEFT JOIN usuario u ON p.autor = u.id
+      LEFT JOIN tipo_academico ta ON p.tipo_archivo = ta.id
+      LEFT JOIN comentarios c ON p.id = c.id_publicacion
+      LEFT JOIN usuario cu ON c.id_usuario = cu.id
+  `;
+
   connection.query(SQL_QUERY, (err, result) => {
-    if(err){
+    if (err) {
       console.error("Error al obtener las publicaciones:", err);
       res.status(500).json({ error: "Error al obtener las publicaciones" });
       return;
     }
     res.json(result);
   });
-})
+});
+
 
 app.get('/api/publicaciones/:id', (req, res) => {
   const { id } = req.params;
-  const SQL_QUERY = 'SELECT p.*, u.nombre AS nombre_usuario, u.id as id_usuario FROM publicacion p INNER JOIN usuario u ON p.autor = u.id WHERE p.id = ?';
+  const SQL_QUERY = `
+    SELECT 
+      p.*, 
+      u.nombre AS nombre_usuario, 
+      u.id as id_usuario,
+      u.usuario AS autor_usuario,
+      u.email AS autor_email,
+      u.descripcion AS autor_descripcion,
+      ta.nombre AS tipo_academico_nombre,
+      c.id AS comentario_id,
+      c.comentario AS comentario_texto,
+      c.titulo AS comentario_titulo,
+      c.valoraciones AS comentario_valoraciones,
+      c.fecha AS comentario_fecha,
+      cu.nombre AS comentario_usuario_nombre,
+      cu.usuario AS comentario_usuario_usuario,
+      tc.nombre AS tipo_contenido_nombre,
+      t.nombre AS titulacion_nombre
+    FROM 
+      publicacion p
+      INNER JOIN usuario u ON p.autor = u.id
+      LEFT JOIN tipo_academico ta ON p.tipo_archivo = ta.id
+      LEFT JOIN comentarios c ON p.id = c.id_publicacion
+      LEFT JOIN usuario cu ON c.id_usuario = cu.id
+      LEFT JOIN publicacion_tipo pt ON p.id = pt.publicacion
+      LEFT JOIN tipo_contenido tc ON pt.tipo_contenido = tc.id
+      LEFT JOIN titulaciones t ON u.titulacion = t.id
+    WHERE 
+      p.id = ?
+  `;
   connection.query(SQL_QUERY, [id], (err, result) => {
     if (err) {
       console.error("Error al obtener las publicaciones:", err);
@@ -84,6 +136,7 @@ app.get('/api/publicaciones/:id', (req, res) => {
     res.json(result);
   });
 });
+
 
 app.get('/api/misPublicaciones/:id', (req, res) => {
   const userId = req.params.id; // Obtener userId de los parámetros de la solicitud
@@ -319,6 +372,20 @@ app.delete('/api/borrarUsuario/:id', (req, res) => {
       return;
     }
     res.json({ message: "Usuario borrado correctamente" });
+  });
+});
+
+app.delete('/api/borrarPubli/:id', (req, res) => {
+  const { id } = req.params;
+  const DELETE_QUERY = 'DELETE FROM publicacion WHERE id = ?';
+  console.log(id);
+  connection.query(DELETE_QUERY, [id], (err, result) => {
+    if (err) {
+      console.error("Error al borrar la publicación:", err);
+      res.status(500).json({ error: "Error al borrar la publicación" });
+      return;
+    }
+    res.json({ message: "Publicación borrada correctamente" });
   });
 });
 

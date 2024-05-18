@@ -11,8 +11,8 @@ import PubliDetalle from './PubliDetalle.jsx';
 import Inicio from './Inicio.jsx';
 import Categoria from './Categoria.jsx'
 import Buscar from './buscar.jsx'
-import UltimosTrabajos from './UltimosTrabajoVistos.jsx'
 import Biblioteca from './Biblioteca.jsx';
+import EditarArchivo from './EditarArchivo.jsx';
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
             <Route path="/subir-archivo" element={<SubirArchivo />} />
             <Route path="/publidetalle" element={<PubliDetalle />} />
             <Route path="/buscar" element={<Buscar />} />
-            <Route path="/ultimosTrabajosVistos" element={<UltimosTrabajos />} />
+            <Route path="/editar-archivo/:id" element={<EditarArchivo />} />
           </Routes>
       </header>
     </div>
