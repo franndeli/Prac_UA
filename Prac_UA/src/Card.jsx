@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Card.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 export default function Card({ photoId }) {
@@ -82,20 +82,21 @@ export default function Card({ photoId }) {
     <div>
       {photoData.map((p) => (
         <div className="card" key={p.id}>
-          <a href={`/publiDetalle?id=${p.id}`} className="card-link">
+          <Link to={`/publiDetalle?id=${p.id}`} className="card-link">
             <div className="card-titulo">{p.titulo}</div>
             <div className="card-imagen">
               <img src={`${ruta}/${encodeURIComponent(p.ruta_archivo)}`} className="ouyeah_foto" alt="Word Icon" />
             </div>
-            <div className="card-icons">
-              <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.likes}
-              <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.visitas}
-            </div>
-            <div className="card-autor">
-              <div>{p.nombre_usuario}</div>
-              <div className="icono_guardar_tu_biblioteca">
-                {location.pathname === '/tu_biblioteca' && (
-                  <FontAwesomeIcon
+          </Link>
+          <div className="card-icons">
+            <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.likes}
+            <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.visitas}
+          </div>
+          <div className="card-autor">
+            <div>{p.nombre_usuario}</div>
+            <div className="icono_guardar_tu_biblioteca">
+              {location.pathname === '/tu_biblioteca' && (
+                <FontAwesomeIcon
                   className="icon-card-guardado"
                   size="lg"
                   icon={fas.faBookmark}
@@ -105,10 +106,9 @@ export default function Card({ photoId }) {
                     handleDesguardarPubli();
                   }}
                 />
-                )}
-              </div>
+              )}
             </div>
-          </a>
+          </div>
         </div>
       ))}
     </div>

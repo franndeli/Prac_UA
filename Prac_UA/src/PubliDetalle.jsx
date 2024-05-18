@@ -3,20 +3,11 @@ import './PubliDetalle.css';
 import Nav from './Nav.jsx';
 import Persona from './images/persona.svg';
 import RatingStars from './RatingStars';
-import ImgArchivo from './images/img_archivo.png';
 import BtnDescargar from './images/btn-descargar.png';
 import Btnguardar from './images/btn-guardar.png';
-import Modal from './Modal.jsx';
 import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
-
-//Para visualizar documentos
-// import { Worker, Viewer } from '@react-pdf-viewer/core';
-// import '@react-pdf-viewer/core/lib/styles/index.css';
-// import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-// import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-// import OfficeViewer from 'office-viewer';
-
+import YouTube from 'react-youtube';
 
 export default function PubliDetalle() {
 
@@ -24,15 +15,14 @@ export default function PubliDetalle() {
 
     const [datosUser, setUser] = useState([]);
     const [showModal, setShowModal] = useState(false);
-
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [newCommentTitle, setNewCommentTitle] = useState('');
     const [rating, setRating] = useState(0);
     const [loading, setLoading] = useState(true);
-
-    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Indice de la imagen actual
-    const [images, setImages] = useState([]); // Lista de todas las imágenes
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [files, setFiles] = useState([]);
+    const [youtubeLink, setYoutubeLink] = useState('');
 
     const storedUserId = localStorage.getItem('id_usuario');
     const location = useLocation();
@@ -45,7 +35,6 @@ export default function PubliDetalle() {
         fetchPubliUser();
     }, []);
 
-
     const fetchComments = async () => {
         try {
             const response = await fetch(`http://localhost:3001/api/datosUsuarioPubli/${publiID}`);
@@ -56,23 +45,31 @@ export default function PubliDetalle() {
             const data = await response.json();
             console.log('Datos recibidos:', data);
     
-            let primaryImage = "";
-            let additionalImages = [];
+            let additionalFiles = [];
     
             if (Array.isArray(data) && data.length > 0) {
                 const firstItem = data[0];
-                // primaryImage = firstItem.ruta_archivo;
-                // console.log(primaryImage);
                 if (firstItem.ruta_archivo_array && firstItem.ruta_archivo_array.length > 0) {
-                    additionalImages = firstItem.ruta_archivo_array.split(',');
-                    console.log(additionalImages);
+                    additionalFiles = firstItem.ruta_archivo_array.split(',');
+                    console.log(additionalFiles);
                 }
             }
     
-            // setImages(primaryImage ? [primaryImage, ...additionalImages] : []);
-            setImages(additionalImages);
+            setFiles(additionalFiles);
             setUser(data);
             setLoading(false);
+
+            const txtFile = additionalFiles.find(file => file.endsWith('.txt'));
+            if (txtFile) {
+                const filePath = `${ruta}/${encodeURIComponent(txtFile)}`;
+                const response = await fetch(filePath);
+                const text = await response.text();
+                console.log(text);
+                if (text.includes('youtube.com') || text.includes('youtu.be')) {
+                    setYoutubeLink(text.trim());
+                }
+            }
+            console.log(youtubeLink);
         } catch (error) {
             console.log('Error al obtener los datos !!', error);
         }
@@ -83,7 +80,7 @@ export default function PubliDetalle() {
             const response = await fetch(`http://localhost:3001/api/mostrarComentarios/${publiID}`);
             if (response.ok) {
                 const data = await response.json();
-                setComments(data); // Asegúrate de que `data` sea un array
+                setComments(data);
                 setLoading(false);
             } else {
                 console.error('Error al obtener comentarios:', response.statusText);
@@ -109,13 +106,12 @@ export default function PubliDetalle() {
                 }),
             });
             if (response.ok) {
-                // Después de enviar el comentario, obtén la lista actualizada de comentarios
                 const updatedCommentsResponse = await fetch(`http://localhost:3001/api/mostrarComentarios/${publiID}`);
                 if (updatedCommentsResponse.ok) {
                     const updatedCommentsData = await updatedCommentsResponse.json();
-                    setComments(updatedCommentsData); // Actualiza el estado con los comentarios más recientes
+                    setComments(updatedCommentsData);
                     setNewComment('');
-                    setNewCommentTitle(''); // Limpia el título del nuevo comentario
+                    setNewCommentTitle('');
                 } else {
                     console.error('Error al obtener comentarios actualizados:', updatedCommentsResponse.statusText);
                 }
@@ -140,14 +136,14 @@ export default function PubliDetalle() {
     }
 
     const handleNextImage = () => {
-        if (images.length > 0) {
-            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+        if (files.length > 0) {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % files.length);
         }
     };
     
     const handlePrevImage = () => {
-        if (images.length > 0) {
-            setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+        if (files.length > 0) {
+            setCurrentImageIndex((prevIndex) => (prevIndex - 1 + files.length) % files.length);
         }
     };
 
@@ -175,12 +171,6 @@ export default function PubliDetalle() {
                 window.location.reload();
             });
 
-            // Actualiza el estado de datosUser
-            // setUser(prevState => 
-            //     prevState.map(user => 
-            //         user.id_usuario === storedUserId ? { ...user, guardado: 0 } : user
-            //     )
-            // );
         } catch (error) {
             console.error('Error al guardar la publicación:', error);
             Swal.fire({
@@ -215,12 +205,6 @@ export default function PubliDetalle() {
                 window.location.reload();
             });
 
-            // Actualiza el estado de datosUser
-            // setUser(prevState => 
-            //     prevState.map(user => 
-            //         user.id_usuario === storedUserId ? { ...user, guardado: 1 } : user
-            //     )
-            // );
         } catch (error) {
             console.error('Error al guardar la publicación:', error);
             Swal.fire({
@@ -249,100 +233,122 @@ export default function PubliDetalle() {
         }
     };
 
+    const extractYouTubeId = (url) => {
+        const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const matches = url.match(regex);
+        return matches ? matches[1] : null;
+    };
+
     return (
         <div>
             <Nav /> 
             <div className="publidetalle-container">
                 {datosUser.map((user) => (
-                                
-                <div>
-                    <div className="infocont">
-                        <div className="izqcont">
-                        <div className='multiImage'>
-                            {['pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(images[currentImageIndex].split('.').pop().toLowerCase()) ? (
-                                        <iframe
-                                            className="Img-archivo"
-                                            src={renderPreview(images[currentImageIndex])}
-                                            title="Document Preview"
-                                            style={{ width: '900px', height: '550px' }}
+                    <div key={user.id}>
+                        <div className="infocont">
+                            <div className="izqcont">
+                            <div className='multiImage'>
+                                    {files[currentImageIndex].endsWith('.txt') && youtubeLink ? (
+                                        <YouTube
+                                            videoId={extractYouTubeId(youtubeLink)}
+                                            className="youtube-iframe"
+                                            opts={{
+                                                width: '900',
+                                                height: '550',
+                                                playerVars: {
+                                                    autoplay: 0,
+                                                },
+                                            }}
                                         />
                                     ) : (
-                                        <img 
-                                            className="Img-archivo" 
-                                            src={ruta + '/' + encodeURIComponent(images[currentImageIndex])} 
-                                            alt="archivo" 
-                                        />
+                                        <>
+                                            {['pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(files[currentImageIndex].split('.').pop().toLowerCase()) ? (
+                                                <iframe
+                                                    className="Img-archivo"
+                                                    src={renderPreview(files[currentImageIndex])}
+                                                    title="Document Preview"
+                                                    style={{ width: '900px', height: '550px' }}
+                                                />
+                                            ) : files[currentImageIndex].split('.').pop().toLowerCase() === 'txt' ? (
+                                                <iframe
+                                                    className="Img-archivo"
+                                                    src={renderPreview(files[currentImageIndex])}
+                                                    title="Text File Preview"
+                                                    style={{ width: '900px', height: '550px' }}
+                                                />
+                                            ) : (
+                                                <div style={{ width: '900px', height: '550px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                                                    <p>{files[currentImageIndex]}</p>
+                                                    <p>No está disponible la previsualización de este archivo</p>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
-                            <div className='BotonesImage'>
-                                <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
-                                <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
-                            </div>
-                        </div>
-                            
-                            <div className="botons-archivo">
-                                <div id="btn-desc">
-                                <a href={ruta + '/' + encodeURIComponent(images[currentImageIndex])} download>Descargar</a>
-                                    <img id="desc"src={BtnDescargar} alt="Descargar" />
+                                    <div className='BotonesImage'>
+                                        <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
+                                        <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
+                                    </div>
                                 </div>
-                                <div id="btn-guard">
-                                <button onClick={() => { 
-                                        if (user.guardado === 0) {
-                                            handleSavePubli();
-                                        } else {
-                                            handleDesguardarPubli();
-                                        }
+                                <div className="botons-archivo">
+                                    <div id="btn-desc">
+                                        <a href={ruta + '/' + encodeURIComponent(files[currentImageIndex])} download>Descargar</a>
+                                        <img id="desc" src={BtnDescargar} alt="Descargar" />
+                                    </div>
+                                    <div id="btn-guard">
+                                        <button onClick={() => { 
+                                            if (user.guardado === 0) {
+                                                handleSavePubli();
+                                            } else {
+                                                handleDesguardarPubli();
+                                            }
                                         }}>
-                                    {user.guardado === 0 ? "Guardar" : "Quitar de Guardados"}
-                                </button>
-                                    <img id="guard" src={Btnguardar} alt={user.guardado === 0 ? "Guardar" : "Quitar de Guardados"} />
+                                            {user.guardado === 0 ? "Guardar" : "Quitar de Guardados"}
+                                        </button>
+                                        <img id="guard" src={Btnguardar} alt={user.guardado === 0 ? "Guardar" : "Quitar de Guardados"} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        
-                        <div className="drchcont">
-                            <div className="infor-detalle">
-                                <h2 className="titulo-det">{user.titulo}</h2>
-                                <h5 className="titulo-det2">{user.titulacion}</h5>
-                                <a href={`/perfil-publico?userId=${user.id_usuario}`}>
-                                    <div className="nom-y-logo">
-                                        <img src={Persona} alt="usuario" />
-                                        <p id="nomUsuario">{user.nombre}</p>
+                            <div className="drchcont">
+                                <div className="infor-detalle">
+                                    <h2 className="titulo-det">{user.titulo}</h2>
+                                    <h5 className="titulo-det2">{user.titulacion}</h5>
+                                    <a href={`/perfil-publico?userId=${user.id_usuario}`}>
+                                        <div className="nom-y-logo">
+                                            <img src={Persona} alt="usuario" />
+                                            <p id="nomUsuario">{user.nombre}</p>
+                                        </div>
+                                    </a>
+                                    <p id="descripci-det">{user.descripcion}</p>
+                                    <div id="etiquetas-det">
+                                        <div id="eti1"><p id="pe">{user.etiquetas}</p></div>
+                                        <div id="eti2"><p id="pe">{user.etiquetas}</p></div>
+                                        <div id="eti3"><p id="pe">{user.etiquetas}</p></div>
                                     </div>
-                                </a>
-                                <p id="descripci-det">{user.descripcion}</p>
-                                <div id="etiquetas-det">
-                                    <div id="eti1"><p id="pe">{user.etiquetas}</p></div>
-                                    <div id="eti2"><p id="pe">{user.etiquetas}</p></div>
-                                    <div id="eti3"><p id="pe">{user.etiquetas}</p></div>
-                                </div>
-                                <div className="estrellas-valoraciones">
-                                    <p className="rating-count"></p>
-                                    <div className="star-rating">
-                                        {user.Valor}
-                                        {typeof user.Valor === 'number' && [...Array(parseInt(user.Valor))].map((_, index) => (
-                                            <span key={index} className="star">&#9733;</span>
-                                        ))}
-                                        { typeof user.Valor === 'number' && [...Array(5 - parseInt(user.Valor))].map((_, index) => (
-                                            <span key={index} className="star grey">&#9733;</span>
-                                        ))}
+                                    <div className="estrellas-valoraciones">
+                                        <p className="rating-count"></p>
+                                        <div className="star-rating">
+                                            {user.Valor}
+                                            {typeof user.Valor === 'number' && [...Array(parseInt(user.Valor))].map((_, index) => (
+                                                <span key={index} className="star">&#9733;</span>
+                                            ))}
+                                            {typeof user.Valor === 'number' && [...Array(5 - parseInt(user.Valor))].map((_, index) => (
+                                                <span key={index} className="star grey">&#9733;</span>
+                                            ))}
+                                        </div>
+                                        <div className="rating-separator"></div>
+                                        <p className="rating-count">{user.totalValoraciones} valoraciones</p>
                                     </div>
-                                    <div className="rating-separator"></div>
-                                    <p className="rating-count">{user.totalValoraciones} valoraciones</p>
-                                </div>
-                                <div className="boton-opinion-det"> 
-                                    <button id="btn-det" onClick={() => 
-                                        {document.getElementById('destino').scrollIntoView({ behavior: 'smooth' });}}>
-                                    Escribir mi opinión
-                                    </button>
+                                    <div className="boton-opinion-det"> 
+                                        <button id="btn-det" onClick={() => 
+                                            {document.getElementById('destino').scrollIntoView({ behavior: 'smooth' });}}>
+                                            Escribir mi opinión
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 ))}
-                
-                
                 <div className="comentcont"> 
                     <h2 id="titulo-coment">COMENTARIOS</h2>
                     <hr className="separador-coment"></hr>
@@ -375,39 +381,38 @@ export default function PubliDetalle() {
                     )}
                     <hr className="separador-coment2" />
                     <div className="final-coment">
-                    <h3 className="titulo-final">Escribe tu opinión:</h3>
-                    <div className="valor-comentar">
-                        <div className="estrellitas">
-                            <h7 id="tit">Valoración general</h7>
-                            <RatingStars onChange={setRating} />
-                        </div>
-                        <div className="separeitor"></div>
-                        <div id="destino">
-                        <h3 className="titulo-final2">Añade un título</h3>
-                            <input
-                                className="area-coment2"
-                                type="text"
-                                value={newCommentTitle}
-                                onChange={e => setNewCommentTitle(e.target.value)}
-                            />
-                            <h3 className="titulo-final3">Añade un comentario</h3>
-                            <input
-                                className="area-coment"
-                                type="text"
-                                value={newComment}
-                                onChange={e => setNewComment(e.target.value)}
-                            />
-                            <div className="final-btn">
-                                <button className="btn-coment" type="submit" onClick={handleCommentSubmit}>
-                                    <p>Enviar opinión</p>
-                                </button>
+                        <h3 className="titulo-final">Escribe tu opinión:</h3>
+                        <div className="valor-comentar">
+                            <div className="estrellitas">
+                                <h7 id="tit">Valoración general</h7>
+                                <RatingStars onChange={setRating} />
+                            </div>
+                            <div className="separeitor"></div>
+                            <div id="destino">
+                                <h3 className="titulo-final2">Añade un título</h3>
+                                <input
+                                    className="area-coment2"
+                                    type="text"
+                                    value={newCommentTitle}
+                                    onChange={e => setNewCommentTitle(e.target.value)}
+                                />
+                                <h3 className="titulo-final3">Añade un comentario</h3>
+                                <input
+                                    className="area-coment"
+                                    type="text"
+                                    value={newComment}
+                                    onChange={e => setNewComment(e.target.value)}
+                                />
+                                <div className="final-btn">
+                                    <button className="btn-coment" type="submit" onClick={handleCommentSubmit}>
+                                        <p>Enviar opinión</p>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </div>
     );
-};
+}

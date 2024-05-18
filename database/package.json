@@ -5,7 +5,8 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "path": "^0.12.7",
-    "sharp": "^0.33.3"
+    "sharp": "^0.33.3",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "cors": "^2.8.5",

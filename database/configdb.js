@@ -392,6 +392,7 @@ app.listen(PORT, () =>{
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 
 const uploadsDir = path.join(__dirname, 'uploads');
 
@@ -403,7 +404,11 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: function(req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    const uniqueSuffix = `${uuidv4()}-${Date.now()}`;
+    const originalName = file.originalname;
+    const extension = path.extname(originalName);
+    const baseName = path.basename(originalName, extension);
+    cb(null, `${baseName}-${uniqueSuffix}${extension}`);
   }
 });
 

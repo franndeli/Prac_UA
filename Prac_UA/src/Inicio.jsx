@@ -3,11 +3,10 @@ import './Inicio.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Card from './Card.jsx';
-import Nav from './Nav.jsx'
+import Nav from './Nav.jsx';
 import { Link } from 'react-router-dom';
 
 export default function Inicio() {
-
     const [fotos, setFotos] = useState([]);
 
     useEffect(() => {
@@ -39,12 +38,12 @@ export default function Inicio() {
             <Nav />
             
             <div className="recomendaciones">
-                <a href="/categoria?titulo=RECOMENDACIONES">
+                <Link to="/categoria?titulo=RECOMENDACIONES" className="recomendaciones_link">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">RECOMENDACIONES</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                     </div>
-                </a>
+                </Link>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
                         <Link to={`/publiDetalle?id=${foto.id}`} key={index}>
@@ -53,13 +52,14 @@ export default function Inicio() {
                     ))}
                 </div>
             </div>
+            
             <div className="recomendaciones">
-                <a href="/categoria?titulo=TUS ÚLTIMOS TRABAJOS VISTOS">
+                <Link to="/categoria?titulo=TUS ÚLTIMOS TRABAJOS VISTOS" className="recomendaciones_link">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">TUS ÚLTIMOS TRABAJOS VISTOS</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                     </div>
-                </a>
+                </Link>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
                         <Link to={`/publiDetalle?id=${foto.id}`} key={index}>
@@ -68,55 +68,67 @@ export default function Inicio() {
                     ))}
                 </div>
             </div>
+            
             <div className="recomendaciones">
-                <a href="/categoria?titulo=MÁS POPULARES">
+                <Link to="/categoria?titulo=MÁS POPULARES" className="recomendaciones_link">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">MÁS POPULARES</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                     </div>
-                </a>
+                </Link>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
-                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                        <Link to={`/publiDetalle?id=${foto.id}`} key={index}>
+                            <Card photoId={foto.id} />
+                        </Link>
                     ))}
                 </div>
             </div>
+            
             <div className="recomendaciones">
-                <a href="/categoria?titulo=FAVORITOS DEL PROFESORADO">
+                <Link to="/categoria?titulo=FAVORITOS DEL PROFESORADO" className="recomendaciones_link">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">FAVORITOS DEL PROFESORADO</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                     </div>
-                </a>
+                </Link>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
-                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                        <Link to={`/publiDetalle?id=${foto.id}`} key={index}>
+                            <Card photoId={foto.id} />
+                        </Link>
                     ))}
                 </div>
             </div>
+            
             <div className="recomendaciones">
-                <a href="/categoria?titulo=RECIÉN SUBIDOS">
+                <Link to="/categoria?titulo=RECIÉN SUBIDOS" className="recomendaciones_link">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">RECIÉN SUBIDOS</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                     </div>
-                </a>
+                </Link>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
-                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                        <Link to={`/publiDetalle?id=${foto.id}`} key={index}>
+                            <Card photoId={foto.id} />
+                        </Link>
                     ))}
                 </div>
             </div>
+            
             <div className="recomendaciones">
-                <a href="/categoria?titulo=PROYECTOS INTERNACIONALES">
+                <Link to="/categoria?titulo=PROYECTOS INTERNACIONALES" className="recomendaciones_link">
                     <div className="recomendaciones_icon">
                         <h2 className="recomendaciones_h2">PROYECTOS INTERNACIONALES</h2>
                         <FontAwesomeIcon className="more_than_icon" icon={fas.faAngleRight} size="lg" />
                     </div>
-                </a>
+                </Link>
                 <div className="cards-container">
                     {fotos.map((foto, index) => (
-                        <a href='publiDetalle' key={index}><Card photoId={foto.id} /></a>
+                        <Link to={`/publiDetalle?id=${foto.id}`} key={index}>
+                            <Card photoId={foto.id} />
+                        </Link>
                     ))}
                 </div>
             </div>

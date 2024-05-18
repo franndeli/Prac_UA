@@ -5,12 +5,14 @@ import camDefault from './images/cam_default.png';
 import Nav from './Nav.jsx'
 import { useNavigate } from 'react-router-dom';
 import AdjustableSelect from './helpers/AdjustableSelects.jsx';
+import Swal from 'sweetalert2';
 
 const SubirArchivo = () => {
     const [imagePreview, setImagePreview] = useState(camDefault); // Estado para manejar la previsualización de la imagen
     // const [imagePreviewsArray, setImagePreviewsArray] = useState([camDefault]);
     const [tipoArchivo, setTipoArchivo] = useState(''); // Estado para manejar el tipo de archivo
     const [tipo_academicos, setTipo_academico] = useState([]);
+    const [youtubeLink, setYoutubeLink] = useState('');
     const storedUserId = localStorage.getItem('id_usuario');
     const navigate = useNavigate();
 
@@ -52,20 +54,31 @@ const SubirArchivo = () => {
         setTipoArchivo(event.target.value);
     };
 
+    const handleYoutubeLinkChange = (event) => {
+        setYoutubeLink(event.target.value);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         const singleFile = document.getElementById('file').files[0];
         const multipleFiles = document.getElementById('file-array').files;
-
+        const youtubeLink = document.getElementById('youtubeLink').value;
+        
         formData.append('file', singleFile);
         Array.from(multipleFiles).forEach((file, index) => {
             formData.append('file-array', file);
         });
+
+        const youtubeLinkBlob = new Blob([youtubeLink], { type: 'text/plain' });
+        formData.append('file-array', youtubeLinkBlob, 'youtubeLink.txt');
+
         formData.append('titulo', document.getElementById('titulo').value);
         formData.append('etiquetas', document.getElementById('etiquetas').value);
         formData.append('tipoArchivo', document.getElementById('tipo-archivo').value);
         formData.append('descripcion', document.getElementById('descripcion').value);
+        
+        // formData.append('youtubeLink', youtubeLink);
 
         try {
             const response = await fetch(`http://localhost:3001/api/subirArchivo/${storedUserId}`, {
@@ -77,8 +90,13 @@ const SubirArchivo = () => {
                 throw new Error('Error al subir archivo desde el frontend');
             }
 
-            console.log('Archivo subido correctamente');
-            navigate('/inicio');
+            Swal.fire({
+                icon: 'success',
+                title: 'Archivo subido',
+                text: 'El archivo se ha subido correctamente',
+            }).then(() => {
+                navigate('/inicio');
+            });
         } catch (error) {
             console.error('Error en la carga:', error);
         }
@@ -104,7 +122,7 @@ const SubirArchivo = () => {
                                 <label htmlFor="tipo-archivo" id="leibel">Tipo de Contenido:</label>
                                 {/* <AdjustableSelect options={tipo_academico} defaultText="Tipo" /> */}
                                 <select className="" id="tipo-archivo" name="tipoArchivo" value={tipoArchivo} onChange={handleTipoArchivoChange}>
-                                    <option value="" disabled selected>Tipo de contenido</option>
+                                    {/* <option value="" disabled selected>Tipo de contenido</option> */}
                                     {tipo_academicos.map(t => (
                                         <option key={t.id} value={t.nombre}>{t.nombre}</option>
                                     ))}
@@ -133,6 +151,10 @@ const SubirArchivo = () => {
                                     <div className="image-upload-container">
                                         <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleFileChange} multiple required />
                                     </div>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="youtubeLink" id="leibel">Enlace de YouTube:</label>
+                                    <input type="text" id="youtubeLink" className="textarea-subir" name="youtubeLink" value={youtubeLink} onChange={handleYoutubeLinkChange} />
                                 </div>
                             </div> 
                         </div>
