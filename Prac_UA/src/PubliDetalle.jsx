@@ -3,7 +3,6 @@ import './PubliDetalle.css';
 import Nav from './Nav.jsx';
 import Persona from './images/persona.svg';
 import RatingStars from './RatingStars';
-import ImgArchivo from './images/img_archivo.png';
 import BtnDescargar from './images/btn-descargar.png';
 import Btnguardar from './images/btn-guardar.png';
 import Modal from './Modal.jsx';
@@ -11,22 +10,18 @@ import { useLocation } from 'react-router-dom';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-
 export default function PubliDetalle() {
-
     const ruta = "http://localhost:3001/uploads/resizedPubliDetalle";
-
+    const [datosConEtiquetas, setDatosConEtiquetas] = useState([]);
     const [datosUser, setUser] = useState([]);
     const [showModal, setShowModal] = useState(false);
-
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [newCommentTitle, setNewCommentTitle] = useState('');
     const [rating, setRating] = useState(0);
     const [loading, setLoading] = useState(true);
-
-    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Indice de la imagen actual
-    const [images, setImages] = useState([]); // Lista de todas las imágenes
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [images, setImages] = useState([]);
 
     const storedUserId = localStorage.getItem('id_usuario');
     const location = useLocation();
@@ -35,10 +30,24 @@ export default function PubliDetalle() {
     const publiID = id;
 
     useEffect(() => {
+        const datosProcesados = datosUser.map(user => {
+            let etiquetas = [];
+            if (typeof user.EtiquetasPubli === 'string') {
+                try {
+                    etiquetas = JSON.parse(user.EtiquetasPubli) || [];
+                } catch (e) {
+                    etiquetas = [];
+                }
+            }
+            return { ...user, etiquetas: Array.isArray(etiquetas) ? etiquetas : [] };
+        });
+        setDatosConEtiquetas(datosProcesados);
+    }, [datosUser]);
+
+    useEffect(() => {
         fetchComments();
         fetchPubliUser();
     }, []);
-
 
     const fetchComments = async () => {
         try {
@@ -46,7 +55,6 @@ export default function PubliDetalle() {
             if (!response.ok) {
                 throw new Error('Error al obtener los datos del servidor !!');
             }
-            
             const data = await response.json();
             console.log('Datos recibidos:', data);
     
@@ -76,7 +84,7 @@ export default function PubliDetalle() {
             const response = await fetch(`http://localhost:3001/api/mostrarComentarios/${publiID}`);
             if (response.ok) {
                 const data = await response.json();
-                setComments(data); // Asegúrate de que `data` sea un array
+                setComments(data);
                 setLoading(false);
             } else {
                 console.error('Error al obtener comentarios:', response.statusText);
@@ -93,7 +101,7 @@ export default function PubliDetalle() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     commentTitle: newCommentTitle,
                     comment: newComment,
                     rating: rating,
@@ -102,13 +110,12 @@ export default function PubliDetalle() {
                 }),
             });
             if (response.ok) {
-                // Después de enviar el comentario, obtén la lista actualizada de comentarios
                 const updatedCommentsResponse = await fetch(`http://localhost:3001/api/mostrarComentarios/${publiID}`);
                 if (updatedCommentsResponse.ok) {
                     const updatedCommentsData = await updatedCommentsResponse.json();
-                    setComments(updatedCommentsData); // Actualiza el estado con los comentarios más recientes
+                    setComments(updatedCommentsData);
                     setNewComment('');
-                    setNewCommentTitle(''); // Limpia el título del nuevo comentario
+                    setNewCommentTitle('');
                 } else {
                     console.error('Error al obtener comentarios actualizados:', updatedCommentsResponse.statusText);
                 }
@@ -128,7 +135,6 @@ export default function PubliDetalle() {
         const hours = ('0' + date.getHours()).slice(-2);
         const minutes = ('0' + date.getMinutes()).slice(-2);
         const seconds = ('0' + date.getSeconds()).slice(-2);
-    
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
@@ -166,8 +172,7 @@ export default function PubliDetalle() {
     };
 
     const handleModalConfirm = () => {
-    // Realizar acción después de confirmar cambios (puedes redirigir aquí si es necesario)
-        setShowModal(false); // Ocultar el modal después de confirmar
+        setShowModal(false);
     };
 
     const handleCloseModal = () => {
@@ -191,87 +196,86 @@ export default function PubliDetalle() {
 
     return (
         <div>
-            <div><Nav></Nav></div> 
+            <Nav />
             <div className="publidetalle-container">
-                {datosUser.map((user) => (
-                                
-                <div>
-                    <div className="infocont">
-                        <div className="izqcont">
-                            <div className='multiImage'>
-                                <img 
-                                    className="Img-archivo" 
-                                    src={ruta + '/' + encodeURIComponent(images[currentImageIndex])} 
-                                    alt="archivo" 
-                                />
-                                <div className='BotonesImage'>
-                                    <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
-                                    <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
+                {datosConEtiquetas.map((user) => (
+                    <div key={user.id}>
+                        <div className="infocont">
+                            <div className="izqcont">
+                                <div className='multiImage'>
+                                    <img 
+                                        className="Img-archivo" 
+                                        src={ruta + '/' + encodeURIComponent(images[currentImageIndex])} 
+                                        alt="archivo" 
+                                    />
+                                    <div className='BotonesImage'>
+                                        <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
+                                        <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
+                                    </div>
+                                </div>
+                                <div className="botons-archivo">
+                                    <div id="btn-desc">
+                                        <button className="btn-guard" onClick={handleDownload}>Descargar</button>
+                                        <img id="desc" src={BtnDescargar} alt="Descargar" />
+                                    </div>
+                                    <div id="btn-guard">
+                                        <button className="btn-guard" onClick={() => { setShowModal(true); handleSavePubli(); }}>GUARDAR</button>
+                                        <img id="guard" src={Btnguardar} alt="Guardar" />
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <div className="botons-archivo">
-                                <div id="btn-desc">
-                                <button className="btn-guard" onClick={handleDownload}>Descargar</button>
-                                    <img id="desc"src={BtnDescargar} alt="Descargar" />
-                                </div>
-                                <div id="btn-guard">
-                                <button className="btn-guard" onClick={() => { setShowModal(true); handleSavePubli(); }}>GUARDAR</button>
-                                    <img id="guard" src={Btnguardar} alt="Guardar" />
+                            <div className="drchcont">
+                                <div className="infor-detalle">
+                                    <h2 className="titulo-det">{user.titulo}</h2>
+                                    <h5 className="titulo-det2">{user.Titulacion_nombre}</h5>
+                                    <h5 className="titulo-det3">{user.TituloAcademico}</h5>
+                                    <a className="userDirection" href={`/perfil-publico?userId=${user.id_usuario}`}>
+                                        <div className="nom-y-logo">
+                                            <img src={Persona} alt="usuario" />
+                                            <p id="nomUsuario">{user.nombre}</p>
+                                        </div>
+                                    </a>
+                                    <p id="descripci-det">{user.descripcion}</p>
+                                    <div id="etiquetas-det">
+                                    {user.EtiquetasPubli && user.EtiquetasPubli.length > 0 ? (
+                                        user.EtiquetasPubli.split(',').map((etiqueta, index) => (
+                                            <div key={index} id={`eti${index + 1}`}>
+                                                <p id="pe">{etiqueta}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No hay etiquetas disponibles</p>
+                                    )}
+                                    </div>
+                                    <div className="estrellas-valoraciones">
+                                        <p className="rating-count"></p>
+                                        <div className="star-rating">
+                                            {user.Valor}
+                                            {typeof user.Valor === 'number' && [...Array(parseInt(user.Valor))].map((_, index) => (
+                                                <span key={index} className="star">&#9733;</span>
+                                            ))}
+                                            { typeof user.Valor === 'number' && [...Array(5 - parseInt(user.Valor))].map((_, index) => (
+                                                <span key={index} className="star grey">&#9733;</span>
+                                            ))}
+                                        </div>
+                                        <div className="rating-separator"></div>
+                                        <p className="rating-count">{user.totalValoraciones} valoraciones</p>
+                                    </div>
+                                    <div className="boton-opinion-det"> 
+                                        <button id="btn-det" onClick={() => 
+                                            {document.getElementById('destino').scrollIntoView({ behavior: 'smooth' });}}>
+                                            Escribir mi opinión
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        
-                        <div className="drchcont">
-                            <div className="infor-detalle">
-                            <h2 className="titulo-det">{user.titulo}</h2>
-                            <h5 className="titulo-det2">{user.Titulacion_nombre}</h5>
-                            <h5 className="titulo-det3">{user.TituloAcademico}</h5>
-                            <a className="userDirection" href={`/perfil-publico?userId=${user.id_usuario}`}>
-                                <div className="nom-y-logo">
-                                    <img src={Persona} alt="usuario" />
-                                    <p id="nomUsuario">{user.nombre}</p>
-                                </div>
-                            </a>
-                            <p id="descripci-det">{user.descripcion}</p>
-                            <div id="etiquetas-det">
-                                <div id="eti1"><p id="pe">{user.etiquetas}</p></div>
-                                <div id="eti2"><p id="pe">{user.etiquetas}</p></div>
-                                <div id="eti3"><p id="pe">{user.etiquetas}</p></div>
-                            </div>
-                            <div className="estrellas-valoraciones">
-                                <p className="rating-count"></p>
-                                <div className="star-rating">
-                                    {user.Valor}
-                                    {typeof user.Valor === 'number' && [...Array(parseInt(user.Valor))].map((_, index) => (
-                                        <span key={index} className="star">&#9733;</span>
-                                    ))}
-                                    { typeof user.Valor === 'number' && [...Array(5 - parseInt(user.Valor))].map((_, index) => (
-                                        <span key={index} className="star grey">&#9733;</span>
-                                    ))}
-                                </div>
-                                <div className="rating-separator"></div>
-                                <p className="rating-count">{user.totalValoraciones} valoraciones</p>
-                            </div>
-                            <div className="boton-opinion-det"> 
-                                <button id="btn-det" onClick={() => 
-                                    {document.getElementById('destino').scrollIntoView({ behavior: 'smooth' });}}>
-                                Escribir mi opinión
-                                </button>
-                            </div>
-                        </div>
-                        
-                            
                         </div>
                     </div>
-                </div>
                 ))}
-                
                 
                 <div className="comentcont"> 
                     <h2 id="titulo-coment">COMENTARIOS</h2>
-                    <hr className="separador-coment"></hr>
+                    <hr className="separador-coment" />
                     {loading ? (
                         <p>Cargando comentarios...</p>
                     ) : comments.length === 0 ? (
@@ -301,45 +305,44 @@ export default function PubliDetalle() {
                     )}
                     <hr className="separador-coment2" />
                     <div className="final-coment">
-                    <h3 className="titulo-final">Escribe tu opinión:</h3>
-                    <div className="valor-comentar">
-                        <div className="estrellitas">
-                            <h7 id="tit">Valoración general</h7>
-                            <RatingStars onChange={setRating} />
-                        </div>
-                        <div className="separeitor"></div>
-                        <div id="destino">
-                        <h3 className="titulo-final2">Añade un título</h3>
-                            <input
-                                className="area-coment2"
-                                type="text"
-                                value={newCommentTitle}
-                                onChange={e => setNewCommentTitle(e.target.value)}
-                            />
-                            <h3 className="titulo-final3">Añade un comentario</h3>
-                            <input
-                                className="area-coment"
-                                type="text"
-                                value={newComment}
-                                onChange={e => setNewComment(e.target.value)}
-                            />
-                            <div className="final-btn">
-                                <button className="btn-coment" type="submit" onClick={handleCommentSubmit}>
-                                    <p>Enviar opinión</p>
-                                </button>
+                        <h3 className="titulo-final">Escribe tu opinión:</h3>
+                        <div className="valor-comentar">
+                            <div className="estrellitas">
+                                <h7 id="tit">Valoración general</h7>
+                                <RatingStars onChange={setRating} />
+                            </div>
+                            <div className="separeitor"></div>
+                            <div id="destino">
+                                <h3 className="titulo-final2">Añade un título</h3>
+                                <input
+                                    className="area-coment2"
+                                    type="text"
+                                    value={newCommentTitle}
+                                    onChange={e => setNewCommentTitle(e.target.value)}
+                                />
+                                <h3 className="titulo-final3">Añade un comentario</h3>
+                                <input
+                                    className="area-coment"
+                                    type="text"
+                                    value={newComment}
+                                    onChange={e => setNewComment(e.target.value)}
+                                />
+                                <div className="final-btn">
+                                    <button className="btn-coment" type="submit" onClick={handleCommentSubmit}>
+                                        <p>Enviar opinión</p>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                 </div>
                 {showModal && (
-            <Modal
-                onClose={handleCloseModal}
-                onConfirm={handleModalConfirm}
-            />
-      )}
+                    <Modal
+                        onClose={handleCloseModal}
+                        onConfirm={handleModalConfirm}
+                    />
+                )}
             </div>
         </div>
     );
-};
+}

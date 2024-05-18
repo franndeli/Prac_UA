@@ -393,7 +393,7 @@ app.post('/api/guardarComentarios', (req, res) => {
 app.get('/api/datosUsuarioPubli/:idPublicacion', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
 
-  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor, u.id as id_usuario, ti.nombre as Titulacion_nombre, tiAc.nombre as TituloAcademico FROM publicacion p, usuario u, comentarios c, titulaciones ti, tipo_academico tiAc where p.id = ? and p.autor = u.id and c.id_publicacion = p.id and u.titulacion = ti.id and p.tipo_archivo = tiAc.id';
+  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor, u.id as id_usuario, ti.nombre as Titulacion_nombre, tiAc.nombre as TituloAcademico, p.etiquetas as EtiquetasPubli FROM publicacion p, usuario u, comentarios c, titulaciones ti, tipo_academico tiAc where p.id = ? and p.autor = u.id and c.id_publicacion = p.id and u.titulacion = ti.id and p.tipo_archivo = tiAc.id';
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {
       console.error('Error al obtener comentarios:', error);
@@ -415,6 +415,7 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
   const userId = req.params.userId;
 
   const { titulo, etiquetas, tipoArchivo, descripcion } = req.body;
+  const etiquetasArray = etiquetas.split(',').map(etiqueta => etiqueta.trim());
   const singleFilePath = req.files['file'][0].path;
 
   // Obtén solo el nombre del archivo único
@@ -466,9 +467,10 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
         }
 
         const tipoArchivoId = result[0].id;
-        
+        const etiquetasString = etiquetasArray.join(',');        
+
         const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        const values = [userId, titulo, etiquetas, tipoArchivoId, descripcion, singleFileName, multipleFilesNames.join(',')];
+        const values = [userId, titulo, etiquetasString, tipoArchivoId, descripcion, singleFileName, multipleFilesNames.join(',')];
 
         connection.query(query, values, (err, result) => {
           if (err) {

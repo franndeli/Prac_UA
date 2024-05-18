@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import AdjustableSelect from './helpers/AdjustableSelects.jsx';
 
 const SubirArchivo = () => {
+    const [etiquetas, setEtiquetas] = useState('');
     const [imagePreview, setImagePreview] = useState(camDefault); // Estado para manejar la previsualización de la imagen
     const [imagePreviewsArray, setImagePreviewsArray] = useState([camDefault]);
     const [tipoArchivo, setTipoArchivo] = useState(''); // Estado para manejar el tipo de archivo
@@ -78,6 +79,17 @@ const SubirArchivo = () => {
         }
     };
 
+    const handleEtiquetasChange = (e) => {
+        const input = e.target.value;
+        const etiquetasArray = input.split(',').map(etiqueta => etiqueta.trim());
+
+        if (etiquetasArray.length <= 3) {
+            setEtiquetas(input);
+        } else {
+            alert('Solo puedes añadir hasta 3 etiquetas');
+        }
+    };
+
     return (
         <div>
             <Nav />
@@ -92,7 +104,16 @@ const SubirArchivo = () => {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="etiquetas" id="leibel">Etiquetas:</label>
-                                <input type="text" id="etiquetas" className="textarea-subir" name="etiquetas" required />
+                                <input
+                                    type="text"
+                                    id="etiquetas"
+                                    className="textarea-subir"
+                                    name="etiquetas"
+                                    value={etiquetas}
+                                    onChange={handleEtiquetasChange}
+                                    required
+                                />
+                                <small>Escribe las etiquetas separadas por comas (,)</small>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="tipo-archivo" id="leibel">Tipo de contenido:</label>
