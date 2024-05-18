@@ -65,7 +65,7 @@
 }
 
 .search-input:focus {
-    border-color: #007bff; /* Cambia el color del borde al enfocar */
+    border-color: #0000ff; /* Cambia el color del borde al enfocar */
 }
 
 /*
@@ -100,4 +100,8 @@
 
 .SelectoresBuscar select option{
     background-color: #ffffff;
+}
+
+.textarea-subir-select-buscar{
+    height: 30px;
 }

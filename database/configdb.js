@@ -13,6 +13,38 @@ app.use(cors());
 app.use(bodyParser.json()); // Para analizar solicitudes con cuerpo en formato JSON
 app.use(bodyParser.urlencoded({ extended: true })); // Para analizar solicitudes con cuerpo en formato URL-encoded
 
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+const { v4: uuidv4 } = require('uuid');
+
+const uploadsDir = path.join(__dirname, 'uploads');
+const resizedDir = path.join(__dirname, 'uploads', 'resized'); // Ruta de la carpeta redimensionada
+const resizedDirPubliDetalle = path.join(__dirname, 'uploads', 'resizedPubliDetalle'); // Ruta de la carpeta redimensionada
+
+// Verifica si el directorio existe, si no, lo crea
+fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
+fs.existsSync(resizedDir) || fs.mkdirSync(resizedDir, { recursive: true }); // Crea la carpeta resized si no existe
+fs.existsSync(resizedDirPubliDetalle) || fs.mkdirSync(resizedDirPubliDetalle, { recursive: true }); // Crea la carpeta resized si no existe
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function(req, file, cb) {
+    const uniqueSuffix = `${uuidv4()}-${Date.now()}`;
+    const originalName = file.originalname;
+    const extension = path.extname(originalName);
+    const baseName = path.basename(originalName, extension);
+    cb(null, `${baseName}-${uniqueSuffix}${extension}`);
+  }
+});
+
+const upload = multer({ storage: storage });
+app.use('/uploads', express.static('uploads'));
+
+
 app.use(session({
   secret: 'UA', // Cambia esto por una cadena secreta para firmar las cookies de sesión
   resave: false,
@@ -61,72 +93,21 @@ app.post('/api/iniciarSesion', (req, res) => {
 
 
 app.get('/api/publicaciones', (req, res) => {
-  const SQL_QUERY = `
-    SELECT 
-      p.*,
-      u.nombre AS autor_nombre,
-      u.usuario AS autor_usuario,
-      u.email AS autor_email,
-      u.descripcion AS autor_descripcion,
-      ta.nombre AS tipo_academico_nombre,
-      c.id AS comentario_id,
-      c.comentario AS comentario_texto,
-      c.titulo AS comentario_titulo,
-      c.valoraciones AS comentario_valoraciones,
-      c.fecha AS comentario_fecha,
-      cu.nombre AS comentario_usuario_nombre,
-      cu.usuario AS comentario_usuario_usuario
-    FROM 
-      publicacion p
-      LEFT JOIN usuario u ON p.autor = u.id
-      LEFT JOIN tipo_academico ta ON p.tipo_archivo = ta.id
-      LEFT JOIN comentarios c ON p.id = c.id_publicacion
-      LEFT JOIN usuario cu ON c.id_usuario = cu.id
-  `;
-
+  const SQL_QUERY = 'SELECT p.*, tiAc.nombre as TiAc_Nombre FROM publicacion p, tipo_academico tiAc where p.tipo_archivo = tiAc.id';
   connection.query(SQL_QUERY, (err, result) => {
-    if (err) {
+    if(err){
       console.error("Error al obtener las publicaciones:", err);
       res.status(500).json({ error: "Error al obtener las publicaciones" });
       return;
     }
     res.json(result);
   });
-});
+})
 
 
 app.get('/api/publicaciones/:id', (req, res) => {
   const { id } = req.params;
-  const SQL_QUERY = `
-    SELECT 
-      p.*, 
-      u.nombre AS nombre_usuario, 
-      u.id as id_usuario,
-      u.usuario AS autor_usuario,
-      u.email AS autor_email,
-      u.descripcion AS autor_descripcion,
-      ta.nombre AS tipo_academico_nombre,
-      c.id AS comentario_id,
-      c.comentario AS comentario_texto,
-      c.titulo AS comentario_titulo,
-      c.valoraciones AS comentario_valoraciones,
-      c.fecha AS comentario_fecha,
-      cu.nombre AS comentario_usuario_nombre,
-      cu.usuario AS comentario_usuario_usuario,
-      tc.nombre AS tipo_contenido_nombre,
-      t.nombre AS titulacion_nombre
-    FROM 
-      publicacion p
-      INNER JOIN usuario u ON p.autor = u.id
-      LEFT JOIN tipo_academico ta ON p.tipo_archivo = ta.id
-      LEFT JOIN comentarios c ON p.id = c.id_publicacion
-      LEFT JOIN usuario cu ON c.id_usuario = cu.id
-      LEFT JOIN publicacion_tipo pt ON p.id = pt.publicacion
-      LEFT JOIN tipo_contenido tc ON pt.tipo_contenido = tc.id
-      LEFT JOIN titulaciones t ON u.titulacion = t.id
-    WHERE 
-      p.id = ?
-  `;
+  const SQL_QUERY = 'SELECT p.*, u.nombre AS nombre_usuario, u.id as id_usuario FROM publicacion p INNER JOIN usuario u ON p.autor = u.id WHERE p.id = ?';
   connection.query(SQL_QUERY, [id], (err, result) => {
     if (err) {
       console.error("Error al obtener las publicaciones:", err);
@@ -140,7 +121,7 @@ app.get('/api/publicaciones/:id', (req, res) => {
 
 app.get('/api/misPublicaciones/:id', (req, res) => {
   const userId = req.params.id; // Obtener userId de los parámetros de la solicitud
-  const SQL_QUERY = 'SELECT * FROM publicacion WHERE autor = ?';
+  const SQL_QUERY = 'SELECT p.*, tiAc.nombre as TiAc_Nombre FROM publicacion p, tipo_academico tiAc where p.tipo_archivo = tiAc.id and autor = ?';
   connection.query(SQL_QUERY, [userId], (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones del usuario:", err);
@@ -211,6 +192,38 @@ app.put('/api/ajustesUsuario/:id', (req, res) => {
     res.status(200).json({ message: "Datos modificados correctamente" });
     
   })
+});
+
+app.put('/api/cambiarFoto/:id', upload.single('file'), async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    if (!req.file) {
+      throw new Error('No se recibió ningún archivo');
+    }
+
+    const singleFilePath = req.file.path;
+    const singleFileName = path.basename(singleFilePath);
+    const resizedFilePath = path.join(resizedDir, singleFileName);
+
+    await sharp(singleFilePath)
+      .resize(150, 150)
+      .toFile(resizedFilePath);
+
+    // Actualizar el campo de la foto en la base de datos
+    const SQL_QUERY = 'UPDATE usuario SET foto = ? WHERE id = ?';
+    connection.query(SQL_QUERY, [singleFileName, userId], (err, result) => {
+      if (err) {
+        console.error("Error al modificar la foto:", err);
+        res.status(500).json({ error: "Error al modificar la foto" });
+        return;
+      }
+      res.status(200).json({ message: "Foto modificada correctamente" });
+    });
+  } catch (error) {
+    console.error("Error al procesar la solicitud:", error);
+    res.status(500).json({ error: "Error al procesar la solicitud" });
+  }
 });
 
 app.put('/api/guardarPubli/:idpubli', (req, res) => {
@@ -405,7 +418,7 @@ app.get('/api/mostrarComentarios/:idPublicacion', (req, res) => {
 
 app.get('/api/biblioteca', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
-  const query = 'SELECT * FROM publicacion WHERE guardado = 1';
+  const query = 'SELECT p.* FROM publicacion p, usuario u WHERE guardado = 1 and p.autor = u.id';
 
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {
@@ -434,7 +447,7 @@ app.post('/api/guardarComentarios', (req, res) => {
 app.get('/api/datosUsuarioPubli/:idPublicacion', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
 
-  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor, u.id as id_usuario FROM publicacion p, usuario u, comentarios c where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+  const query = 'SELECT u.*, p.*, COUNT(valoraciones) AS totalValoraciones, ROUND(AVG(c.valoraciones)) as Valor, u.id as id_usuario, ti.nombre as Titulacion_nombre, tiAc.nombre as TituloAcademico, p.etiquetas as EtiquetasPubli FROM publicacion p, usuario u, comentarios c, titulaciones ti, tipo_academico tiAc where p.id = ? and p.autor = u.id and c.id_publicacion = p.id and u.titulacion = ti.id and p.tipo_archivo = tiAc.id';
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {
       console.error('Error al obtener comentarios:', error);
@@ -456,38 +469,14 @@ app.listen(PORT, () =>{
 //PARA LA PARTE DE SUBIR ARCHIVOS
 
 //primero configuramos multer para que nos cree el directorio uploads si no lo tenemos
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
 
-const uploadsDir = path.join(__dirname, 'uploads');
-
-// Verifica si el directorio existe, si no, lo crea
-fs.existsSync(uploadsDir) || fs.mkdirSync(uploadsDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, uploadsDir);
-  },
-  filename: function(req, file, cb) {
-    const uniqueSuffix = `${uuidv4()}-${Date.now()}`;
-    const originalName = file.originalname;
-    const extension = path.extname(originalName);
-    const baseName = path.basename(originalName, extension);
-    cb(null, `${baseName}-${uniqueSuffix}${extension}`);
-  }
-});
-
-const upload = multer({ storage: storage });
-app.use('/uploads', express.static('uploads'));
 
 app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: 'file-array' }]), async (req, res) => {
   const userId = req.params.userId;
 
   const { titulo, etiquetas, tipoArchivo, descripcion } = req.body;
   const singleFilePath = req.files['file'][0].path;
-
+  const etiquetasArray = etiquetas.split(',').map(etiqueta => etiqueta.trim());
   // Obtén solo el nombre del archivo único
   const singleFileName = path.basename(singleFilePath);
 
@@ -519,9 +508,10 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
       }
 
       const tipoArchivoId = result[0].id;
+      const etiquetasString = etiquetasArray.join(',');
       
       const query = 'INSERT INTO publicacion (autor, titulo, etiquetas, tipo_archivo, descripcion, ruta_archivo, ruta_archivo_array) VALUES (?, ?, ?, ?, ?, ?, ?)';
-      const values = [userId, titulo, etiquetas, tipoArchivoId, descripcion, singleFileName, multipleFilesNames.join(',')];
+      const values = [userId, titulo, etiquetasString, tipoArchivoId, descripcion, singleFileName, multipleFilesNames.join(',')];
 
       connection.query(query, values, (err, result) => {
         if (err) {

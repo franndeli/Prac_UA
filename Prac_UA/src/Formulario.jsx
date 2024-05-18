@@ -2,19 +2,18 @@ import React, { useState } from 'react';
 import './Formulario.css';
 import { useNavigate } from 'react-router-dom';
 import Datos from './Datos';
-import ConfirmationModal from './ConfirmarBorrarCuenta'; 
+import ConfirmationModal from './ConfirmarBorrarCuenta';
+import iconoSubir from './images/cam.svg';
+import camDefault from './images/cam_default.png';
 
 export default function Formulario() {
-
-  const userId = 6;
-
-  // Definimos el estado para controlar qué formulario se muestra y el color del botón
   const [formulario, setFormulario] = useState('usuario');
+  const [imagePreview, setImagePreview] = useState(camDefault);
   const [color, setColor] = useState('blue');
-  const [formData, setFormData] = useState({}); // Estado para almacenar datos del formulario
+  const [formData, setFormData] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-
+  const userId = localStorage.getItem('id_usuario');
   const navigate = useNavigate();
 
   const handleConfirmarCambios = async () => {
@@ -42,6 +41,11 @@ export default function Formulario() {
     }
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImagePreview(URL.createObjectURL(file));
+  };
+
   const handleBorrarCuenta = async () => {
     try {
       const response = await fetch(`http://localhost:3001/api/borrarUsuario/${userId}`, {
@@ -50,17 +54,15 @@ export default function Formulario() {
       if (!response.ok) {
         throw new Error('Error al borrar la cuenta');
       }
-      setShowConfirmationModal(false); // Ocultar modal después de borrar la cuenta
+      setShowConfirmationModal(false);
       console.log('Cuenta borrada exitosamente');
       navigate('/iniciarsesion');
-      // Aquí puedes redirigir o realizar otras acciones después de borrar la cuenta
     } catch (error) {
       console.error('Error al borrar la cuenta:', error);
     }
   };
 
   const handleModalConfirm = () => {
-    // Realizar acción después de confirmar cambios (puedes redirigir aquí si es necesario)
     navigate('/perfil-privado');
   };
 
@@ -79,22 +81,48 @@ export default function Formulario() {
     });
   };
 
-  // Función para cambiar el formulario a "usuario"
   const mostrarFormularioUsuario = () => {
     setFormulario('usuario');
     setColor('blue');
   };
 
-  // Función para cambiar el formulario a "sistema"
   const mostrarFormularioSistema = () => {
     setFormulario('sistema');
     setColor('blue');
   };
 
-  // Función para cambiar el color a blanco cuando se hace clic en otro botón
-  const cambiarColor = () => {
-    setColor('');
+  const handleCambiarFoto = async () => {
+    try {
+      const userId = localStorage.getItem('id_usuario');
+      if (!userId) {
+        throw new Error('No se encontró el id_usuario en el localStorage');
+      }
+  
+      const formDataToSend = new FormData();
+      const fileInput = document.getElementById('file');
+  
+      if (fileInput && fileInput.files.length > 0) {
+        formDataToSend.append('file', fileInput.files[0]);
+      } else {
+        throw new Error('Por favor seleccione un archivo');
+      }
+  
+      const response = await fetch(`http://localhost:3001/api/cambiarFoto/${userId}`, {
+        method: 'PUT',
+        body: formDataToSend,
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al cambiar la foto');
+      }
+  
+      // Actualizar la vista o realizar otras acciones necesarias después de cambiar la foto
+      console.log('Foto cambiada correctamente');
+    } catch (error) {
+      console.error('Error al cambiar la foto:', error);
+    }
   };
+  // Función para cambiar el color a blanco cuando se hace clic en otro botón
 
   return (
     <div>
@@ -137,6 +165,19 @@ export default function Formulario() {
                 <label htmlFor="Descripcion">Descripción:</label>
                 <textarea className="inputFormulario" id="Descripcion" cols={20} onChange={handleInputChange}/>
               </div> 
+            </div>
+
+            <div className="form-group-formulario imagen-subida-formulario">
+              <div className="image-upload-container-formulario">
+                  <img src={imagePreview} alt="Imagen por defecto" className="image-preview" />
+                  <input type="file" id="file" name="file" className="inputfile" onChange={handleImageChange} />
+                  <label htmlFor="file" className="image-upload-label-formulario">
+                      <div className="upload-icon-container">
+                          <img src={iconoSubir} alt="Subir" />
+                      </div>
+                  </label>
+              </div>
+              <button className="custom-button-Formulario" onClick={handleCambiarFoto}>Cambiar Foto</button>
             </div>
 
             <div>

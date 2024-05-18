@@ -154,7 +154,7 @@ const EditarArchivo = () => {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="tipo-archivo" id="leibel">Tipo de Contenido:</label>
-                                <select className="" id="tipo-archivo" name="tipoArchivo" value={tipoArchivo} onChange={handleTipoArchivoChange}>
+                                <select className="textarea-subir-select" id="tipo-archivo" name="tipoArchivo" value={tipoArchivo} onChange={handleTipoArchivoChange}>
                                     {tipo_academicos.map(t => (
                                         <option key={t.id} value={t.nombre}>{t.nombre}</option>
                                     ))}

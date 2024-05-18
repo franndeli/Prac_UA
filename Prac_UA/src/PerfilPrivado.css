@@ -10,10 +10,10 @@ h1{
 
 .InfoUsuario {
     display: flex;
-    border: 1px solid #0000ff;
+    border: 2px solid #0000ff;
     border-radius: 5px;
     padding: 10px;
-    max-width: 70%;
+    width: 1030px;
     margin: auto;
   }
   
@@ -28,7 +28,7 @@ h1{
 
   .button-custom{
     align-self: flex-end;
-    margin-right: 215px
+    margin-left: 180px;
   }
 
   .custom-button-blue {
@@ -80,5 +80,22 @@ h1{
   flex-wrap: wrap; /* Permitir que las tarjetas se envuelvan en múltiples líneas */
 }
 
+.BotonesAlaDerecha{
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-end;
+  align-items: flex-end;
+}
 
+.Img-archivo-Perfil{
+  border: 3px solid black;
+  border-radius: 8px;
+}
 
+.textarea-subir-select-perfil{
+  border-radius: 20px; /* Forma redonda */
+  padding: 0.25rem;
+  border: 2px solid #0000ff;
+  background-color: #ffffff;
+  margin-bottom: 10px; /* Espacio entre los selects */
+}

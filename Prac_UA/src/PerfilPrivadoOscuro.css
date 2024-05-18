@@ -13,7 +13,7 @@ h1{
     border: 1px solid #000068;
     border-radius: 5px;
     padding: 10px;
-    max-width: 70%;
+    width: 1030px;
     margin: auto;
   }
   
@@ -28,7 +28,12 @@ h1{
 
   .button-custom{
     align-self: flex-end;
-    margin-right: 215px
+    margin-left: 180px;
+  }
+
+  .Img-archivo-Perfil{
+    border: 3px solid black;
+    border-radius: 8px;
   }
 
   .custom-button-blue-dark {
@@ -80,5 +85,8 @@ h1{
   flex-wrap: wrap; /* Permitir que las tarjetas se envuelvan en múltiples líneas */
 }
 
-
+.Img-archivo-Perfil{
+  border: 3px solid black;
+  border-radius: 8px;
+}
   

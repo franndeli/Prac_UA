@@ -10,10 +10,10 @@ h1{
 
 .InfoUsuario {
     display: flex;
-    border: 1px solid #0000ff;
+    border: 2px solid #0000ff;
     border-radius: 5px;
     padding: 10px;
-    max-width: 70%;
+    width: 1030px;
     margin: auto;
   }
   
@@ -63,5 +63,10 @@ h1{
   .cards-container {
     display: flex;
     flex-wrap: wrap; /* Permitir que las tarjetas se envuelvan en múltiples líneas */
+  }
+
+  .Img-archivo-Perfil{
+    border: 3px solid black;
+    border-radius: 8px;
   }
  

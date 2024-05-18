@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const SubirArchivo = () => {
+    const [etiquetas, setEtiquetas] = useState('');
     const [imagePreview, setImagePreview] = useState(camDefault);
     const [tipoArchivo, setTipoArchivo] = useState('');
     const [tipo_academicos, setTipo_academico] = useState([]);
@@ -32,6 +33,17 @@ const SubirArchivo = () => {
         
         fetchTipo_academico();
     }, []);
+
+    const handleEtiquetasChange = (e) => {
+        const input = e.target.value;
+        const etiquetasArray = input.split(',').map(etiqueta => etiqueta.trim());
+
+        if (etiquetasArray.length <= 3) {
+            setEtiquetas(input);
+        } else {
+            alert('Solo puedes añadir hasta 3 etiquetas');
+        }
+    };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -119,11 +131,21 @@ const SubirArchivo = () => {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="etiquetas" id="leibel">Etiquetas:</label>
-                                <input type="text" id="etiquetas" className="textarea-subir" name="etiquetas" required />
+                                <input
+                                    type="text"
+                                    id="etiquetas"
+                                    className="textarea-subir"
+                                    name="etiquetas"
+                                    value={etiquetas}
+                                    onChange={handleEtiquetasChange}
+                                    required
+                                />
+                                <small>Escribe las etiquetas separadas por comas (,)</small>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="tipo-archivo" id="leibel">Tipo de Contenido:</label>
-                                <select className="" id="tipo-archivo" name="tipoArchivo" value={tipoArchivo} onChange={handleTipoArchivoChange}>
+                                <label htmlFor="tipo-archivo" id="leibel">Tipo de contenido:</label>
+                                <select className="textarea-subir-select" id="tipo-archivo" name="tipoArchivo" value={tipoArchivo} onChange={handleTipoArchivoChange}>
+                                    <option selected value="" disabled></option>
                                     {tipo_academicos.map(t => (
                                         <option key={t.id} value={t.nombre}>{t.nombre}</option>
                                     ))}
@@ -136,7 +158,7 @@ const SubirArchivo = () => {
                         </div>
                         <div className="cont2">
                             <div className="form-group imagen-subida lol">
-                                <div className="image-upload-container">
+                                <div className="image-upload-container-array">
                                     <img src={imagePreview} alt="Imagen por defecto" className="image-preview" />
                                     <input type="file" id="file" name="file" className="inputfile" onChange={handleImageChange} required />
                                     <label htmlFor="file" className="image-upload-label">
@@ -150,7 +172,9 @@ const SubirArchivo = () => {
                                 <h3 className="MultiArchivo_h3">MultiArchivos</h3>
                                 <div className="form-group imagen-subida">
                                     <div className="image-upload-container">
-                                        <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleFileChange} multiple ref={fileInputRef} />
+                                    <div className='icon_upload'>
+                                                <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleFileChange} multiple required />
+                                            </div>
                                     </div>
                                     <ul>
                                         {selectedFiles.map((file, index) => (

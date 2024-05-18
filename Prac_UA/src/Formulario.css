@@ -85,3 +85,53 @@
   background-color: transparent;
   color: #0074d9;
 }
+
+.form-group-formulario {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.image-upload-container-formulario{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imagen-subida-formulario{
+  width: 250px;
+  height: 250px;
+
+}
+
+.image-upload-label-formulario {
+  position: absolute;
+  bottom: 35px;
+  right: 645px;
+  padding: 5px;
+  background-color: #51b5ed;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  align-items: center;
+}
+
+.image-upload-label-formulario:hover {
+  background-color: #2980b9;
+}
+
+input[type="file"] {
+  /* Oculta el texto */
+  color: transparent;
+  /* Establece un ancho para el input */
+  width: 0.1px;
+  /* Establece la altura del input */
+  height: 0.1px;
+  /* Hace que el input sea completamente transparente */
+  opacity: 0;
+  /* Evita que el input ocupe espacio en el diseño */
+  overflow: hidden;
+  /* Establece la posición fuera de la pantalla */
+  position: absolute;
+  /* Desplaza el input fuera de la pantalla */
+  z-index: -1;
+}

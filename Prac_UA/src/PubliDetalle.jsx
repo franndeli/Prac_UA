@@ -8,13 +8,14 @@ import Btnguardar from './images/btn-guardar.png';
 import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import YouTube from 'react-youtube';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 export default function PubliDetalle() {
 
     const ruta = "http://localhost:3001/uploads";
-
+    const [datosConEtiquetas, setDatosConEtiquetas] = useState([]);
     const [datosUser, setUser] = useState([]);
-    const [showModal, setShowModal] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [newCommentTitle, setNewCommentTitle] = useState('');
@@ -29,6 +30,36 @@ export default function PubliDetalle() {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
     const publiID = id;
+
+    const handleDownload = async () => {
+        const zip = new JSZip();
+        const imgFolder = zip.folder("files");
+
+        for (const file of files) {
+            const response = await fetch(ruta + '/' + encodeURIComponent(file));
+            const blob = await response.blob();
+            imgFolder.file(file, blob);
+        }
+
+        zip.generateAsync({ type: "blob" }).then((content) => {
+            saveAs(content, "Contenidos.zip");
+        });
+    };
+
+    useEffect(() => {
+        const datosProcesados = datosUser.map(user => {
+            let etiquetas = [];
+            if (typeof user.EtiquetasPubli === 'string') {
+                try {
+                    etiquetas = JSON.parse(user.EtiquetasPubli) || [];
+                } catch (e) {
+                    etiquetas = [];
+                }
+            }
+            return { ...user, etiquetas: Array.isArray(etiquetas) ? etiquetas : [] };
+        });
+        setDatosConEtiquetas(datosProcesados);
+    }, [datosUser]);
 
     useEffect(() => {
         fetchComments();
@@ -253,8 +284,8 @@ export default function PubliDetalle() {
                                             videoId={extractYouTubeId(youtubeLink)}
                                             className="youtube-iframe"
                                             opts={{
-                                                width: '900',
-                                                height: '550',
+                                                width: '900px',
+                                                height: '550px',
                                                 playerVars: {
                                                     autoplay: 0,
                                                 },
@@ -267,7 +298,7 @@ export default function PubliDetalle() {
                                                     className="Img-archivo"
                                                     src={renderPreview(files[currentImageIndex])}
                                                     title="Document Preview"
-                                                    style={{ width: '900px', height: '550px' }}
+                                                    style={{ width: '900px', height: '550px', flexDirection: 'column', alignItems: ''}}
                                                 />
                                             ) : files[currentImageIndex].split('.').pop().toLowerCase() === 'txt' ? (
                                                 <iframe
@@ -284,18 +315,17 @@ export default function PubliDetalle() {
                                             )}
                                         </>
                                     )}
-                                    <div className='BotonesImage'>
+                                    <div className='BotonesImagePasar'>
                                         <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
                                         <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
                                     </div>
-                                </div>
                                 <div className="botons-archivo">
                                     <div id="btn-desc">
-                                        <a href={ruta + '/' + encodeURIComponent(files[currentImageIndex])} download>Descargar</a>
+                                    <button className="btn-guard" onClick={handleDownload}>Descargar</button>
                                         <img id="desc" src={BtnDescargar} alt="Descargar" />
                                     </div>
                                     <div id="btn-guard">
-                                        <button onClick={() => { 
+                                        <button className="btn-guard" onClick={() => { 
                                             if (user.guardado === 0) {
                                                 handleSavePubli();
                                             } else {
@@ -307,12 +337,14 @@ export default function PubliDetalle() {
                                         <img id="guard" src={Btnguardar} alt={user.guardado === 0 ? "Guardar" : "Quitar de Guardados"} />
                                     </div>
                                 </div>
+                                </div>
                             </div>
                             <div className="drchcont">
                                 <div className="infor-detalle">
                                     <h2 className="titulo-det">{user.titulo}</h2>
-                                    <h5 className="titulo-det2">{user.titulacion}</h5>
-                                    <a href={`/perfil-publico?userId=${user.id_usuario}`}>
+                                    <h5 className="titulo-det2">{user.Titulacion_nombre}</h5>
+                                    <h5 className="titulo-det3">{user.TituloAcademico}</h5>
+                                    <a className="userDirection" href={`/perfil-publico?userId=${user.id_usuario}`}>
                                         <div className="nom-y-logo">
                                             <img src={Persona} alt="usuario" />
                                             <p id="nomUsuario">{user.nombre}</p>
@@ -320,9 +352,15 @@ export default function PubliDetalle() {
                                     </a>
                                     <p id="descripci-det">{user.descripcion}</p>
                                     <div id="etiquetas-det">
-                                        <div id="eti1"><p id="pe">{user.etiquetas}</p></div>
-                                        <div id="eti2"><p id="pe">{user.etiquetas}</p></div>
-                                        <div id="eti3"><p id="pe">{user.etiquetas}</p></div>
+                                    {user.EtiquetasPubli && user.EtiquetasPubli.length > 0 ? (
+                                        user.EtiquetasPubli.split(',').map((etiqueta, index) => (
+                                            <div key={index} id={`eti${index + 1}`}>
+                                                <p id="pe">{etiqueta}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No hay etiquetas disponibles</p>
+                                    )}
                                     </div>
                                     <div className="estrellas-valoraciones">
                                         <p className="rating-count"></p>
@@ -381,7 +419,7 @@ export default function PubliDetalle() {
                     )}
                     <hr className="separador-coment2" />
                     <div className="final-coment">
-                        <h3 className="titulo-final">Escribe tu opinión:</h3>
+                    <h3 className="titulo-final">Escribe tu opinión:</h3>
                         <div className="valor-comentar">
                             <div className="estrellitas">
                                 <h7 id="tit">Valoración general</h7>

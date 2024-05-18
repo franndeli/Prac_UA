@@ -4,12 +4,17 @@ import Card from './Card.jsx';
 import Nav from './Nav.jsx';
 import './PerfilPublico.css';
 import { Link } from 'react-router-dom';
+import AdjustableSelect from './helpers/AdjustableSelects.jsx';
 
 export default function PerfilPublico() {
+
+  const ruta = "http://localhost:3001/uploads/resized";
   const [datosPublicos, setDatosPublicos] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
   const [tipoSeleccionado, setTipoSeleccionado] = useState("");
   const location = useLocation();
+  const [tipo_contenido, setTipoSeleccionadoTipo] = useState("");
+  const [tipo_contenidos, setTipoSeleccionados] = useState([]);
   const userId = new URLSearchParams(location.search).get("userId");
   console.log(userId);
 
@@ -45,7 +50,7 @@ export default function PerfilPublico() {
 
   const fotosFiltradas = publicaciones.filter(publicacion => {
     const nombreValido = publicacion.titulo;
-    const tipoValido = !tipoSeleccionado || publicacion.tipo_archivo === tipoSeleccionado;
+    const tipoValido = !tipo_contenido || publicacion.TiAc_Nombre === tipo_contenido;
     return nombreValido && tipoValido;
   });
 
@@ -56,8 +61,27 @@ export default function PerfilPublico() {
 
   useEffect(() => {
     fetchPublico();
+    fetchTipo_academico();
     fetchPublicaciones(userId);
   }, [userId]);
+
+  const handleTipoSeleccionadoTipo = (e) => {
+    const valorSeleccionado = e.target.value;
+    setTipoSeleccionadoTipo(valorSeleccionado);
+  }
+
+  const fetchTipo_academico = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/tipo_academico');
+      if (!response.ok) {
+        throw new Error('Error al cargar tipo_academico');
+      }
+      const data = await response.json();
+      setTipoSeleccionados(data);
+    } catch (error) {
+      console.error('Error al cargar las tipo_academico:', error);
+    }
+  };
 
   return (
     <div>
@@ -68,11 +92,15 @@ export default function PerfilPublico() {
           <div className='container'>
             <div className='InfoUsuario'>
               <div className='InfoUsuarioImage'>
-                <p>Poner Imagen</p>
+              <img 
+                  className="Img-archivo-Perfil" 
+                  src={ruta + '/' + encodeURIComponent(p.foto)} 
+                  alt="archivo" 
+                  />
               </div>
               <div className='InfoUsuarioText'>
                 <p>{p.nombre}</p>
-                <p>{p.titulacion}</p>
+                <p>{p.nombre_titulacion}</p>
                 <p>{p.descripcion}</p>
               </div>
             </div>
@@ -82,19 +110,12 @@ export default function PerfilPublico() {
       <div className='PublicacionesPublico'>
         <h2 className='PubliPublico'>Publicaciones</h2>
         <div className='select-container-Publico'>
-          <select name="Tipo" id="Tipo" onChange={handleTipoSeleccionado}>
-            <option defaultValue>Tipo</option>
-            <option>Word</option>
-                <option>PDF</option>
-                <option>Excel</option>
-                <option>Video</option>
-                <option>Audio</option>
-                <option>Practicas</option>
-                <option>TFG</option>
-                <option>TFM</option>
-                <option>Tesis</option>
-                <option>Otro</option>
-          </select>
+        <select className="textarea-subir-select-perfil" id="tipo-archivo" name="tipoArchivo" value={tipo_contenido} onChange={handleTipoSeleccionadoTipo}>
+                <option value="" selected>Tipo de contenido</option>
+                {tipo_contenidos.map(tipo => (
+                    <option key={tipo.id} value={tipo.nombre}>{tipo.nombre}</option>
+                ))}
+            </select>
         </div>
           <div className="cards-container">
             {fotosFiltradas.map(publicacion => (

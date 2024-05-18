@@ -9,6 +9,7 @@ import AdjustableSelect from './helpers/AdjustableSelects.jsx';
 
 export default function PerfilPrivado() {
 
+  const ruta = "http://localhost:3001/uploads/resized";
   const [datosPublicos, setDatosPublicos] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
   const [tipo_contenido, setTipoSeleccionado] = useState("");
@@ -46,7 +47,7 @@ export default function PerfilPrivado() {
 
   const fotosFiltradas = publicaciones.filter(publicacion => {
     const nombreValido = publicacion.titulo;
-    const tipoValido = !tipo_contenido || publicacion.tipo_archivo === tipo_contenido;
+    const tipoValido = !tipo_contenido || publicacion.TiAc_Nombre === tipo_contenido;
     return nombreValido && tipoValido;
   });
 
@@ -99,28 +100,39 @@ export default function PerfilPrivado() {
           <div className='container'>
             <div className={p.color === "Claro" ? 'InfoUsuario' : 'InfoUsuario-dark'}>
               <div className='InfoUsuarioImage'>
-                <p>Poner Imagen</p>
+              <img 
+                  className="Img-archivo-Perfil" 
+                  src={ruta + '/' + encodeURIComponent(p.foto)} 
+                  alt="archivo" 
+                  />
               </div>
               <div className='InfoUsuarioText'>
                 <p>{p.nombre}</p>
-                <p>{p.titulacion}</p>
+                <p>{p.nombre_titulacion}</p>
                 <p>{p.descripcion}</p>
               </div>
             </div>
-            <div className='button-custom'>
-              <button className={p.color === "Claro" ? 'custom-button-blue': 'custom-button-blue-dark'} onClick={handleEditarPerfilClick}>
-                Editar Perfil
-              </button>
-            </div>
-            <div className='button-custom'>
-              <button className={p.color === "Claro" ? 'custom-button-blue': 'custom-button-blue-dark'} onClick={handleCerrarSesion}>
-                Cerrar sesion
-              </button>
+            <div className='BotonesAlaDerecha'>
+              <div className='button-custom'>
+                <button className={p.color === "Claro" ? 'custom-button-blue': 'custom-button-blue-dark'} onClick={handleEditarPerfilClick}>
+                  Editar Perfil
+                </button>
+              </div>
+              <div className='button-custom'>
+                <button className={p.color === "Claro" ? 'custom-button-blue': 'custom-button-blue-dark'} onClick={handleCerrarSesion}>
+                  Cerrar sesion
+                </button>
+              </div>
             </div>
           </div>
           <div className='PublicacionesPrivado'>
             <h2 className='PubliPrivate'>Publicaciones</h2>
-            <AdjustableSelect options={tipo_contenidos} defaultText="Tipo" />
+            <select className="textarea-subir-select-perfil" id="tipo-archivo" name="tipoArchivo" value={tipo_contenido} onChange={handleTipoSeleccionado}>
+                <option value="" selected>Tipo de contenido</option>
+                {tipo_contenidos.map(tipo => (
+                    <option key={tipo.id} value={tipo.nombre}>{tipo.nombre}</option>
+                ))}
+            </select>
             <div className="cards-container">
               {fotosFiltradas.map(publicacion => (
                 <a href={`/publiDetalle?id=${publicacion.id}`}>
