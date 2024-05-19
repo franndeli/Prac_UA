@@ -1,4 +1,4 @@
-.card {
+.card-blue{
       width: 250px;
       border: 2px solid #1B5EBE;
       border-radius: 10px;
@@ -12,7 +12,25 @@
       cursor: pointer;
 }
 
-.card:hover{
+.card-yellow{
+      width: 250px;
+      border: 2px solid #bbff00;
+      border-radius: 10px;
+      background-color: #ffffff;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-right: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+      cursor: pointer;
+}
+
+.card-blue:hover{
+      transform: scale(1.05);
+}
+
+.card-yellow:hover{
       transform: scale(1.05);
 }
 
@@ -48,7 +66,7 @@
       margin-right: 2px;
 }
 
-.card-autor {
+.card-blue .card-autor {
       display: flex;
       justify-content: space-between; /* Distribuye el espacio entre los elementos */
       align-items: center; /* Centra verticalmente los elementos */
@@ -56,6 +74,18 @@
       font-size: 14px;
       padding: 7px;
       background-color: #1B5EBE;
+      color: #ffffff;
+      border-radius: 0 0 5px 5px;    
+}
+
+.card-yellow .card-autor {
+      display: flex;
+      justify-content: space-between; /* Distribuye el espacio entre los elementos */
+      align-items: center; /* Centra verticalmente los elementos */
+      color: #333;
+      font-size: 14px;
+      padding: 7px;
+      background-color: #bbff00;
       color: #ffffff;
       border-radius: 0 0 5px 5px;    
 }

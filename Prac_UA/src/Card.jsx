@@ -112,6 +112,51 @@ export default function Card({ photoId }) {
     });
   };
 
+  function determineCardColor(ruta_archivo) {
+    // Verificar que ruta_archivo no sea undefined ni null
+    if (ruta_archivo !== undefined && ruta_archivo !== null) {
+        // Dividir la cadena en un array de rutas de archivo
+        const filePaths = ruta_archivo.split(',');
+
+        // Crear un objeto para contar las ocurrencias de cada extensión
+        const extensionCounts = {};
+
+        // Contar las ocurrencias de cada extensión
+        filePaths.forEach(filePath => {
+            const extension = filePath.split('.').pop();
+            extensionCounts[extension] = (extensionCounts[extension] || 0) + 1;
+        });
+
+        // Encontrar la extensión con más ocurrencias
+        let mostCommonExtension = '';
+        let maxCount = 0;
+        for (const extension in extensionCounts) {
+            if (extensionCounts[extension] > maxCount) {
+                mostCommonExtension = extension;
+                maxCount = extensionCounts[extension];
+            }
+        }
+
+        // Asignar el color en base a la extensión más común
+        switch (mostCommonExtension) {
+            case 'pdf':
+                return '-blue';
+            case 'txt':
+                return '-green';
+            case 'png':
+            case'jpg':
+            case 'jpeg':
+                return '-yellow';
+            default:
+                return '';
+        }
+    } else {
+        console.error('La cadena ruta_archivo es undefined o null.');
+        return 'gray'; // O devuelve un color predeterminado en caso de error
+    }
+}
+
+
   useEffect(() => {
     fetchPhotoData();
   }, [photoId]);
@@ -119,7 +164,8 @@ export default function Card({ photoId }) {
   return (
     <div>
       {photoData.map((p) => (
-        <div className="card" key={p.id}>
+
+        <div className={`card${determineCardColor(p.ruta_archivo_array)}`} key={p.id}>
           <Link to={`/publiDetalle?id=${p.id}`} className="card-link">
             <div className="card-titulo">{p.titulo}</div>
             <div className="card-imagen">
