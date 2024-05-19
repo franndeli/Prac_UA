@@ -41,7 +41,11 @@ const SubirArchivo = () => {
         if (etiquetasArray.length <= 3) {
             setEtiquetas(input);
         } else {
-            alert('Solo puedes añadir hasta 3 etiquetas');
+            Swal.fire({
+                icon: 'Fail',
+                title: 'Etiquetas',
+                text: 'No se pueden poner mas de 3 etiquetas',
+            })
         }
     };
 

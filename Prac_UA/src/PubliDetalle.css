@@ -374,3 +374,8 @@
 #titulo-coment{
   text-align: center;
 }
+
+.userDirection{
+  text-decoration: none;
+  color: #000000;
+}

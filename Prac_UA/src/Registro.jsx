@@ -5,17 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import ConfirmarNuevoUsuario from './ConfirmarNuevoUsuario';
+import Swal from 'sweetalert2';
 
 export default function Registro() {
-
-    const handleModalConfirm = () => {
-        navigate('/iniciarsesion');
-        setShowModal(false);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
 
     const navigate = useNavigate();
 
@@ -27,7 +19,6 @@ export default function Registro() {
     const [repetir_contraseña, setRepetirContraseña] = useState('');
     const [titulacion, setTitulacion] = useState(''); // Estado para el ID de la titulación seleccionada
     const [titulaciones, setTitulaciones] = useState([]); // Estado para la lista de todas las titulaciones
-    const [showModal, setShowModal] = useState(false);
 
     const handleUsuarioChange = (e) => setUsuario(e.target.value);
     const handleContraseñaChange = (e) => setContraseña(e.target.value);
@@ -81,7 +72,13 @@ export default function Registro() {
             }
 
             // Renderizar el modal si showModal es true
-            setShowModal(true);
+            Swal.fire({
+                icon: 'success',
+                title: 'Usuario registrado',
+                text: 'El usuario se ha registrado correctamente.',
+            }).then(() => {
+                navigate('/iniciarsesion');
+            });
             // Aquí puedes redirigir al usuario a la página de inicio de sesión o hacer cualquier otra acción
         } catch (error) {
             alert(error.message);
@@ -203,13 +200,6 @@ export default function Registro() {
                 <hr className="separador"/>
                 <p className="registrate">¿Ya tienes una cuenta? <a href="/iniciarsesion">Inicia sesión</a> </p>
             </div>
-
-            {showModal && (
-            <ConfirmarNuevoUsuario
-                onClose={handleCloseModal}
-                onConfirm={handleModalConfirm}
-            />
-      )}
 
         </div>
     );

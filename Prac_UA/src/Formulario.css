@@ -99,7 +99,7 @@
 
 .imagen-subida-formulario{
   width: 250px;
-  height: 250px;
+  height: 400px;
 
 }
 
@@ -119,7 +119,7 @@
   background-color: #2980b9;
 }
 
-input[type="file"] {
+.inputfileFormulario {
   /* Oculta el texto */
   color: transparent;
   /* Establece un ancho para el input */

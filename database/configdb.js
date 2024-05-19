@@ -263,7 +263,7 @@ app.put('/api/desguardarPubli/:idpubli', (req, res) => {
 
 app.get('/api/perfil/:idUsuario', (req, res) => {
   const { idUsuario } = req.params;
-  const SQL_QUERY = 'SELECT * FROM usuario WHERE id = ?';
+  const SQL_QUERY = 'SELECT u.*, t.nombre as nombre_titulacion FROM usuario u , titulaciones t WHERE u.id = ? and u.titulacion = t.id';
   connection.query(SQL_QUERY, [idUsuario], (err, result) => {
     if (err) {
       console.error("Error al obtener el perfil del usuario:", err);
@@ -418,7 +418,7 @@ app.get('/api/mostrarComentarios/:idPublicacion', (req, res) => {
 
 app.get('/api/biblioteca', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
-  const query = 'SELECT p.* FROM publicacion p, usuario u WHERE guardado = 1 and p.autor = u.id';
+  const query = 'SELECT p.*, tiAc.nombre as TiAc_Nombre FROM publicacion p, tipo_academico tiAc, usuario u where p.tipo_archivo = tiAc.id and p.guardado = 1 and p.autor = u.id';
 
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {

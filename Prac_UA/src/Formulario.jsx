@@ -5,13 +5,13 @@ import Datos from './Datos';
 import ConfirmationModal from './ConfirmarBorrarCuenta';
 import iconoSubir from './images/cam.svg';
 import camDefault from './images/cam_default.png';
+import Swal from 'sweetalert2';
 
 export default function Formulario() {
   const [formulario, setFormulario] = useState('usuario');
   const [imagePreview, setImagePreview] = useState(camDefault);
   const [color, setColor] = useState('blue');
   const [formData, setFormData] = useState({});
-  const [showModal, setShowModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const userId = localStorage.getItem('id_usuario');
   const navigate = useNavigate();
@@ -35,7 +35,15 @@ export default function Formulario() {
       if (!response.ok) {
         throw new Error('Error al guardar los datos del servidor !!');
       }
-      setShowModal(true);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Datos cambiados',
+        text: 'Los datos se han cambiado correctamente.',
+    }).then(() => {
+        navigate('/perfil-privado');
+    });
+
     } catch (error) {
       console.log('Error al guardar los datos !!', error);
     }
@@ -54,24 +62,18 @@ export default function Formulario() {
       if (!response.ok) {
         throw new Error('Error al borrar la cuenta');
       }
-      setShowConfirmationModal(false);
-      console.log('Cuenta borrada exitosamente');
-      navigate('/iniciarsesion');
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Usuario eliminado',
+        text: 'El usuario se ha eliminado correctamente',
+    }).then(() => {
+        navigate('/iniciarsesion');
+    });
+
     } catch (error) {
       console.error('Error al borrar la cuenta:', error);
     }
-  };
-
-  const handleModalConfirm = () => {
-    navigate('/perfil-privado');
-  };
-
-  const handleCloseConfirmationModal = () => {
-    setShowConfirmationModal(false);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
   };
 
   const handleInputChange = (e) => {
@@ -116,6 +118,14 @@ export default function Formulario() {
         throw new Error('Error al cambiar la foto');
       }
   
+      Swal.fire({
+        icon: 'success',
+        title: 'Foto cambiada',
+        text: 'La foto se ha cambiado correctamente.',
+    }).then(() => {
+        navigate('/perfil-privado');
+    });
+
       // Actualizar la vista o realizar otras acciones necesarias después de cambiar la foto
       console.log('Foto cambiada correctamente');
     } catch (error) {
@@ -170,7 +180,7 @@ export default function Formulario() {
             <div className="form-group-formulario imagen-subida-formulario">
               <div className="image-upload-container-formulario">
                   <img src={imagePreview} alt="Imagen por defecto" className="image-preview" />
-                  <input type="file" id="file" name="file" className="inputfile" onChange={handleImageChange} />
+                  <input type="file" id="file" name="file" className="inputfileFormulario" onChange={handleImageChange} />
                   <label htmlFor="file" className="image-upload-label-formulario">
                       <div className="upload-icon-container">
                           <img src={iconoSubir} alt="Subir" />
@@ -181,7 +191,7 @@ export default function Formulario() {
             </div>
 
             <div>
-              <button className="custom-button-Formulario-red" onClick={() => setShowConfirmationModal(true)}>Borrar cuenta</button>
+              <button className="custom-button-Formulario-red" onClick={handleBorrarCuenta}>Borrar cuenta</button>
               <button className={`custom-button-Formulario ${color}`} onClick={handleConfirmarCambios}>Guardar Cambios</button>
             </div>
           </fieldset>
@@ -253,23 +263,6 @@ export default function Formulario() {
             </div>
           </fieldset>
         </div>
-      )}
-
-      {/* Renderizar el modal si showModal es true */}
-      {showModal && (
-        <Datos
-          data={formData}
-          onClose={handleCloseModal}
-          onConfirm={handleModalConfirm}
-        />
-      )}
-
-      {/* Renderizar el modal de advertencia al intentar borrar cuenta si showConfirmationModal es true */}
-      {showConfirmationModal && (
-        <ConfirmationModal 
-        onClose={handleCloseConfirmationModal}
-        onConfirm={handleBorrarCuenta }
-        />
       )}
 
     </div>

@@ -49,11 +49,13 @@ export default function Categoria() {
 
 
   const fotosFiltradas = fotos.filter(publicacion => {
-    const nombreValido =!tipo_contenido || publicacion.TipoAcademicoNombre === tipo_contenido;
-    const tipoValido = !tipo_academico || publicacion.tipo_academico === tipo_contenido;
+    const nombreValido = publicacion.titulo;
+    const tipoValido = !tipo_contenido || publicacion.TiAc_Nombre === tipo_contenido;
     return nombreValido && tipoValido;
   });
 
+  console.log(tipo_academico);
+  console.log(tipo_contenido);
 
   return (
     <div className="categoria">
@@ -61,16 +63,16 @@ export default function Categoria() {
       <h1 className="categoria_h1">TU BIBLIOTECA</h1>
       <div className="categoria_body">
         <div className="categoria_selects">
-        <select className="textarea-subir-select-perfil" id="tipo-archivo" name="tipoArchivo" value={tipo_academico} onChange={handleTipoSeleccionado}>
+        <select className="textarea-subir-select-perfil" id="tipo-archivo" name="tipoArchivo" value={tipo_contenido} onChange={handleTipoSeleccionado}>
                 <option value="" selected>Tipo de contenido</option>
-                {fotosFiltradas.map(tipo => (
+                {tipo_academico.map(tipo => (
                     <option key={tipo.id} value={tipo.nombre}>{tipo.nombre}</option>
                 ))}
             </select>
         </div>
       </div>
       <div className='categoria_publicaciones'>
-          {fotos.map(foto => (
+          {fotosFiltradas.map(foto => (
             <Card key={foto.id} photoId={foto.id} />
           ))}
         </div>
