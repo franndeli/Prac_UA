@@ -177,7 +177,7 @@ export default function Card({ photoId }) {
             <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.visitas}
           </div>
           <div className="card-autor">
-            <div>{p.nombre_usuario}</div>
+            <div className='NombreCard'>{p.nombre_usuario}</div>
             <div className="icono_guardar_tu_biblioteca">
               {location.pathname === '/tu_biblioteca' && (
                 <FontAwesomeIcon
