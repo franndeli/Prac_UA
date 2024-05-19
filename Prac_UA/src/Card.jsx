@@ -137,6 +137,9 @@ export default function Card({ photoId }) {
             }
         }
 
+        console.log(maxCount);
+        console.log(mostCommonExtension);
+
         // Asignar el color en base a la extensión más común
         switch (mostCommonExtension) {
             case 'pdf':
@@ -148,7 +151,7 @@ export default function Card({ photoId }) {
             case 'jpeg':
                 return '-yellow';
             default:
-                return '';
+                return '-grey';
         }
     } else {
         console.error('La cadena ruta_archivo es undefined o null.');

@@ -12,7 +12,6 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
 export default function PubliDetalle() {
-
     const ruta = "http://localhost:3001/uploads";
     const [datosConEtiquetas, setDatosConEtiquetas] = useState([]);
     const [datosUser, setUser] = useState([]);
@@ -90,17 +89,10 @@ export default function PubliDetalle() {
             setUser(data);
             setLoading(false);
 
-            const txtFile = additionalFiles.find(file => file.endsWith('.txt'));
-            if (txtFile) {
-                const filePath = `${ruta}/${encodeURIComponent(txtFile)}`;
-                const response = await fetch(filePath);
-                const text = await response.text();
-                console.log(text);
-                if (text.includes('youtube.com') || text.includes('youtu.be')) {
-                    setYoutubeLink(text.trim());
-                }
+            const youtubeFile = additionalFiles.find(file => file.includes('youtube.com') || file.includes('youtu.be'));
+            if (youtubeFile) {
+                setYoutubeLink(youtubeFile);
             }
-            console.log(youtubeLink);
         } catch (error) {
             console.log('Error al obtener los datos !!', error);
         }
@@ -270,6 +262,11 @@ export default function PubliDetalle() {
         return matches ? matches[1] : null;
     };
 
+    const isImageFile = (fileName) => {
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
+    };
+
     return (
         <div>
             <Nav /> 
@@ -278,8 +275,8 @@ export default function PubliDetalle() {
                     <div key={user.id}>
                         <div className="infocont">
                             <div className="izqcont">
-                            <div className='multiImage'>
-                                    {files[currentImageIndex].endsWith('.txt') && youtubeLink ? (
+                                <div className='multiImage'>
+                                    {youtubeLink && files[currentImageIndex] === youtubeLink ? (
                                         <YouTube
                                             videoId={extractYouTubeId(youtubeLink)}
                                             className="youtube-iframe"
@@ -293,7 +290,14 @@ export default function PubliDetalle() {
                                         />
                                     ) : (
                                         <>
-                                            {['pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(files[currentImageIndex].split('.').pop().toLowerCase()) ? (
+                                            {isImageFile(files[currentImageIndex]) ? (
+                                                <img
+                                                    className="Img-archivo"
+                                                    src={renderPreview(files[currentImageIndex])}
+                                                    alt="Image File Preview"
+                                                    style={{ width: '900px', height: '550px' }}
+                                                />
+                                            ) : ['pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(files[currentImageIndex].split('.').pop().toLowerCase()) ? (
                                                 <iframe
                                                     className="Img-archivo"
                                                     src={renderPreview(files[currentImageIndex])}
@@ -315,13 +319,16 @@ export default function PubliDetalle() {
                                             )}
                                         </>
                                     )}
-                                    <div className='BotonesImagePasar'>
-                                        <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
-                                        <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
-                                    </div>
+                                    {files.length > 1 && (
+                                        <div className='BotonesImagePasar'>
+                                            <button className='botonImagesPasar' onClick={handlePrevImage}>Anterior</button>
+                                            <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="botons-archivo">
                                     <div id="btn-desc">
-                                    <button className="btn-guard" onClick={handleDownload}>Descargar</button>
+                                        <button className="btn-guard" onClick={handleDownload}>Descargar</button>
                                         <img id="desc" src={BtnDescargar} alt="Descargar" />
                                     </div>
                                     <div id="btn-guard">
@@ -336,7 +343,6 @@ export default function PubliDetalle() {
                                         </button>
                                         <img id="guard" src={Btnguardar} alt={user.guardado === 0 ? "Guardar" : "Quitar de Guardados"} />
                                     </div>
-                                </div>
                                 </div>
                             </div>
                             <div className="drchcont">

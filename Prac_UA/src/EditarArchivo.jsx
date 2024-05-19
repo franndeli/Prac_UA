@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const EditarArchivo = () => {
-    const { id } = useParams(); // Obtén el ID del archivo desde la URL
+    const { id } = useParams();
     const [imagePreview, setImagePreview] = useState(camDefault);
     const [titulo, setTitulo] = useState('');
     const [etiquetas, setEtiquetas] = useState('');
@@ -51,12 +51,10 @@ const EditarArchivo = () => {
                 setEtiquetas(archivo.etiquetas);
                 setDescripcion(archivo.descripcion);
                 setTipoArchivo(archivo.tipo_academico_nombre);
-                setYoutubeLink(archivo.youtubeLink);
-                // Aquí asumiendo que el archivo tiene una propiedad `imagePreview`
+                const youtubeLinkFromDB = archivo.ruta_archivo_array ? archivo.ruta_archivo_array.split(',').find(file => file.includes('youtube.com') || file.includes('youtu.be')) : '';
+                setYoutubeLink(youtubeLinkFromDB || '');
                 setImagePreview(`${ruta}/${archivo.ruta_archivo}` || camDefault);
-                // Aquí asumiendo que el archivo tiene una propiedad `selectedFiles` como lista de archivos
-                // setSelectedFiles(archivo.ruta_archivo_array || []);
-                console.log(imagePreview);
+                setSelectedFiles(archivo.ruta_archivo_array ? archivo.ruta_archivo_array.split(',').filter(file => !file.includes('youtube.com') && !file.includes('youtu.be')) : []);
             } catch (error) {
                 console.error('Error al cargar los datos del archivo:', error);
             }
@@ -76,8 +74,8 @@ const EditarArchivo = () => {
         setSelectedFiles(prevFiles => {
             const updatedFiles = [...prevFiles];
             files.forEach(file => {
-                if (!updatedFiles.some(f => f.name === file.name && f.size === file.size)) {
-                    updatedFiles.push(file);
+                if (!updatedFiles.some(f => f === file.name)) {
+                    updatedFiles.push(file.name);
                 }
             });
             return updatedFiles;
@@ -85,8 +83,26 @@ const EditarArchivo = () => {
         fileInputRef.current.value = null;
     };
 
-    const handleRemoveFile = (index) => {
-        setSelectedFiles(prevFiles => prevFiles.filter((file, i) => i !== index));
+    const handleRemoveFile = async (fileName) => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/eliminarArchivo/${id}/${fileName}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al eliminar el archivo');
+            }
+
+            setSelectedFiles(prevFiles => prevFiles.filter(file => file !== fileName));
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Archivo eliminado',
+                text: 'El archivo se ha eliminado correctamente',
+            });
+        } catch (error) {
+            console.error('Error al eliminar el archivo:', error);
+        }
     };
 
     const handleTituloChange = (e) => setTitulo(e.target.value);
@@ -99,15 +115,19 @@ const EditarArchivo = () => {
         e.preventDefault();
         const formData = new FormData();
         const singleFile = document.getElementById('file').files[0];
-        const youtubeLink = document.getElementById('youtubeLink').value;
+        console.log(singleFile);
 
         formData.append('file', singleFile);
-        selectedFiles.forEach((file, index) => {
-            formData.append('file-array', file);
+
+        selectedFiles.forEach((file) => {
+            if (file instanceof File) {
+                formData.append('file-array', file);
+            } else {
+                formData.append('file-array-existing', file);
+            }
         });
 
-        const youtubeLinkBlob = new Blob([youtubeLink], { type: 'text/plain' });
-        formData.append('file-array', youtubeLinkBlob, 'youtubeLink.txt');
+        formData.append('youtubeLink', youtubeLink);
 
         formData.append('titulo', titulo);
         formData.append('etiquetas', etiquetas);
@@ -186,8 +206,8 @@ const EditarArchivo = () => {
                                     <ul>
                                         {selectedFiles.map((file, index) => (
                                             <li key={index}>
-                                                {file.name}
-                                                <button type="button" onClick={() => handleRemoveFile(index)}>Eliminar</button>
+                                                {typeof file === 'string' ? file : file.name}
+                                                <button type="button" onClick={() => handleRemoveFile(typeof file === 'string' ? file : file.name)}>Eliminar</button>
                                             </li>
                                         ))}
                                     </ul>

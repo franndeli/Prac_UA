@@ -40,6 +40,20 @@
       cursor: pointer;
 }
 
+.card-grey{
+      width: 250px;
+      border: 2px solid #989898;
+      border-radius: 10px;
+      background-color: #ffffff;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-right: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+      cursor: pointer;
+}
+
 .card-blue:hover{
       transform: scale(1.05);
 }
@@ -49,6 +63,10 @@
 }
 
 .card-green:hover{
+      transform: scale(1.05);
+}
+
+.card-grey:hover{
       transform: scale(1.05);
 }
 
@@ -116,6 +134,18 @@
       font-size: 14px;
       padding: 7px;
       background-color: #00ff2a;
+      color: #ffffff;
+      border-radius: 0 0 5px 5px;    
+}
+
+.card-grey .card-autor {
+      display: flex;
+      justify-content: space-between; /* Distribuye el espacio entre los elementos */
+      align-items: center; /* Centra verticalmente los elementos */
+      color: #333;
+      font-size: 14px;
+      padding: 7px;
+      background-color: #989898;
       color: #ffffff;
       border-radius: 0 0 5px 5px;    
 }

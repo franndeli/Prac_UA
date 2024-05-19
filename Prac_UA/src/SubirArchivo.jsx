@@ -17,20 +17,20 @@ const SubirArchivo = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
-    useEffect(() =>{
+    useEffect(() => {
         const fetchTipo_academico = async () => {
             try {
-              const response = await fetch('http://localhost:3001/api/tipo_academico');
-              if (!response.ok) {
-                throw new Error('Error al cargar tipo_academico');
-              }
-              const data = await response.json();
-              setTipo_academico(data);
+                const response = await fetch('http://localhost:3001/api/tipo_academico');
+                if (!response.ok) {
+                    throw new Error('Error al cargar tipo_academico');
+                }
+                const data = await response.json();
+                setTipo_academico(data);
             } catch (error) {
-              console.error('Error al cargar las tipo_academico:', error);
+                console.error('Error al cargar las tipo_academico:', error);
             }
-          };
-        
+        };
+
         fetchTipo_academico();
     }, []);
 
@@ -42,10 +42,10 @@ const SubirArchivo = () => {
             setEtiquetas(input);
         } else {
             Swal.fire({
-                icon: 'Fail',
+                icon: 'error',
                 title: 'Etiquetas',
-                text: 'No se pueden poner mas de 3 etiquetas',
-            })
+                text: 'No se pueden poner más de 3 etiquetas',
+            });
         }
     };
 
@@ -65,7 +65,9 @@ const SubirArchivo = () => {
             });
             return updatedFiles;
         });
-        fileInputRef.current.value = null;
+        if (fileInputRef.current) {
+            fileInputRef.current.value = null;
+        }
     };
 
     const handleRemoveFile = (index) => {
@@ -84,15 +86,15 @@ const SubirArchivo = () => {
         e.preventDefault();
         const formData = new FormData();
         const singleFile = document.getElementById('file').files[0];
-        const youtubeLink = document.getElementById('youtubeLink').value;
 
         formData.append('file', singleFile);
-        selectedFiles.forEach((file, index) => {
+        selectedFiles.forEach((file) => {
             formData.append('file-array', file);
         });
 
-        const youtubeLinkBlob = new Blob([youtubeLink], { type: 'text/plain' });
-        formData.append('file-array', youtubeLinkBlob, 'youtubeLink.txt');
+        if (youtubeLink.trim() !== '') {
+            formData.append('file-array', youtubeLink);
+        }
 
         formData.append('titulo', document.getElementById('titulo').value);
         formData.append('etiquetas', document.getElementById('etiquetas').value);
@@ -126,7 +128,7 @@ const SubirArchivo = () => {
             <Nav />
             <legend>SUBIR ARCHIVO</legend>
             <div className="SubirArchivo-container">
-                <form method="POST" action="/tu-endpoint" encType="multipart/form-data" onSubmit={handleSubmit}>
+                <form method="POST" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <fieldset className="fielsetSubirArchivo">
                         <div className="cont1">
                             <div className="form-group">
@@ -176,9 +178,9 @@ const SubirArchivo = () => {
                                 <h3 className="MultiArchivo_h3">MultiArchivos</h3>
                                 <div className="form-group imagen-subida">
                                     <div className="image-upload-container">
-                                    <div className='icon_upload'>
-                                                <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleFileChange} multiple required />
-                                            </div>
+                                        <div className='icon_upload'>
+                                            <input type="file" id="file-array" name="file-array" className="inputfile" onChange={handleMultipleFileChange} multiple ref={fileInputRef} />
+                                        </div>
                                     </div>
                                     <ul>
                                         {selectedFiles.map((file, index) => (
