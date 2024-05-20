@@ -544,99 +544,103 @@ app.post('/api/subirArchivo/:userId', upload.fields([{ name: 'file' }, { name: '
   }
 });
 
-app.put('/api/editarArchivo/:id', upload.fields([{ name: 'file' }, { name: 'file-array' }, { name: 'file-array-existing' }]), async (req, res) => {
+app.put('/api/editarArchivo/:id', upload.fields([{ name: 'file' }, { name: 'file-array' }]), async (req, res) => {
   const { id } = req.params;
   const { titulo, etiquetas, tipoArchivo, descripcion, youtubeLink } = req.body;
   console.log(req.body);
   const etiquetasArray = etiquetas.split(',').map(etiqueta => etiqueta.trim());
 
-  let singleFilePath = req.files['file'] ? req.files['file'][0].path : null;
-  const singleFileName = singleFilePath ? path.basename(singleFilePath) : null;
-
-  // Obtener el archivo existente de la base de datos
-  const GET_EXISTING_FILES_QUERY = 'SELECT ruta_archivo_array FROM publicacion WHERE id = ?';
+  // Obtener la imagen y los archivos existentes de la base de datos
+  const GET_EXISTING_FILES_QUERY = 'SELECT ruta_archivo, ruta_archivo_array FROM publicacion WHERE id = ?';
   connection.query(GET_EXISTING_FILES_QUERY, [id], (err, result) => {
-      if (err) {
-          console.error("Error al obtener archivos existentes:", err);
-          res.status(500).json({ error: "Error al obtener archivos existentes" });
-          return;
-      }
-
-      let existingFiles = result.length > 0 ? result[0].ruta_archivo_array.split(',') : [];
-
-      let newFiles = [];
-      if (req.files['file-array']) {
-          newFiles = req.files['file-array'].map((file) => {
-              const filePath = file.path;
-              const fileName = path.basename(filePath);
-              return fileName;
-          });
-      }
-
-      let existingFilesFromForm = req.body['file-array-existing'] ? (Array.isArray(req.body['file-array-existing']) ? req.body['file-array-existing'] : [req.body['file-array-existing']]) : [];
-
-      // Agregar los archivos existentes que no son enlaces de YouTube
-      existingFiles = existingFiles.filter(file => !file.includes('youtube.com') && !file.includes('youtu.be'));
-
-      // Agregar los nuevos archivos subidos
-      existingFiles = [...existingFiles, ...newFiles, ...existingFilesFromForm];
-
-      // Agregar el nuevo enlace de YouTube si existe
-      if (youtubeLink && youtubeLink.trim() !== '') {
-          existingFiles = existingFiles.filter(file => !file.includes('youtube.com') && !file.includes('youtu.be'));
-          existingFiles.push(youtubeLink);
-      }
-
-      const TIPO_ARCHIVO_QUERY = 'SELECT id FROM tipo_academico WHERE nombre = ?';
-      connection.query(TIPO_ARCHIVO_QUERY, [tipoArchivo], (err, result) => {
-          if (err) {
-              console.error("Error al verificar el tipo de archivo:", err);
-              res.status(500).json({ error: "Error al verificar el tipo de archivo" });
-              return;
-          }
-
-          if (result.length === 0) {
-              res.status(400).json({ error: "El tipo de archivo no existe" });
-              return;
-          }
-
-          const tipoArchivoId = result[0].id;
-          const etiquetasString = etiquetasArray.join(',');
-
-          const updateQuery = 'UPDATE publicacion SET titulo = ?, etiquetas = ?, tipo_archivo = ?, descripcion = ?, ruta_archivo = ?, ruta_archivo_array = ? WHERE id = ?';
-          const values = [titulo, etiquetasString, tipoArchivoId, descripcion, singleFileName, existingFiles.join(','), id];
-
-          connection.query(updateQuery, values, (err, result) => {
-              if (err) {
-                  console.error('Error al actualizar archivo en la base de datos:', err);
-                  res.status(500).send('Error al actualizar archivo');
-              } else {
-                  res.status(200).send('Archivo actualizado correctamente');
-              }
-          });
-      });
-  });
-});
-
-app.delete('/api/eliminarArchivo/:idPubli/:fileName', (req, res) => {
-  const { idPubli, fileName } = req.params;
-  const DELETE_QUERY = 'UPDATE publicacion SET ruta_archivo_array = REPLACE(ruta_archivo_array, ?, "") WHERE id = ?';
-  
-  connection.query(DELETE_QUERY, [fileName, idPubli], (err, result) => {
     if (err) {
-      console.error("Error al eliminar el archivo:", err);
-      res.status(500).json({ error: "Error al eliminar el archivo" });
+      console.error("Error al obtener archivos existentes:", err);
+      res.status(500).json({ error: "Error al obtener archivos existentes" });
       return;
     }
-    // Opcionalmente, también puedes eliminar el archivo físicamente del servidor
-    const filePath = path.join(uploadsDir, fileName);
-    fs.unlink(filePath, (err) => {
+
+    const existingData = result[0];
+    let singleFileName = existingData.ruta_archivo;
+    if (req.files['file'] && req.files['file'][0]) {
+      const singleFilePath = req.files['file'][0].path;
+      singleFileName = path.basename(singleFilePath);
+    }
+
+    // Obtener los nuevos archivos subidos
+    let newFiles = [];
+    if (req.files['file-array']) {
+      newFiles = req.files['file-array'].map((file) => {
+        const filePath = file.path;
+        const fileName = path.basename(filePath);
+        return fileName;
+      });
+    }
+
+    // Obtener los archivos existentes del formulario (los que no se han eliminado)
+    let existingFilesFromForm = req.body['file-array-existing'] ? (Array.isArray(req.body['file-array-existing']) ? req.body['file-array-existing'] : [req.body['file-array-existing']]) : [];
+
+    // Combinar los archivos nuevos con los existentes proporcionados en el formulario
+    let updatedFiles = [...existingFilesFromForm, ...newFiles];
+
+    // Agregar el nuevo enlace de YouTube si existe
+    if (youtubeLink && youtubeLink.trim() !== '') {
+      updatedFiles = updatedFiles.filter(file => !file.includes('youtube.com') && !file.includes('youtu.be'));
+      updatedFiles.push(youtubeLink);
+    }
+
+    const TIPO_ARCHIVO_QUERY = 'SELECT id FROM tipo_academico WHERE nombre = ?';
+    connection.query(TIPO_ARCHIVO_QUERY, [tipoArchivo], (err, result) => {
       if (err) {
-        console.error("Error al eliminar el archivo del sistema de archivos:", err);
-        res.status(500).json({ error: "Error al eliminar el archivo del sistema de archivos" });
+        console.error("Error al verificar el tipo de archivo:", err);
+        res.status(500).json({ error: "Error al verificar el tipo de archivo" });
         return;
       }
-      res.json({ message: "Archivo eliminado correctamente" });
+
+      if (result.length === 0) {
+        res.status(400).json({ error: "El tipo de archivo no existe" });
+        return;
+      }
+
+      const tipoArchivoId = result[0].id;
+      const etiquetasString = etiquetasArray.join(',');
+
+      const updateQuery = 'UPDATE publicacion SET titulo = ?, etiquetas = ?, tipo_archivo = ?, descripcion = ?, ruta_archivo = ?, ruta_archivo_array = ? WHERE id = ?';
+      const values = [titulo, etiquetasString, tipoArchivoId, descripcion, singleFileName, updatedFiles.join(','), id];
+
+      connection.query(updateQuery, values, (err, result) => {
+        if (err) {
+          console.error('Error al actualizar archivo en la base de datos:', err);
+          res.status(500).send('Error al actualizar archivo');
+        } else {
+          res.status(200).send('Archivo actualizado correctamente');
+        }
+      });
     });
   });
 });
+
+
+
+// app.delete('/api/eliminarArchivo/:idPubli/:fileName', (req, res) => {
+//   const { idPubli, fileName } = req.params;
+//   const DELETE_QUERY = 'UPDATE publicacion SET ruta_archivo_array = REPLACE(ruta_archivo_array, ?, "") WHERE id = ?';
+
+//   connection.query(DELETE_QUERY, [fileName, idPubli], (err, result) => {
+//     if (err) {
+//       console.error("Error al eliminar el archivo:", err);
+//       res.status(500).json({ error: "Error al eliminar el archivo" });
+//       return;
+//     }
+//     // Opcionalmente, también puedes eliminar el archivo físicamente del servidor
+//     const filePath = path.join(uploadsDir, fileName);
+//     fs.unlink(filePath, (err) => {
+//       if (err) {
+//         console.error("Error al eliminar el archivo del sistema de archivos:", err);
+//         res.status(500).json({ error: "Error al eliminar el archivo del sistema de archivos" });
+//         return;
+//       }
+//       res.json({ message: "Archivo eliminado correctamente" });
+//     });
+//   });
+// });
+

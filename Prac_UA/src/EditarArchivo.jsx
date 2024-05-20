@@ -16,6 +16,7 @@ const EditarArchivo = () => {
     const [tipo_academicos, setTipo_academico] = useState([]);
     const [youtubeLink, setYoutubeLink] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [existingImage, setExistingImage] = useState('');
     const storedUserId = localStorage.getItem('id_usuario');
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
@@ -54,6 +55,7 @@ const EditarArchivo = () => {
                 const youtubeLinkFromDB = archivo.ruta_archivo_array ? archivo.ruta_archivo_array.split(',').find(file => file.includes('youtube.com') || file.includes('youtu.be')) : '';
                 setYoutubeLink(youtubeLinkFromDB || '');
                 setImagePreview(`${ruta}/${archivo.ruta_archivo}` || camDefault);
+                setExistingImage(archivo.ruta_archivo || ''); // Guardar la imagen existente
                 setSelectedFiles(archivo.ruta_archivo_array ? archivo.ruta_archivo_array.split(',').filter(file => !file.includes('youtube.com') && !file.includes('youtu.be')) : []);
             } catch (error) {
                 console.error('Error al cargar los datos del archivo:', error);
@@ -74,35 +76,15 @@ const EditarArchivo = () => {
         setSelectedFiles(prevFiles => {
             const updatedFiles = [...prevFiles];
             files.forEach(file => {
-                if (!updatedFiles.some(f => f === file.name)) {
-                    updatedFiles.push(file.name);
-                }
+                updatedFiles.push(file);
             });
             return updatedFiles;
         });
         fileInputRef.current.value = null;
     };
 
-    const handleRemoveFile = async (fileName) => {
-        try {
-            const response = await fetch(`http://localhost:3001/api/eliminarArchivo/${id}/${fileName}`, {
-                method: 'DELETE',
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al eliminar el archivo');
-            }
-
-            setSelectedFiles(prevFiles => prevFiles.filter(file => file !== fileName));
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Archivo eliminado',
-                text: 'El archivo se ha eliminado correctamente',
-            });
-        } catch (error) {
-            console.error('Error al eliminar el archivo:', error);
-        }
+    const handleRemoveFile = (fileName) => {
+        setSelectedFiles(prevFiles => prevFiles.filter(file => (typeof file === 'string' ? file : file.name) !== fileName));
     };
 
     const handleTituloChange = (e) => setTitulo(e.target.value);
@@ -115,9 +97,12 @@ const EditarArchivo = () => {
         e.preventDefault();
         const formData = new FormData();
         const singleFile = document.getElementById('file').files[0];
-        console.log(singleFile);
 
-        formData.append('file', singleFile);
+        if (singleFile) {
+            formData.append('file', singleFile);
+        } else {
+            formData.append('existingFile', existingImage); // Enviar la imagen existente si no se selecciona una nueva
+        }
 
         selectedFiles.forEach((file) => {
             if (file instanceof File) {
@@ -128,7 +113,6 @@ const EditarArchivo = () => {
         });
 
         formData.append('youtubeLink', youtubeLink);
-
         formData.append('titulo', titulo);
         formData.append('etiquetas', etiquetas);
         formData.append('tipoArchivo', tipoArchivo);
