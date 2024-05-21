@@ -379,3 +379,9 @@
   text-decoration: none;
   color: #000000;
 }
+
+.pagina_tal_de_tal{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

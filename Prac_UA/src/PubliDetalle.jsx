@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import YouTube from 'react-youtube';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 
 export default function PubliDetalle() {
     const ruta = "http://localhost:3001/uploads";
@@ -34,14 +36,60 @@ export default function PubliDetalle() {
         const zip = new JSZip();
         const imgFolder = zip.folder("files");
 
-        for (const file of files) {
+        const filteredFiles = files.filter(file => !file.includes('youtube.com') && !file.includes('youtu.be'));
+
+        for (const file of filteredFiles) {
             const response = await fetch(ruta + '/' + encodeURIComponent(file));
+            if (!response.ok) {
+                console.error(`Failed to fetch file: ${file}`);
+                continue;
+            }
             const blob = await response.blob();
             imgFolder.file(file, blob);
         }
 
         zip.generateAsync({ type: "blob" }).then((content) => {
             saveAs(content, "Contenidos.zip");
+        });
+    };
+
+    const handleDownloadCurrent = async () => {
+        const currentFile = files[currentImageIndex];
+        if (currentFile.includes('youtube.com') || currentFile.includes('youtu.be')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se puede descargar un enlace de YouTube.',
+            });
+            return;
+        }
+        const response = await fetch(ruta + '/' + encodeURIComponent(currentFile));
+        if (!response.ok) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo descargar el archivo actual.',
+            });
+            return;
+        }
+        const blob = await response.blob();
+        saveAs(blob, currentFile);
+    };
+
+    const handleDownloadPrompt = () => {
+        Swal.fire({
+            title: 'Seleccione una opción de descarga',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Descargar Archivo Actual',
+            denyButtonText: 'Descargar Todos los Archivos',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleDownloadCurrent();
+            } else if (result.isDenied) {
+                handleDownload();
+            }
         });
     };
 
@@ -280,6 +328,7 @@ export default function PubliDetalle() {
                                         <YouTube
                                             videoId={extractYouTubeId(youtubeLink)}
                                             className="youtube-iframe"
+                                            alt={files[currentImageIndex]}
                                             opts={{
                                                 width: '900px',
                                                 height: '550px',
@@ -294,7 +343,7 @@ export default function PubliDetalle() {
                                                 <img
                                                     className="Img-archivo"
                                                     src={renderPreview(files[currentImageIndex])}
-                                                    alt="Image File Preview"
+                                                    alt={files[currentImageIndex]}
                                                     style={{ width: '900px', height: '550px' }}
                                                 />
                                             ) : ['pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(files[currentImageIndex].split('.').pop().toLowerCase()) ? (
@@ -302,6 +351,7 @@ export default function PubliDetalle() {
                                                     className="Img-archivo"
                                                     src={renderPreview(files[currentImageIndex])}
                                                     title="Document Preview"
+                                                    alt={files[currentImageIndex]}
                                                     style={{ width: '900px', height: '550px', flexDirection: 'column', alignItems: ''}}
                                                 />
                                             ) : files[currentImageIndex].split('.').pop().toLowerCase() === 'txt' ? (
@@ -309,6 +359,7 @@ export default function PubliDetalle() {
                                                     className="Img-archivo"
                                                     src={renderPreview(files[currentImageIndex])}
                                                     title="Text File Preview"
+                                                    alt={files[currentImageIndex]}
                                                     style={{ width: '900px', height: '550px' }}
                                                 />
                                             ) : (
@@ -325,11 +376,16 @@ export default function PubliDetalle() {
                                             <button className='botonImagesPasar' onClick={handleNextImage}>Siguiente</button>
                                         </div>
                                     )}
+                                    {files.length > 1 && (
+                                    <div className="pagina_tal_de_tal">
+                                        <p>Archivo {currentImageIndex + 1} de {files.length} </p>
+                                    </div>
+                                )}
                                 </div>
                                 <div className="botons-archivo">
                                     <div id="btn-desc">
-                                        <button className="btn-guard" onClick={handleDownload}>Descargar</button>
-                                        <img id="desc" src={BtnDescargar} alt="Descargar" />
+                                    <button className="btn-guard" onClick={handleDownloadPrompt}>Descargar</button>
+                                        <FontAwesomeIcon alt="Descargar archivo" icon={fas.faDownload} />
                                     </div>
                                     <div id="btn-guard">
                                         <button className="btn-guard" onClick={() => { 
@@ -339,9 +395,16 @@ export default function PubliDetalle() {
                                                 handleDesguardarPubli();
                                             }
                                         }}>
-                                            {user.guardado === 0 ? "Guardar" : "Quitar de Guardados"}
+                                            {user.guardado === 0 ? (
+                                                <>
+                                                    Guardar <FontAwesomeIcon alt="Guardar Archivo" icon={fas.faBookmark} />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Quitar de Guardados <FontAwesomeIcon alt="Guardar Archivo" icon={fas.faX} />
+                                                </>
+                                            )}
                                         </button>
-                                        <img id="guard" src={Btnguardar} alt={user.guardado === 0 ? "Guardar" : "Quitar de Guardados"} />
                                     </div>
                                 </div>
                             </div>
@@ -404,7 +467,7 @@ export default function PubliDetalle() {
                         comments.map(comment => (
                             <div className="coment1" key={comment.id}>
                                 <div className="comentario1">
-                                    <img src={Persona} alt="usuario" />
+                                    <img src={Persona} alt="Imagen usuario" />
                                     <p id="nomUsuario">{comment.usuario}</p>
                                     <div className="star-rating">
                                         {[...Array(parseInt(comment.valoraciones))].map((_, index) => (

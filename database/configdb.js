@@ -105,7 +105,15 @@ app.get('/api/publicaciones', (req, res) => {
 })
 
 app.get('/api/publicacionesrandom/', (req, res) => {
-  const SQL_QUERY = 'SELECT p.*, tiAc.nombre as TiAc_Nombre FROM publicacion p, tipo_academico tiAc where p.tipo_archivo = tiAc.id ORDER BY RAND()';
+  const SQL_QUERY = `SELECT p.*, tiAc.nombre as TiAc_Nombre
+  FROM (
+    SELECT DISTINCT id
+    FROM publicacion
+    ORDER BY RAND()
+  ) as unique_ids
+  JOIN publicacion p ON p.id = unique_ids.id
+  JOIN tipo_academico tiAc ON p.tipo_archivo = tiAc.id;
+  `;
   connection.query(SQL_QUERY, (err, result) => {
     if(err){
       console.error("Error al obtener las publicaciones:", err);
