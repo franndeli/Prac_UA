@@ -132,7 +132,7 @@ export default function PubliDetalle() {
                     console.log(additionalFiles);
                 }
             }
-    
+
             setFiles(additionalFiles);
             setUser(data);
             setLoading(false);
@@ -151,6 +151,7 @@ export default function PubliDetalle() {
             const response = await fetch(`http://localhost:3001/api/mostrarComentarios/${publiID}`);
             if (response.ok) {
                 const data = await response.json();
+                console.log(data);
                 setComments(data);
                 setLoading(false);
             } else {

@@ -435,7 +435,7 @@ app.delete('/api/borrarPubli/:id', (req, res) => {
 
 app.get('/api/mostrarComentarios/:idPublicacion', (req, res) => {
   const idPublicacion = req.params.idPublicacion;
-  const query = 'SELECT c.*, u.usuario AS usuario FROM comentarios c , publicacion p, usuario u where p.id = ? and p.autor = u.id and c.id_publicacion = p.id';
+  const query = 'SELECT c.*, u.usuario AS usuario FROM comentarios c , publicacion p, usuario u where p.id = ? and c.id_publicacion = p.id and c.id_usuario = u.id';
 
   connection.query(query, [idPublicacion] ,(error, results) => {
     if (error) {

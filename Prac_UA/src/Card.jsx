@@ -143,13 +143,13 @@ export default function Card({ photoId }) {
         // Asignar el color en base a la extensión más común
         switch (mostCommonExtension) {
             case 'pdf':
-                return '-blue';
-            case 'txt':
-                return '-green';
+                return '-red';
+            case 'com':
+                return '-orange';
             case 'png':
             case'jpg':
             case 'jpeg':
-                return '-yellow';
+                return '-green';
             default:
                 return '-grey';
         }

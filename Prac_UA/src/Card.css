@@ -1,6 +1,6 @@
-.card-blue{
+.card-red{
       width: 250px;
-      border: 2px solid #1B5EBE;
+      border: 2px solid #fd2828;
       border-radius: 10px;
       background-color: #ffffff;
       text-align: center;
@@ -12,9 +12,9 @@
       cursor: pointer;
 }
 
-.card-yellow{
+.card-orange{
       width: 250px;
-      border: 2px solid #bbff00;
+      border: 2px solid #ffbb0f;
       border-radius: 10px;
       background-color: #ffffff;
       text-align: center;
@@ -28,7 +28,7 @@
 
 .card-green{
       width: 250px;
-      border: 2px solid #00ff2a;
+      border: 2px solid #2dff50;
       border-radius: 10px;
       background-color: #ffffff;
       text-align: center;
@@ -54,11 +54,11 @@
       cursor: pointer;
 }
 
-.card-blue:hover{
+.card-red:hover{
       transform: scale(1.05);
 }
 
-.card-yellow:hover{
+.card-orange:hover{
       transform: scale(1.05);
 }
 
@@ -106,26 +106,26 @@
       margin-right: 2px;
 }
 
-.card-blue .card-autor {
+.card-red .card-autor {
       display: flex;
       justify-content: space-between; /* Distribuye el espacio entre los elementos */
       align-items: center; /* Centra verticalmente los elementos */
       color: #333;
       font-size: 14px;
       padding: 7px;
-      background-color: #1B5EBE;
+      background-color: #fd2828;
       color: #ffffff;
       border-radius: 0 0 5px 5px; 
 }
 
-.card-yellow .card-autor {
+.card-orange .card-autor {
       display: flex;
       justify-content: space-between; /* Distribuye el espacio entre los elementos */
       align-items: center; /* Centra verticalmente los elementos */
       color: #333;
       font-size: 14px;
       padding: 7px;
-      background-color: #bbff00;
+      background-color: #ffbb0f;
       color: #ffffff;
       border-radius: 0 0 5px 5px;    
 }
@@ -137,7 +137,7 @@
       color: #333;
       font-size: 14px;
       padding: 7px;
-      background-color: #00ff2a;
+      background-color: #2dff50;
       color: #ffffff;
       border-radius: 0 0 5px 5px;    
 }
