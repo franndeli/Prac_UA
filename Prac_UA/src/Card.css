@@ -72,9 +72,13 @@
 
 
 .card-titulo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #333;
-      font-size: 16px;
+      font-size: 20px;
       padding: 10px;
+      font-weight: 600;
 }
 
 .card-imagen {

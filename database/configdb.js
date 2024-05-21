@@ -104,6 +104,17 @@ app.get('/api/publicaciones', (req, res) => {
   });
 })
 
+app.get('/api/publicacionesrandom/', (req, res) => {
+  const SQL_QUERY = 'SELECT p.*, tiAc.nombre as TiAc_Nombre FROM publicacion p, tipo_academico tiAc where p.tipo_archivo = tiAc.id ORDER BY RAND()';
+  connection.query(SQL_QUERY, (err, result) => {
+    if(err){
+      console.error("Error al obtener las publicaciones:", err);
+      res.status(500).json({ error: "Error al obtener las publicaciones" });
+      return;
+    }
+    res.json(result);
+  });
+})
 
 app.get('/api/publicaciones/:id', (req, res) => {
   const { id } = req.params;

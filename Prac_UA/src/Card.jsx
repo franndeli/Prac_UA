@@ -166,62 +166,61 @@ export default function Card({ photoId }) {
 
   return (
     <div>
-      {photoData.map((p) => (
-
-        <div className={`card${determineCardColor(p.ruta_archivo_array)}`} key={p.id}>
-          <Link to={`/publiDetalle?id=${p.id}`} className="card-link">
-            <div className="card-titulo">{p.titulo}</div>
-            <div className="card-imagen">
-              <img src={`${ruta}/${encodeURIComponent(p.ruta_archivo)}`} className="ouyeah_foto" alt="Word Icon" />
-            </div>
-          </Link>
-          <div className="card-icons">
-            <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.likes}
-            <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.visitas}
-          </div>
-          <div className="card-autor">
-            <div className='NombreCard'>{p.nombre_usuario}</div>
-            <div className="icono_guardar_tu_biblioteca">
-              {location.pathname === '/tu_biblioteca' && (
-                <FontAwesomeIcon
-                  className="icon-card-guardado"
-                  size="lg"
-                  icon={fas.faBookmark}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleDesguardarPubli();
-                  }}
-                />
-              )}
-              {location.pathname === '/perfil-privado' && (
-                <>
-                  <FontAwesomeIcon
-                    className="icon-card-borrar"
-                    size="lg"
-                    icon={fas.faTrash}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      BorrarPubli();
-                    }}
-                  />
-                  <FontAwesomeIcon
-                    className="icon-card-editar"
-                    size="lg"
-                    icon={fas.faEdit}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      navigate(`/editar-archivo/${p.id}`);
-                    }}
-                  />
-                </>
-              )}
-            </div>
-          </div>
+  {photoData.map((p) => (
+    <div className={`card${determineCardColor(p.ruta_archivo_array)}`} key={p.id}>
+      <Link to={`/publiDetalle?id=${p.id}`} className="card-link">
+        <div className="card-titulo">{p.titulo}</div>
+        <div className="card-imagen">
+          <img src={`${ruta}/${encodeURIComponent(p.ruta_archivo)}`} className="ouyeah_foto" alt="Word Icon" />
         </div>
-      ))}
+      </Link>
+      <div className="card-icons">
+        <FontAwesomeIcon className="icon-card" icon={fas.faHeart} color="red" /> {p.likes}
+        <FontAwesomeIcon className="icon-card" icon={fas.faEye} /> {p.visitas}
+      </div>
+      <div className="card-autor">
+        <div className='NombreCard'>{p.nombre_usuario}</div>
+        <div className="icono_guardar_tu_biblioteca">
+          {location.pathname === '/tu_biblioteca' && (
+            <FontAwesomeIcon
+              className="icon-card-guardado"
+              size="lg"
+              icon={fas.faBookmark}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleDesguardarPubli();
+              }}
+            />
+          )}
+          {location.pathname === '/perfil-privado' && (
+            <>
+              <FontAwesomeIcon
+                className="icon-card-borrar"
+                size="lg"
+                icon={fas.faTrash}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  BorrarPubli();
+                }}
+              />
+              <FontAwesomeIcon
+                className="icon-card-editar"
+                size="lg"
+                icon={fas.faEdit}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  navigate(`/editar-archivo/${p.id}`);
+                }}
+              />
+            </>
+          )}
+        </div>
+      </div>
     </div>
-  );
+  ))}
+</div>
+  )
 }

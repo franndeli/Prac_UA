@@ -13,8 +13,8 @@ export default function Navbar() {
             <img src={logo} alt="Logo web"/>
             <div className="nav-container">
                 <ul className="nav-list">
-                    <li className={currentPage.pathname === '/inicio' ? 'active' : ''}><a href='/inicio'>Inicio</a></li>
-                    <li className={currentPage.pathname === '/tu_biblioteca' ? 'active' : ''}><a href='/tu_biblioteca'>Tu Biblioteca</a></li>
+                    <li className={currentPage.pathname === '/inicio' ? 'active' : ''}><FontAwesomeIcon icon={fas.faHouse} /><a href='/inicio'>Inicio</a></li>
+                    <li className={currentPage.pathname === '/tu_biblioteca' ? 'active' : ''}><FontAwesomeIcon icon={fas.faBook} /><a href='/tu_biblioteca'>Tu Biblioteca</a></li>
                 </ul>
             </div>
             <div className="icons-menu">

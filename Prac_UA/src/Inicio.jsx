@@ -15,7 +15,7 @@ export default function Inicio() {
 
     const fetchFotos = async () => {
         try {
-            const response = await fetch('http://localhost:3001/api/publicaciones');
+            const response = await fetch('http://localhost:3001/api/publicacionesrandom');
             if (!response.ok) {
                 throw new Error('Error al obtener las fotos del servidor');
             }
