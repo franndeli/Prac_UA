@@ -1,12 +1,17 @@
 .publidetalle-container {
   display: block;
-  width: 1400px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .infocont {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  margin-right:10px;
+  
 }
+
 
 .izqcont,
 .drchcont {
@@ -27,7 +32,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size:18px;
+  font-size:10px;
 }
 
 .nom-y-logo img {
@@ -39,11 +44,11 @@
 
 #nomUsuario {
   margin: 0;
-  font-size: 23px;
+  font-size: 1em;
 }
 
 .comentcont {
-  width: 1350px;
+  width: 1150px;
 }
 
 .infor-detalle {
@@ -99,7 +104,7 @@
 }
 
 #pe {
-  font-size: 18px;
+  font-size: 12px;
   margin: 0;
 }
 
@@ -117,7 +122,7 @@
 
 .rating-count {
   margin-left: 5px;
-  font-size: 25px;
+  font-size: 19px;
   margin-right: 10px;
 }
 
@@ -129,7 +134,7 @@
   cursor: pointer;
   font-family: 'Montserrat';
   padding:10px;
-  font-size:18px;
+  font-size:13px;
 }
 
 .izqcont {
@@ -142,6 +147,8 @@
   border: 3px solid black;
   border-radius: 8px;
   margin-bottom: 10px;
+  max-width:600px;
+  margin-left: 90px;
 }
 
 .botons-archivo {
@@ -150,7 +157,7 @@
   margin-top: 10px;
   font-size: medium;
   cursor: pointer;
-  font-size:25px;
+  font-size:px;
   
 }
 
@@ -297,7 +304,8 @@
 
 .valor-comentar {
   display: flex;
-  flex: 1;
+  
+  flex-direction: column;
   margin-left: 60px;
 }
 
@@ -346,7 +354,7 @@
   font-weight: bold;
   font-family: 'Montserrat';
   padding:10px;
-  font-size:18px;
+  font-size:14px;
 }
 
 .area-coment {
@@ -367,7 +375,9 @@
   margin-bottom: 5px;
   min-height: 50px;
 }
-
+.final-coment{
+  max-width: 1100px;
+}
 .final-btn {
   display: flex; 
   justify-content: flex-end; 
@@ -382,7 +392,7 @@
     border: 1px solid black;
     border-radius: 10px;
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 12px;
     color:black;
     text-transform: uppercase; /* Mayúsculas para el texto del botón */
     box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* Sombra ligera para profundidad */
@@ -407,4 +417,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .infocont {
+    flex-direction: row;  /* Mantiene la fila en pantallas más grandes */
+  }
+  .valor-comentar{
+    flex-direction: row;
+  }
+}
+@media (max-width: 768px) {
+  .infocont {
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 0;
+
+  }
+
+  .izqcont, .drchcont, .comentcont {
+    width: 100%;
+    margin-left:700px;
+    max-width:fit-content;
+  }
+
+  .comentcont, .nom-y-logo, .estrellas-valoraciones {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .coment1, .comentario1 {
+    flex-direction: column;
+    align-items: center;
+  }
+  p{
+    max-width: fit-content;
+  }
+  /* Ajustes adicionales para otros elementos según sea necesario */
 }

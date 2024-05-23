@@ -317,7 +317,7 @@ export default function PubliDetalle() {
     };
 
     return (
-        <div>
+        <div className="inicio">
             <Nav /> 
             <div className="publidetalle-container">
                 {datosUser.map((user) => (

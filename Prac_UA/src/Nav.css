@@ -5,11 +5,12 @@
   border: 4px solid #0097EC;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
-  width: 1050px; /* Ancho fijo en píxeles */
+   /* Hacer el ancho flexible */
+  width: 1050px; /* Máximo ancho en pantallas grandes */
   height: 65px;
   margin-top: 40px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .navbar > img{
@@ -69,7 +70,7 @@
   width: 100%;
   height: 10px;
   background-color: #0097EC;
-  transform: translateY(14px);
+  transform: translateY(17px);
   clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%);
   box-shadow: inset 0px 2px 5px 2px rgba(0, 0, 0, 0.24);
 }
@@ -111,3 +112,45 @@
   display: flex;
   align-items: center;
 }
+/* Estilo base para el botón del menú hamburguesa */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+}
+
+/* Estilos para pantallas móviles */
+@media (max-width: 768px) {
+
+  
+  .menu-toggle {
+    display: block;
+    position: absolute; /* Asegura que el botón no desplace otros elementos */
+    top: 60px; /* Espacio desde el top */
+    right: 40px; /* Espacio desde el right */
+    color: black; /* Ajusta según tu diseño */
+    background: none; /* Sin fondo para integrarse mejor */
+    border: none; /* Sin bordes para un aspecto más limpio */
+  }
+
+  .nav-container, .icons-menu {
+    display: none; /* Ocultar cuando el menú está cerrado */
+    width: 100%; /* Uso completo del ancho para alinear los elementos */
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-container.open, .icons-menu.open {
+    display: flex;/* Espacio vertical para respirar */
+  }
+  .navbar{
+    display: flex;
+    width:80%;
+    margin-left: 60px;
+    margin-right: 40px;
+    
+  }
+  
+}
+
+/* Puedes ajustar más detalles como animaciones y transiciones */

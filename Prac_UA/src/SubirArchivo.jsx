@@ -124,11 +124,11 @@ const SubirArchivo = () => {
     };
 
     return (
-        <div>
+        <div className="inicio">
             <Nav />
             <legend>SUBIR ARCHIVO</legend>
             <div className="SubirArchivo-container">
-                <form method="POST" encType="multipart/form-data" onSubmit={handleSubmit}>
+                <form className="mecagoendios" method="POST" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <fieldset className="fielsetSubirArchivo">
                         <div className="cont1">
                             <div className="form-group">

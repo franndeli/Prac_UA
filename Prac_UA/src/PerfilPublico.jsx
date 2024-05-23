@@ -84,7 +84,7 @@ export default function PerfilPublico() {
   };
 
   return (
-    <div>
+    <div className="inicio">
       <Nav />
       {datosPublicos.map((p) => (
         <div key={p.id}>

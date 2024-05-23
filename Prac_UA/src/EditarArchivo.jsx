@@ -141,7 +141,7 @@ const EditarArchivo = () => {
     };
 
     return (
-        <div>
+        <div className='inicio'>
             <Nav />
             <legend>EDITAR ARCHIVO</legend>
             <div className="SubirArchivo-container">

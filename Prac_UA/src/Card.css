@@ -1,7 +1,7 @@
 .card-red, .card-orange, .card-green, .card-grey {
       display: flex;
       flex-direction: column;
-      min-height: 450px;
+      min-height: 430px;
       justify-content: space-between; /* Distribuye el espacio entre los elementos */
       
   }

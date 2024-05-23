@@ -16,9 +16,10 @@ h1{
   box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave */
   border-radius: 10px; /* Bordes redondeados */
   padding: 20px;
-  width: auto; /* Adaptar al contenido */
-  margin: 20px auto; /* Centrado con margen */
-  border: none; /* Sin borde */
+ width: 90%; /* Usa un porcentaje del ancho disponible en lugar de 'auto' */
+  max-width: 600px; /* Establece un máximo para pantallas grandes */
+  margin: 20px auto;
+  border: none;
 }
   
   .InfoUsuarioImage {
@@ -55,11 +56,11 @@ h1{
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 1300px;
 }
 
 .PubliPrivate{
   text-align: left;
-  margin-left:100px;
 }
 
 .TipoContenidoPrivado {
@@ -131,4 +132,21 @@ h1{
     color: #333;   
     background-color: white; /* Color de fondo del select */
     font-family: 'Montserrat';
+}
+@media (max-width: 768px) {
+  .InfoUsuario {
+    flex-direction: column; /* Apila los elementos verticalmente */
+    align-items: center; /* Centra los elementos horizontalmente */
+  }
+
+  .InfoUsuarioText {
+    padding-left: 0; /* Elimina el padding lateral en móviles */
+    text-align: center; /* Centra el texto para coherencia visual */
+    width: 100%; /* Permite que el texto ocupe todo el ancho */
+  }
+
+  .button-custom {
+    margin-left: 0; /* Alinea el botón correctamente en móviles */
+    margin-top: 20px; /* Espacio después de los elementos anteriores */
+  }
 }

@@ -61,7 +61,7 @@ export default function Categoria() {
   }
 
   return (
-    <div className="categoria">
+    <div className="inicio">
       <Nav />
       <h1 className="categoria_h1">{titulo}</h1>
       <div className="categoria_body">

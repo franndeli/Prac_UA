@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import './PerfilPrivado.css'; // Importa el CSS por defecto
 import './PerfilPrivadoOscuro.css'; // Importa el CSS oscuro
 import AdjustableSelect from './helpers/AdjustableSelects.jsx';
+import Swal from 'sweetalert2';
 
 export default function PerfilPrivado() {
 
@@ -83,18 +84,39 @@ export default function PerfilPrivado() {
   };
 
   const handleCerrarSesion = () => {
-    // Limpiar el localStorage
-    localStorage.removeItem('id_usuario');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('recuerdame');
-    // Redirigir a la página de inicio de sesión
-    navigate('/iniciarsesion');
+    Swal.fire({
+      title: '¿Estás seguro de que quieres cerrrar sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Limpiar el localStorage
+          localStorage.removeItem('id_usuario');
+          localStorage.removeItem('usuario');
+          localStorage.removeItem('recuerdame');
+          // Redirigir a la página de inicio de sesión
+          navigate('/iniciarsesion');
+        } catch (error) {
+          console.error('Error al cerrar sesión', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al cerrar sesión',
+          });
+        }
+      }
+    });
   };
 
   return (
-    <div>
+    <div >
       {datosPublicos.map((p) => (
-        <div key={p.ID}>
+        <div key={p.ID} className="inicio">
           <Nav />
           <h1>Mi perfil</h1>
           <div className='container'>

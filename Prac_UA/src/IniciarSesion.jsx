@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './IniciarSesion.css';
-import logo from './images/logo512.png';
+import logo from '../src/images/fotoWEB.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
@@ -69,7 +69,7 @@ export default function IniciarSesion() {
         <div className='iniciar-sesion'>
             <div className="titulo-web">
                 <img src={logo} alt="Logo de la web"></img>
-                <h1 className="iniciar_sesion_h1">TÍTULO DE LA WEB</h1>
+                <h1 className="iniciar_sesion_h1">POLITEC</h1>
             </div>
             <div className='formulario-iniciar-sesion'>
                 <form onSubmit={handleSubmit}>

@@ -45,3 +45,31 @@
     align-items: flex-start; 
     justify-content: flex-start; 
 }
+.cards-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center; /* Centrado de los cards */
+    gap: 20px; /* Espacio entre los cards */
+}
+@media (max-width: 600px) {
+    .inicio{
+        display:flex;
+        align-items: center;
+    }
+    .cards-container {
+        flex-direction: column; /* Ajusta los elementos en una columna */
+        align-items: center; /* Centra los cards verticalmente */
+        margin-left:0 !important;
+    }
+    .recomendaciones_h2 {
+        text-align: center; /* Centra el texto de los títulos horizontalmente */
+        font-size: 25px;
+        overflow-wrap: break-word;
+    }
+
+    .recomendaciones_icon {
+        justify-content: center; /* Centra los íconos y texto dentro de .recomendaciones_icon */
+        font-size: 20px;
+    }
+}
