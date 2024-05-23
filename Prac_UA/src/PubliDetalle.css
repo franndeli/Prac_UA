@@ -18,7 +18,7 @@
   margin-bottom: 50px;
   font-weight: normal;
 }
-
+ 
 .titulo-det2 {
   font-weight: normal;
 }
@@ -27,6 +27,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size:18px;
 }
 
 .nom-y-logo img {
@@ -35,9 +36,10 @@
   border-radius: 50%;
 }
 
+
 #nomUsuario {
   margin: 0;
-  font-size: 13px;
+  font-size: 23px;
 }
 
 .comentcont {
@@ -79,6 +81,9 @@
   align-items: center;
   border-radius: 25px;
   padding: 5px 20px;
+  font-family: 'Montserrat';
+  padding:10px;
+  
 }
 
 #eti1 {
@@ -94,7 +99,7 @@
 }
 
 #pe {
-  font-size: 10px;
+  font-size: 18px;
   margin: 0;
 }
 
@@ -112,7 +117,7 @@
 
 .rating-count {
   margin-left: 5px;
-  font-size: 18px;
+  font-size: 25px;
   margin-right: 10px;
 }
 
@@ -123,6 +128,8 @@
   min-width: 170px;
   cursor: pointer;
   font-family: 'Montserrat';
+  padding:10px;
+  font-size:18px;
 }
 
 .izqcont {
@@ -143,6 +150,8 @@
   margin-top: 10px;
   font-size: medium;
   cursor: pointer;
+  font-size:25px;
+  
 }
 
 #btn-desc {
@@ -153,7 +162,7 @@
   border-bottom-left-radius: 20px;
   font-weight: bold;
   display: flex;
-  align-items: center;
+  align-items: center;padding:10px;
 }
 
 #btn-guard {
@@ -232,12 +241,13 @@
 }
 
 .star-rating .star {
-  font-size: 24px;
+  font-size: 33px;
   color: gold;
 }
 
 .star-rating .star.grey {
   color: grey;
+  
 }
 
 .titulo-fecha {
@@ -253,24 +263,29 @@
   margin: 0px 0px 0px 10px;
   padding: 0;
   font-weight: bold;
+  font-size:18px;
+  font-family: 'Montserrat';
 }
 
 #fecha-coment {
   margin: 0px 0px 0px 10px;
   padding: 0;
   color: #b2b3b3;
+  font-size:18px;
 }
 
 #fecha-coment2 {
   margin: 0px 0px 0px 10px;
   padding: 0;
   color: #000000;
+  font-size:19px;
 }
 
 .comentario2 {
   text-align: left;
   margin-left: 130px;
   max-width: 60%;
+
 }
 
 .titulo-final {
@@ -329,6 +344,9 @@
   border-radius: 10px; 
   text-align: center; 
   font-weight: bold;
+  font-family: 'Montserrat';
+  padding:10px;
+  font-size:18px;
 }
 
 .area-coment {
@@ -354,17 +372,22 @@
   display: flex; 
   justify-content: flex-end; 
   margin-top: 10px; 
+  
 }
 
 .btn-coment {
-  padding: 8px 16px; 
-  background-color: #5cbdf3; 
-  color: black; 
-  cursor: pointer;
-  border:1px solid black;
-  border-radius: 10px; 
-  text-align: center; 
-  font-weight: bold;
+  margin:10px;
+    background-color: #0097EC; /* Azul claro, más moderno */
+    
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color:black;
+    text-transform: uppercase; /* Mayúsculas para el texto del botón */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* Sombra ligera para profundidad */
+    transition: background-color 0.3s; /* Transición suave al interactuar */
+    font-family: 'Montserrat';
 }
 
 .btn-coment p {

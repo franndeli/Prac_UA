@@ -55,7 +55,7 @@ app.use(session({
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'lhc15',
   database: 'prac_ua'
 });
 

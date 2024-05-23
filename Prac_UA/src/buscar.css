@@ -28,6 +28,7 @@
     cursor: pointer;
     transition: transform 0.3s ease;
     color: black;
+    margin-left: 100px;
 }
 
 .recomendaciones_icon:hover {
@@ -50,7 +51,8 @@
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 400px; /* Ajusta el ancho máximo según sea necesario */
+    max-width: 900px;
+    
     margin-bottom: 20px;
     margin-top: 50px;
 }
@@ -62,10 +64,19 @@
     border-radius: 25px;
     outline: none;
     transition: border-color 0.3s ease;
+    height: 40px;
+    font-size: 20px;
 }
 
+.search-input::placeholder {
+    font-size: 20px; 
+    padding-left: 10px;
+    font-family: 'Montserrat';
+}
+
+
 .search-input:focus {
-    border-color: #0000ff; /* Cambia el color del borde al enfocar */
+    border-color: #0097EC; /* Cambia el color del borde al enfocar */
 }
 
 /*
@@ -84,7 +95,12 @@
     background-color: #0056b3; /* Cambia el color de fondo al pasar el ratón 
 }
 */
-
+.cards-container{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 100px;
+    
+}
 .SelectoresBuscar{
     display: flex;
     flex-direction: row;
@@ -92,16 +108,21 @@
 
 .SelectoresBuscar select{
     border-radius: 20px; /* Forma redonda */
-    padding: 0.25rem;
-    border: 2px solid #0000ff;
+    padding: 0.45rem;
+    border: 2px solid #0097EC;
     background-color: #ffffff;
     margin-left: 2px;
+    font-family: 'Montserrat';
+    font-size: 18px;
 }
 
 .SelectoresBuscar select option{
     background-color: #ffffff;
 }
 
-.textarea-subir-select-buscar{
-    height: 30px;
+.textarea-subir-select-buscar {
+    font-size: 16px;
+    color: #333;   
+    background-color: white; /* Color de fondo del select */
+    font-family: 'Montserrat';
 }

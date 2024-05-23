@@ -1,3 +1,13 @@
+.card-red, .card-orange, .card-green, .card-grey {
+      display: flex;
+      flex-direction: column;
+      min-height: 450px;
+      justify-content: space-between; /* Distribuye el espacio entre los elementos */
+      
+  }
+  
+  
+
 .card-red{
       width: 250px;
       border: 2px solid #fd2828;
@@ -98,7 +108,8 @@
       justify-content: right;
       align-items: center;
       padding: 10px;
-      font-size: 14px;
+      font-size: 18px;
+      
 }
 
 .icon-card {
@@ -116,6 +127,8 @@
       background-color: #fd2828;
       color: #ffffff;
       border-radius: 0 0 5px 5px; 
+      min-height: 30px;
+      
 }
 
 .card-orange .card-autor {
@@ -127,7 +140,8 @@
       padding: 7px;
       background-color: #ffbb0f;
       color: #ffffff;
-      border-radius: 0 0 5px 5px;    
+      border-radius: 0 0 5px 5px;   
+      min-height: 30px; 
 }
 
 .card-green .card-autor {
@@ -139,7 +153,8 @@
       padding: 7px;
       background-color: #2dff50;
       color: #ffffff;
-      border-radius: 0 0 5px 5px;    
+      border-radius: 0 0 5px 5px; 
+      min-height: 30px;   
 }
 
 .card-grey .card-autor {
@@ -152,12 +167,15 @@
       background-color: #989898;
       color: #ffffff;
       border-radius: 0 0 5px 5px;    
+      min-height: 30px;
 }
 
 .icono_guardar_tu_biblioteca {
       display: flex;
       justify-content: flex-end; /* Alinea el icono a la derecha */
       align-items: center; /* Centra verticalmente el icono */
+      font-size:20px;
+      gap:10px;
 }
 
 .icon-card-guardado {
@@ -174,4 +192,8 @@
       justify-content: center; /* Alinea el icono a la derecha */
       align-items: center; /* Centra verticalmente el icono */
       width: 250px;
+      font-size:20px;
 }
+
+
+  

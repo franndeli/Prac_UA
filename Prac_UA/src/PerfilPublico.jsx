@@ -99,7 +99,7 @@ export default function PerfilPublico() {
                   />
               </div>
               <div className='InfoUsuarioText'>
-                <p>{p.nombre}</p>
+                <h2>{p.nombre}</h2>
                 <p>{p.nombre_titulacion}</p>
                 <p>{p.descripcion}</p>
               </div>
@@ -110,12 +110,14 @@ export default function PerfilPublico() {
       <div className='PublicacionesPublico'>
         <h2 className='PubliPublico'>Publicaciones</h2>
         <div className='select-container-Publico'>
+        <div className='SelectoresBuscar'>
         <select className="textarea-subir-select-perfil" id="tipo-archivo" name="tipoArchivo" value={tipo_contenido} onChange={handleTipoSeleccionadoTipo}>
                 <option value="" selected>Tipo de contenido</option>
                 {tipo_contenidos.map(tipo => (
                     <option key={tipo.id} value={tipo.nombre}>{tipo.nombre}</option>
                 ))}
             </select>
+            </div>
         </div>
           <div className="cards-container">
             {fotosFiltradas.map(publicacion => (

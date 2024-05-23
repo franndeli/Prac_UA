@@ -8,14 +8,18 @@ h1{
     justify-content: center; /* Centra los elementos horizontalmente */
   }
 
+/* Estilos para el contenedor principal del perfil */
 .InfoUsuario {
-    display: flex;
-    border: 2px solid #0000ff;
-    border-radius: 5px;
-    padding: 10px;
-    width: 1030px;
-    margin: auto;
-  }
+  display: flex;
+  align-items: center;
+  background-color: #f4f4f4; /* Fondo claro */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 20px;
+  width: auto; /* Adaptar al contenido */
+  margin: 20px auto; /* Centrado con margen */
+  border: none; /* Sin borde */
+}
   
   .InfoUsuarioImage {
     flex: 0 0 auto; /* No crece ni se encoge */
@@ -32,15 +36,19 @@ h1{
   }
 
   .custom-button-blue {
-    background-color: #0074d9;
-    color: #ffffff; /* Cambia el color del texto para que sea legible */
-    border: 2px solid #0000ff; /* Añade un borde azul a los botones */
-    border-radius: 20px; /* Añade bordes redondeados a los botones */
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    margin-top: 10px; /* Ajusta el espacio entre los botones */
-    margin-left: 50px;
-}
+    margin:10px;
+    background-color: #0097EC; /* Azul claro, más moderno */
+    
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color:black;
+    text-transform: uppercase; /* Mayúsculas para el texto del botón */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* Sombra ligera para profundidad */
+    transition: background-color 0.3s; /* Transición suave al interactuar */
+    font-family: 'Montserrat';
+  }
 
 
 .PublicacionesPrivado {
@@ -51,6 +59,7 @@ h1{
 
 .PubliPrivate{
   text-align: left;
+  margin-left:100px;
 }
 
 .TipoContenidoPrivado {
@@ -88,14 +97,38 @@ h1{
 }
 
 .Img-archivo-Perfil{
-  border: 3px solid black;
-  border-radius: 8px;
+  width: 100px; /* Tamaño específico */
+  height: 100px;
+  border-radius: 50%; /* Circular */
+  border: 3px solid #000000; /* Borde sólido con color de acento */
+  object-fit: cover;
+}
+.InfoUsuarioText p {
+  font-family: 'Arial', sans-serif; /* Fuente más moderna */
+  color: #333; /* Color oscuro para texto */
+  margin-bottom: 4px; /* Espaciado entre líneas de texto */
+  font-family: 'Montserrat';
+}
+
+.categoria_body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.categoria_selects{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start; 
+  justify-content: flex-start; 
+  gap: 30px;
+
 }
 
 .textarea-subir-select-perfil{
-  border-radius: 20px; /* Forma redonda */
-  padding: 0.25rem;
-  border: 2px solid #0000ff;
-  background-color: #ffffff;
-  margin-bottom: 10px; /* Espacio entre los selects */
+  font-size: 16px;
+    color: #333;   
+    background-color: white; /* Color de fondo del select */
+    font-family: 'Montserrat';
 }

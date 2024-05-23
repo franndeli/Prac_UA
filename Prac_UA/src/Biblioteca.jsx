@@ -62,7 +62,7 @@ export default function Categoria() {
       <Nav />
       <h1 className="categoria_h1">TU BIBLIOTECA</h1>
       <div className="categoria_body">
-        <div className="categoria_selects">
+        <div className="SelectoresBuscar">
         <select className="textarea-subir-select-perfil" id="tipo-archivo" name="tipoArchivo" value={tipo_contenido} onChange={handleTipoSeleccionado}>
                 <option value="" selected>Tipo de contenido</option>
                 {tipo_academico.map(tipo => (

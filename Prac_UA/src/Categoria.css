@@ -23,6 +23,32 @@
     align-items: flex-start; 
     justify-content: flex-start; 
     gap: 30px;
+
+}
+.SelectoresBuscar{
+    display: flex;
+    flex-direction: row;
+}
+
+.SelectoresBuscar select{
+    border-radius: 20px; /* Forma redonda */
+    padding: 0.45rem;
+    border: 2px solid #0097EC;
+    background-color: #ffffff;
+    margin-left: 2px;
+    font-family: 'Montserrat';
+    font-size: 18px;
+}
+
+.SelectoresBuscar select option{
+    background-color: #ffffff;
+}
+
+.textarea-subir-select-buscar {
+    font-size: 16px;
+    color: #333;   
+    background-color: white; /* Color de fondo del select */
+    font-family: 'Montserrat';
 }
 
 .categoria_publicaciones{
@@ -33,4 +59,5 @@
     justify-content: flex-start;
     margin-top: 30px;
     width: 85%;
+    margin-left: 100px;
 }
