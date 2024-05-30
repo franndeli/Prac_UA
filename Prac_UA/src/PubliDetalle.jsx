@@ -184,6 +184,14 @@ export default function PubliDetalle() {
                     setComments(updatedCommentsData);
                     setNewComment('');
                     setNewCommentTitle('');
+                    Swal.fire({
+                        title: 'Comentario publicado',
+                        text: 'Tu comentario ha sido publicado correctamente',
+                        icon: 'success',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                    });
                 } else {
                     console.error('Error al obtener comentarios actualizados:', updatedCommentsResponse.statusText);
                 }
