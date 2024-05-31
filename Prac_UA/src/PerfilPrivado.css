@@ -134,9 +134,24 @@ h1{
     font-family: 'Montserrat';
 }
 @media (max-width: 768px) {
+  .navbar{
+    min-width: 350px;
+    margin-left: 20px;
+  }
+  .container{
+    max-width: 300px;
+  }
   .InfoUsuario {
-    flex-direction: column; /* Apila los elementos verticalmente */
+    flex-direction: column; /* Organiza los elementos verticalmente */
     align-items: center; /* Centra los elementos horizontalmente */
+    padding: 20px; /* Ajusta el padding para espacio adecuado */
+    margin: 10px auto; /* Centra el contenedor y reduce el margen */
+    width: 100%; /* Asegura que ocupa todo el ancho disponible */
+    max-width: 100%; /* Elimina cualquier máximo que pueda estar definido */
+  }
+
+  .InfoUsuarioImage {
+    margin-bottom: 10px; /* Espacio entre la imagen y el texto siguiente */
   }
 
   .InfoUsuarioText {
@@ -146,7 +161,29 @@ h1{
   }
 
   .button-custom {
-    margin-left: 0; /* Alinea el botón correctamente en móviles */
+    width: 100%; /* Hace que los botones ocupen todo el ancho disponible */
+    order: 3; /* Asegura que los botones se muevan debajo del contenido */
+    display: flex;
+    flex-direction: column; /* Alinea los botones en columna */
+    align-items: center; /* Centra los botones */
     margin-top: 20px; /* Espacio después de los elementos anteriores */
   }
+
+  .custom-button-blue {
+    width: auto; /* Permite que el botón se ajuste al contenido */
+    margin: 10px 0; /* Añade margen superior e inferior para separar botones */
+  }
+
+  .PublicacionesPrivado {
+    width: 100%; /* Ajusta el ancho para que no exceda la pantalla */
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+  }
+
+  .PubliPrivate, .TipoContenidoPrivado, .select-container-privado, .cards-container {
+    width: 100%; /* Ajusta todos los contenedores de publicaciones para que se adapten al nuevo layout */
+  }
+  .PubliPrivate, .select-container-Publico{
+    margin-left:80px;
+  }
 }
+

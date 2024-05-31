@@ -264,37 +264,40 @@ legend {
 }
 
 @media (max-width: 768px) {
-.SubirArchivo-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  padding: 20px;
-  height: 100vh; 
-  box-sizing: border-box;
-}
-legend{
-align-items: center;
-}
+  .navbar{
+    margin-left: 80px;
+  }
+  .SubirArchivo-container, .mecagoendios, .fielsetSubirArchivo {
+      min-width: 0; 
+      width: 95%;   
+      padding: 10px; 
+      margin: 0 auto; 
+      box-sizing: border-box; 
+      
+  }
+  .fielsetSubirArchivo{
+    margin-left: 30px;
+  }
 
-.fielsetSubirArchivo {
-  width: 100%; 
-  display: flex;
-  flex-direction: column; 
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
 
-.cont1, .cont2, .cont3 {
-  width: 100%; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  max-width: none;
-}
+  .cont1, .cont2, .cont3 {
+    width: 100%;   
+    max-width: 100%; 
+    padding: 5px;  
+    margin: 5px 0; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
+  .form-group-botn{
+    width: 60%;
+  }
+  .textarea-subir{
+    max-width: 90%;
+  }
+  .form-group{
+    max-width: 90%;
+  }
 
 }

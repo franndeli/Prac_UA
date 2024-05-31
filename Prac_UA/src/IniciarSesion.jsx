@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function IniciarSesion() {
 
     const navigate = useNavigate();
@@ -66,7 +67,9 @@ export default function IniciarSesion() {
     }, [navigate]);
     
     return (
+        
         <div className='iniciar-sesion'>
+            
             <div className="titulo-web">
                 <img src={logo} alt="Logo de la web"></img>
                 <h1 className="iniciar_sesion_h1">POLITEC</h1>

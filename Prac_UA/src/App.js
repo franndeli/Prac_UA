@@ -1,4 +1,5 @@
 import './App.css';
+import { Helmet } from 'react-helmet';
 import Formulario from './Formulario.jsx';
 import PerfilPrivado from './PerfilPrivado.jsx';
 import PerfilPublico from './PerfilPublico.jsx';
@@ -16,7 +17,11 @@ import EditarArchivo from './EditarArchivo.jsx';
 
 function App() {
   return (
+    
     <div className="App">
+      <Helmet>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Helmet>
       <header className="App-header">
           <Routes>
             <Route path="/" element={<Navigate to="/iniciarsesion" replace />} />

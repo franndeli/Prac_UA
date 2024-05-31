@@ -11,6 +11,8 @@
   margin-top: 40px;
   margin-left: 10px;
   margin-right: 10px;
+  margin-left: auto; /* Centrar en la página */
+  margin-right: auto; /* Centrar en la página */
 }
 
 .navbar > img{
@@ -119,6 +121,49 @@
   border: none;
 }
 
+
+
+/* Nuevo estilo para el menú lateral */
+.side-nav {
+  display: none;
+  position: fixed; /* Cambiado de 'absolute' a 'fixed' para que cubra toda la pantalla */
+  left: 0;
+  top: 0;
+  width: 300px; /* Aumentado de 250px para dar más espacio */
+  height: 100vh;
+  background-color: #0097EC;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  align-items: center; /* Centrado horizontal de los ítems */
+  justify-content: center; /* Centrado vertical de los ítems */
+  padding: 50px 0; /* Añadido padding superior e inferior para centrar todo verticalmente */
+}
+
+.side-nav.open {
+  transform: translateX(0%);
+}
+
+.nav-list2 {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column; /* Cambiado a columna para que se apilen verticalmente */
+  align-items: center; /* Alineación horizontal centrada */
+  gap: 30px; /* Espacio entre elementos aumentado */
+  padding: 0;
+}
+
+.nav-list2 li a, .nav-list li svg {
+  font-size: 1.5rem; /* Aumentar el tamaño del texto */
+  color: #ffffff; /* Cambiar el color a blanco para mejor contraste */
+}
+
+.nav-list2 li svg {
+  width: 2rem; /* Aumentar el tamaño de los iconos */
+  height: 2rem; /* Aumentar el tamaño de los iconos */
+}
+
+
 /* Estilos para pantallas móviles */
 @media (max-width: 768px) {
 
@@ -150,7 +195,13 @@
     margin-right: 40px;
     
   }
+ 
+
+ 
+
+  .side-nav,
+  .side-nav.open {
+    display: flex;
+  }
   
 }
-
-/* Puedes ajustar más detalles como animaciones y transiciones */

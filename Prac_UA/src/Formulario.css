@@ -135,3 +135,41 @@
   /* Desplaza el input fuera de la pantalla */
   z-index: -1;
 }
+@media (max-width: 768px) {
+  .Formulario {
+    width: 100%; /* Utiliza todo el ancho disponible */
+    margin: 10px 0; /* Reduce el margen para que no se desborde */
+    padding: 15px; /* Suficiente espacio interno pero no demasiado */
+    box-sizing: border-box; /* Incluye padding y border en el ancho total */
+  }
+
+  .form-group, .form-group-user, .label-group {
+    flex-direction: column; /* Apila los elementos verticalmente */
+    align-items: flex-start; /* Alinea los elementos a la izquierda */
+    width: 100%; /* Establece el ancho al 100% para evitar desbordamientos */
+  }
+
+  .inputFormulario, .textarea-subir-select-perfil {
+    width: 100%; /* Ajusta el ancho de los inputs */
+    margin-top: 5px; /* Espacio después de las etiquetas */
+  }
+
+  .custom-button-Formulario, .custom-button-Formulario.blue, .custom-button-Formulario-red {
+    width: 100%; /* Botones a lo ancho del contenedor */
+    margin: 10px 0; /* Espacio arriba y abajo para cada botón */
+  }
+
+  .image-upload-container-formulario, .imagen-subida-formulario {
+    width: 100%; /* Ajusta la imagen para que se ajuste al ancho */
+    height: auto; /* Mantiene la proporción de las imágenes */
+  }
+  .upload-icon-container{
+    display:none;
+  }
+
+  .image-upload-label-formulario {
+    right: 0; /* Ajusta la posición de la etiqueta sobre la imagen */
+    left: 0; /* Centra la etiqueta horizontalmente */
+    margin: auto; /* Añade auto para centrar dentro del contenedor */
+  }
+}

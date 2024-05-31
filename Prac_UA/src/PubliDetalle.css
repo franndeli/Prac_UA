@@ -431,19 +431,20 @@
   .infocont {
     flex-direction: column;
     justify-content: center;
-    margin-right: 0;
+    margin-left: 30px;
 
   }
 
   .izqcont, .drchcont, .comentcont {
     width: 100%;
-    margin-left:700px;
+    
     max-width:fit-content;
   }
 
   .comentcont, .nom-y-logo, .estrellas-valoraciones {
     flex-direction: column;
     align-items: center;
+    max-width: 100%;
   }
 
   .coment1, .comentario1 {
@@ -453,5 +454,26 @@
   p{
     max-width: fit-content;
   }
-  /* Ajustes adicionales para otros elementos según sea necesario */
+  .btn-desc, .btn-guard {
+    width: auto;  /* Elimina cualquier ancho fijo */
+    padding: 10px;  /* Asegura suficiente espacio interno */
+  }
+  .Img-archivo {
+    max-width: 400px;  /* Asegura que la imagen no sea más ancha que la pantalla */
+    margin: 10px auto;  /* Centra la imagen horizontalmente */
+  }
+
+  .estrellas-valoraciones, .nom-y-logo {
+    flex-direction: column;
+    align-items: center;
+  }
+  .separador-coment {
+    width: 100%; /* Ocupar el ancho total para que sea horizontal */
+        height: 1px; /* Reducir la altura para que sea una línea delgada */
+        background-color: #ccc;
+        margin: 20px 0;
+  }
+  .separeitor{
+    display:none;
+  }
 }
