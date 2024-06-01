@@ -49,6 +49,7 @@ h1{
     box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* Sombra ligera para profundidad */
     transition: background-color 0.3s; /* Transición suave al interactuar */
     font-family: 'Montserrat';
+    cursor: pointer;
   }
 
 

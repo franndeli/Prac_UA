@@ -4,6 +4,7 @@ import logo from '../src/images/fotoWEB.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 export default function IniciarSesion() {
@@ -50,7 +51,16 @@ export default function IniciarSesion() {
 
                 navigate('/inicio'); // Redirige a la página de inicio
             } else {
-                throw new Error(data.error || 'Error al iniciar sesión'); // Manejo de errores del servidor
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Usuario o contraseñas incorrectos',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    animation: true,
+                    timer: '2000',
+                    timerProgressBar: true
+                });
+                throw new Error(data.error || 'Error al iniciar sesión');
             }
             
             navigate('/inicio');
